@@ -18,6 +18,30 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="client.h" />
+    <ClInclude Include="EDAcoinsNet.h" />
+    <ClInclude Include="FULLNode.h" />
+    <ClInclude Include="manifestHandler.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="observer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="server.h" />
+    <ClInclude Include="SPVNode.h" />
+    <ClInclude Include="subject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EDA-TPF3-G3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="client.cpp" />
+    <ClCompile Include="EDAcoinsNet.cpp" />
+    <ClCompile Include="FULLNode.cpp" />
+    <ClCompile Include="manifestHandler.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="server.cpp" />
+    <ClCompile Include="SPVNode.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{6709D6A3-9349-40DE-A045-1BC9BFDC57CD}</ProjectGuid>
@@ -122,8 +146,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

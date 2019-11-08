@@ -13,5 +13,71 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\MVC related">
+      <UniqueIdentifier>{b7bff58a-ab60-4d96-a2d9-eef5ab7976bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Node handlers">
+      <UniqueIdentifier>{fa38b241-0edb-40a8-884f-fac28b63dbf5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="observer.h">
+      <Filter>Header Files\MVC related</Filter>
+    </ClInclude>
+    <ClInclude Include="subject.h">
+      <Filter>Header Files\MVC related</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FULLNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="server.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="manifestHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="EDAcoinsNet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EDA-TPF3-G3.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FULLNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="manifestHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EDAcoinsNet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
