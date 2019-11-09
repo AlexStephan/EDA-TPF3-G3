@@ -13,6 +13,40 @@ EDAcoinsNet::~EDAcoinsNet()
 	for (size_t i = 0; i < SPVvector.size(); i++)
 		delete SPVvector[i];
 }
+errorType EDAcoinsNet::createFULLNode(NodeData newNode)
+{
+	errorType creationState;
+	creationState.error = false;
+	creationState.datos = "";
+
+	if (existAlready(newNode) == false) {
+		FULLNode* node = new FULLNode(newNode);
+		FULLvector.emplace_back(node);
+	}
+	else {
+		creationState.error = true;
+		creationState.datos = "Failed to create FULL Node:\nSpecified socket or ID is already used";
+	}
+	notifyAllObservers();
+	return creationState;
+}
+errorType EDAcoinsNet::createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode)
+{
+	errorType creationState;
+	creationState.error = false;
+	creationState.datos = "";
+
+	if (existAlready(newNode) == false) {
+		SPVNode* node = new SPVNode(newNode, FilterNode, HeaderNode);
+		SPVvector.emplace_back(node);
+	}
+	else {
+		creationState.error = true;
+		creationState.datos = "Failed to create SPV Node:\nSpecified socket or ID is already used";
+	}
+	notifyAllObservers();
+	return creationState;
+}
 const vector<NodeData>& EDAcoinsNet::getKnownFULLdata()
 {
 	return FULLdata;
@@ -47,6 +81,15 @@ SPVNode* EDAcoinsNet::getSPVnode(size_t pos)
 	if (pos < SPVvector.size())
 		node = SPVvector[pos];
 	return node;
+}
+
+bool EDAcoinsNet::existAlready(NodeData node)
+{
+	if ((existAlready(node.getID()) == false)
+		&& (existAlready(node.getSocket()) == false))
+		return false;
+	else
+		return true;
 }
 
 bool EDAcoinsNet::existAlready(string ID)

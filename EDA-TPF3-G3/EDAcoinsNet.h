@@ -34,6 +34,7 @@ private:
 	vector<FULLNode*> FULLvector;
 	vector<SPVNode*> SPVvector;
 
+	bool existAlready(NodeData node);
 	bool existAlready(string ID);
 	bool existAlready(Socket socket);
 };

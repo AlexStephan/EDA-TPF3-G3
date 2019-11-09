@@ -28,7 +28,7 @@ class Socket
 public:
 	Socket(uint port, ip_t ip);
 	Socket(uint port, uint ip1, uint ip2, uint ip3, uint ip4);
-	Socket(Socket& c);
+	Socket(const Socket& c);
 
 	string getPortString();
 	string getIPString();
