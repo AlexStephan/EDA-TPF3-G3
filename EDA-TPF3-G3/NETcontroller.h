@@ -24,7 +24,7 @@ class NETcontroller :
 	public Observer
 {
 public:
-	NETcontroller(EDAcoinsNet& model);
+	NETcontroller(EDAcoinsNet* model);
 	~NETcontroller();
 	virtual void update(void*);
 	bool isRunning();
@@ -36,13 +36,34 @@ private:
 
 	ImGuiHandler guiHandler;
 	WarningWindowHandler warningHandler;
-	void drawControlWindow();
 
+	//Para los nodos locales
 	vector<FULLcontroller*> FcontrolList;
 	vector<FULLviewer*> FviewList;
 	vector<SPVcontroller*> ScontrolList;
 	vector<SPVviewer*> SviewList;
 
 	string myWindowName;
+
+	//METODOS PRIVADOS:
+	void drawControlWindow(); //OLI
+	/*NOTA de drawControlWindow:
+	usar myWindowName como parametro de ImGui::Begin
+	creo q solo es necesario el include "imgui.h" q ya coloque
+
+	El NETcontroller accede (en su caracter de controller)
+	a las siguientes funciones de EDAcoinsNET:
+
+	errorType createFULLNode(NodeData newNode);
+	errorType createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode);
+
+	recordar siempre pasar el resultado de dichas funciones (errorType) a traves de
+	warningHandler.check();
+
+	La unica funcion de la ventana de controller es permitirle al usuario
+	elegir q tipo de nodo crear, y luego, los parametros de entrada
+	(NodeData propia, en caso de ser FULL, o propia + de los dos FULL vecinos, para los SPV)
+
+	*/
 };
 
