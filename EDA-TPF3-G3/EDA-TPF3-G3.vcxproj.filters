@@ -141,6 +141,9 @@
     <ClInclude Include="ImGuiHandler.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
+    <ClInclude Include="blockChain.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">

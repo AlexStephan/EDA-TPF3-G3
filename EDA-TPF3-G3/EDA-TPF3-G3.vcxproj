@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
     <ClInclude Include="EDAcoinsNet.h" />
     <ClInclude Include="errorType.h" />

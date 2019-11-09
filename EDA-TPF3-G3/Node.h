@@ -9,6 +9,9 @@
 #include "server.h"
 #include "client.h"
 
+//
+#include "errorType.h"
+
 class Node :
 	public Subject
 {
