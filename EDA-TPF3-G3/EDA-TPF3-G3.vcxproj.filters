@@ -40,6 +40,9 @@
     <Filter Include="Source Files\_NODES">
       <UniqueIdentifier>{48a1a873-baa7-4af3-ba89-59d640458023}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\LIBS %28ImGui, Json, etc%29">
+      <UniqueIdentifier>{3e3057dd-05bd-41c9-b352-61ab77721539}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="observer.h">
@@ -87,6 +90,24 @@
     <ClInclude Include="EDAcoinsNet.h">
       <Filter>Header Files\_MAINS</Filter>
     </ClInclude>
+    <ClInclude Include="FULLviewer.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="FULLcontroller.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVcontroller.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVviewer.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="NETcontroller.h">
+      <Filter>Header Files\_MAINS</Filter>
+    </ClInclude>
+    <ClInclude Include="NETviewer.h">
+      <Filter>Header Files\_MAINS</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -126,6 +147,27 @@
     </ClCompile>
     <ClCompile Include="SPVNode.cpp">
       <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="FULLcontroller.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="FULLviewer.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVcontroller.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVviewer.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="NETcontroller.cpp">
+      <Filter>Source Files\_MAINS</Filter>
+    </ClCompile>
+    <ClCompile Include="NETviewer.cpp">
+      <Filter>Source Files\_MAINS</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

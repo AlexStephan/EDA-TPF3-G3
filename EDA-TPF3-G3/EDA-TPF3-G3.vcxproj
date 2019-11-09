@@ -22,15 +22,21 @@
     <ClInclude Include="client.h" />
     <ClInclude Include="EDAcoinsNet.h" />
     <ClInclude Include="errorType.h" />
+    <ClInclude Include="FULLcontroller.h" />
     <ClInclude Include="FULLNode.h" />
+    <ClInclude Include="FULLviewer.h" />
     <ClInclude Include="manifestHandler.h" />
+    <ClInclude Include="NETcontroller.h" />
+    <ClInclude Include="NETviewer.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeData.h" />
     <ClInclude Include="observer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="server.h" />
     <ClInclude Include="Socket.h" />
+    <ClInclude Include="SPVcontroller.h" />
     <ClInclude Include="SPVNode.h" />
+    <ClInclude Include="SPVviewer.h" />
     <ClInclude Include="subject.h" />
     <ClInclude Include="WarningWindow.h" />
     <ClInclude Include="WarningWindowHandler.h" />
@@ -41,13 +47,20 @@
   <ItemGroup>
     <ClCompile Include="client.cpp" />
     <ClCompile Include="EDAcoinsNet.cpp" />
+    <ClCompile Include="FULLcontroller.cpp" />
     <ClCompile Include="FULLNode.cpp" />
+    <ClCompile Include="FULLviewer.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
+    <ClCompile Include="NETcontroller.cpp" />
+    <ClCompile Include="NETviewer.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeData.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="SPVcontroller.cpp" />
     <ClCompile Include="SPVNode.cpp" />
+    <ClCompile Include="SPVviewer.cpp" />
     <ClCompile Include="WarningWindow.cpp" />
     <ClCompile Include="WarningWindowHandler.cpp" />
   </ItemGroup>
