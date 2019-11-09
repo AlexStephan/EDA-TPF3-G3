@@ -3,5 +3,7 @@
 class FULLcontroller :
 	public Observer
 {
+public:
+	void cycle();
 };
 

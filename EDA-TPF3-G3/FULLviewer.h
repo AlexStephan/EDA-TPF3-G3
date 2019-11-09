@@ -3,5 +3,7 @@
 class FULLviewer :
 	public Observer
 {
+public:
+	void cycle();
 };
 

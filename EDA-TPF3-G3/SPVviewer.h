@@ -3,5 +3,7 @@
 class SPVviewer :
 	public Observer
 {
+public:
+	void cycle();
 };
 

@@ -17,11 +17,8 @@
 //Ventanas de Warning
 #include "WarningWindowHandler.h"
 
-//Graficas	//LINKEAR!!!!!!!!!!!!!!!!!!!!!!
-#include "allegro5/allegro.h"
-#include "allegro5/allegro_primitives.h"
-#include "imgui.h"
-#include "imgui_impl_allegro5.h"
+//ImGuiHandler
+#include "ImGuiHandler.h"
 
 class NETcontroller :
 	public Observer
@@ -34,7 +31,18 @@ public:
 	void cycle();
 private:
 	EDAcoinsNet* netmodel;
-	NETviewer* netviewer;
+	NETviewer netviewer;
 	bool running;
+
+	ImGuiHandler guiHandler;
+	WarningWindowHandler warningHandler;
+	void drawControlWindow();
+
+	vector<FULLcontroller*> FcontrolList;
+	vector<FULLviewer*> FviewList;
+	vector<SPVcontroller*> ScontrolList;
+	vector<SPVviewer*> SviewList;
+
+	string myWindowName;
 };
 
