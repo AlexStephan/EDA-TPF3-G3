@@ -21,16 +21,19 @@
   <ItemGroup>
     <ClInclude Include="client.h" />
     <ClInclude Include="EDAcoinsNet.h" />
+    <ClInclude Include="errorType.h" />
     <ClInclude Include="FULLNode.h" />
     <ClInclude Include="manifestHandler.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="nodeData2.h" />
-    <ClInclude Include="nodeData3.h" />
+    <ClInclude Include="NodeData.h" />
     <ClInclude Include="observer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="server.h" />
+    <ClInclude Include="Socket.h" />
     <ClInclude Include="SPVNode.h" />
     <ClInclude Include="subject.h" />
+    <ClInclude Include="WarningWindow.h" />
+    <ClInclude Include="WarningWindowHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc" />
@@ -41,10 +44,12 @@
     <ClCompile Include="FULLNode.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
     <ClCompile Include="Node.cpp" />
-    <ClCompile Include="nodeData2.cpp" />
-    <ClCompile Include="nodeData3.cpp" />
+    <ClCompile Include="NodeData.cpp" />
     <ClCompile Include="server.cpp" />
+    <ClCompile Include="Socket.cpp" />
     <ClCompile Include="SPVNode.cpp" />
+    <ClCompile Include="WarningWindow.cpp" />
+    <ClCompile Include="WarningWindowHandler.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

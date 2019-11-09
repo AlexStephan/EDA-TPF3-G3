@@ -5,7 +5,6 @@
 using namespace std;
 typedef unsigned int uint;
 
-
 struct ip_t {
 	uint b1;
 	uint b2;
@@ -14,20 +13,24 @@ struct ip_t {
 };
 
 
-class nodeData2
+class Socket
 {
 public:
-	nodeData2(uint port,ip_t ip);
-	nodeData2(uint port, uint ip1, uint ip2, uint ip3, uint ip4);
-	nodeData2(nodeData2& c);
+	Socket(uint port, ip_t ip);
+	Socket(uint port, uint ip1, uint ip2, uint ip3, uint ip4);
+	Socket(Socket& c);
 
 	string getPortString();
 	string getIPString();
 	uint getPort();
 	ip_t getIP();
-	
-protected:
+
+	bool operator==(Socket& s);
+
+private:
 	uint port;
 	ip_t ip;
 };
+
+
 

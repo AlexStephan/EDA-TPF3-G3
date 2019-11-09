@@ -19,6 +19,12 @@
     <Filter Include="Header Files\Node handlers">
       <UniqueIdentifier>{fa38b241-0edb-40a8-884f-fac28b63dbf5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Gui handlers">
+      <UniqueIdentifier>{1092f088-f056-4db7-85e1-61899b1b151f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gui handlers">
+      <UniqueIdentifier>{00d9e4d5-c99b-42de-959d-ee6231ac1c9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="observer.h">
@@ -51,11 +57,20 @@
     <ClInclude Include="EDAcoinsNet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="nodeData2.h">
+    <ClInclude Include="errorType.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
-    <ClInclude Include="nodeData3.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="WarningWindow.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="WarningWindowHandler.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeData.h">
+      <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -85,10 +100,16 @@
     <ClCompile Include="EDAcoinsNet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nodeData2.cpp">
+    <ClCompile Include="WarningWindow.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="WarningWindowHandler.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nodeData3.cpp">
+    <ClCompile Include="NodeData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
