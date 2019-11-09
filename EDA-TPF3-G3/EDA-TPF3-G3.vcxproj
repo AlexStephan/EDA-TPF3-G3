@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="block.h" />
+    <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
     <ClInclude Include="EDAcoinsNet.h" />
     <ClInclude Include="errorType.h" />
@@ -55,6 +57,7 @@
     <ResourceCompile Include="EDA-TPF3-G3.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="client.cpp" />
     <ClCompile Include="EDAcoinsNet.cpp" />
     <ClCompile Include="FULLcontroller.cpp" />
