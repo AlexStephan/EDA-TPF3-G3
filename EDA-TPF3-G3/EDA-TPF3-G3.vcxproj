@@ -24,6 +24,8 @@
     <ClInclude Include="FULLNode.h" />
     <ClInclude Include="manifestHandler.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="nodeData2.h" />
+    <ClInclude Include="nodeData3.h" />
     <ClInclude Include="observer.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="server.h" />
@@ -39,6 +41,8 @@
     <ClCompile Include="FULLNode.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="nodeData2.cpp" />
+    <ClCompile Include="nodeData3.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="SPVNode.cpp" />
   </ItemGroup>

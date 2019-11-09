@@ -51,6 +51,12 @@
     <ClInclude Include="EDAcoinsNet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="nodeData2.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="nodeData3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -77,6 +83,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EDAcoinsNet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nodeData2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="nodeData3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
