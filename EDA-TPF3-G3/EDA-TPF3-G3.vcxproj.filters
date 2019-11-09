@@ -46,6 +46,12 @@
     <Filter Include="Source Files\LIBS %28ImGui, Json, etc%29">
       <UniqueIdentifier>{86584b97-0b66-4758-ac7e-37a0ddd4033a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Bitcoins">
+      <UniqueIdentifier>{7db2fd29-85bf-4c2d-aec8-d8f68fd5a676}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bitcoins">
+      <UniqueIdentifier>{9df6882b-f68a-43e0-8022-17f4b8b87988}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="observer.h">
@@ -141,8 +147,11 @@
     <ClInclude Include="ImGuiHandler.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
+    <ClInclude Include="block.h">
+      <Filter>Header Files\Bitcoins</Filter>
+    </ClInclude>
     <ClInclude Include="blockChain.h">
-      <Filter>Header Files\Node handlers</Filter>
+      <Filter>Header Files\Bitcoins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +231,9 @@
     </ClCompile>
     <ClCompile Include="ImGuiHandler.cpp">
       <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Source Files\Bitcoins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
