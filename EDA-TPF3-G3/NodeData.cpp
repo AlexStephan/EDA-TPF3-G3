@@ -15,7 +15,7 @@ NodeData::NodeData(string id, Socket& c) :
 {
 }
 
-NodeData::NodeData(NodeData& c) :
+NodeData::NodeData(const NodeData& c) :
 	id(c.id), socket(c.socket)
 {
 }

@@ -4,7 +4,7 @@
 int main(void) {
 	srand(time(NULL));
 	EDAcoinsNet network;
-	NETcontroller controller(network);
+	NETcontroller controller(&network);
 
 	network.attach(controller);
 

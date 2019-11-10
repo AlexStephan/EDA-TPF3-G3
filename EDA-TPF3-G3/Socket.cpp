@@ -11,7 +11,7 @@ Socket::Socket(uint port, uint ip1, uint ip2, uint ip3, uint ip4) :
 {
 }
 
-Socket::Socket(Socket& c) :
+Socket::Socket(const Socket& c) :
 	port(c.port), ip(c.ip)
 {
 }
