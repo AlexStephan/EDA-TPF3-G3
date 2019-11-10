@@ -53,17 +53,15 @@ private:
 	void keepSending();										//All active clients keep sending their messages, parse if completed, destroy if completed.
 	chrono::system_clock::time_point clock;					//Current time variable, used in initialization of Network Layout
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
-	//Json creation for network usage
-	string createJsonBlock(unsigned int height);
-	string createJsonTx(Transaction tx);
-	string createJsonMerkle();
-	string createJsonFilter(string filter);
-	string createHeader(unsigned int height);
-	//Response creation for newtwork usage
+	//INTERACTION WITH STRANGERS
+	errorType postLayout(Socket socket);
+	errorType postPing(Socket socket);
+	//INTERACTION WITH NEIGHBOURS
 	string serverResponse(STATE rta);
-	string createServerErrRsp();
-	string createServerBlock(string path);
-	string createServerOkRsp(string path);
-	void createDates(char*, char*);
+	errorType postBlock(unsigned int neighbourPos, unsigned int height);
+	errorType getBlockHeader(unsigned int height, unsigned int neighbourPos);
+	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
+	errorType postMerkleBlock(unsigned int neighbourPos);
+	errorType postFilter(unsigned int neighbourPos);
 };
 

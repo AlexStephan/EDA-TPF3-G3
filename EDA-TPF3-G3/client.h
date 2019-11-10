@@ -4,6 +4,8 @@
 #include <string>
 #include <curl/curl.h>
 
+#define HTTP_OK "HTTP OK"
+
 using namespace std;
 
 typedef enum { POSTClient, GETClient } ClientType;
@@ -17,6 +19,7 @@ public:
 	void sendRequest(void);
 	void POST(string path, string& json);
 	void GET(string path, string& json);
+	Socket getSocket();
 	string getResponse(void);
 	int getRunning();
 	ClientType getClientType() { return cType; };
