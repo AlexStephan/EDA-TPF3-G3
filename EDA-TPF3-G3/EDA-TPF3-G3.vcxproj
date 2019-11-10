@@ -44,6 +44,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeData.h" />
     <ClInclude Include="observer.h" />
+    <ClInclude Include="printTXroutine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="server.h" />
     <ClInclude Include="Socket.h" />
@@ -51,6 +52,8 @@
     <ClInclude Include="SPVNode.h" />
     <ClInclude Include="SPVviewer.h" />
     <ClInclude Include="subject.h" />
+    <ClInclude Include="TreeWindow.h" />
+    <ClInclude Include="TreeWindowHandler.h" />
     <ClInclude Include="WarningWindow.h" />
     <ClInclude Include="WarningWindowHandler.h" />
   </ItemGroup>
@@ -76,11 +79,14 @@
     <ClCompile Include="NETviewer.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeData.cpp" />
+    <ClCompile Include="printTXroutine.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="SPVcontroller.cpp" />
     <ClCompile Include="SPVNode.cpp" />
     <ClCompile Include="SPVviewer.cpp" />
+    <ClCompile Include="TreeWindow.cpp" />
+    <ClCompile Include="TreeWindowHandler.cpp" />
     <ClCompile Include="WarningWindow.cpp" />
     <ClCompile Include="WarningWindowHandler.cpp" />
   </ItemGroup>

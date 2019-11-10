@@ -20,12 +20,12 @@ NodeData::NodeData(const NodeData& c) :
 {
 }
 
-string NodeData::getID()
+string NodeData::getID() const
 {
 	return id;
 }
 
-Socket NodeData::getSocket()
+Socket NodeData::getSocket() const
 {
 	return socket;
 }

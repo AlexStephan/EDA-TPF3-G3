@@ -156,6 +156,15 @@
     <ClInclude Include="layout.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
+    <ClInclude Include="TreeWindow.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeWindowHandler.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="printTXroutine.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -237,6 +246,15 @@
     </ClCompile>
     <ClCompile Include="Block.cpp">
       <Filter>Source Files\Bitcoins</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeWindowHandler.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeWindow.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="printTXroutine.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

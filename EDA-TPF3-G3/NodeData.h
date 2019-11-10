@@ -9,8 +9,8 @@ public:
 	NodeData(string id, Socket& c);
 	NodeData(const NodeData& c);
 
-	string getID();
-	Socket getSocket();
+	string getID() const;
+	Socket getSocket() const;
 
 private:
 	string id;
