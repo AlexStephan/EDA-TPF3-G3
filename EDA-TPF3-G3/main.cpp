@@ -3,7 +3,7 @@
 
 int main(void) {
 	EDAcoinsNet network;
-	NETcontroller controller(network);
+	NETcontroller controller(&network);
 
 	network.attach(controller);
 

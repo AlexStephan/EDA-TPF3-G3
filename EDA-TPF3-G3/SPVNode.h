@@ -1,5 +1,6 @@
 #pragma once
 #include "Node.h"
+#include "blockChain.h"
 
 class SPVNode :
 	public Node
