@@ -52,10 +52,12 @@ void TreeWindow::draw()
 			ImGui::SameLine();
 			ImGui::BeginChild("Txs",ImVec2(CCHILD_W,CCHILD_H));
 
-			vector<Transaction> TXlist = block.getTransactions();
+			vector<Transaction>& TXlist = block.getTransactions();
 
-			for(int j=0;j<block.getNTx();j++)
-				printTx(block.getTransactions())
+			for (int j = 0; j < TXlist.size(); j++)
+				printTx(TXlist[j], j);
+
+			ImGui::EndChild();
 		}
 		else {
 			ImGui::Text("There are no TX in this block...\n...and that just doesn't feel right...");
