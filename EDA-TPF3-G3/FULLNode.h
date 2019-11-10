@@ -25,6 +25,14 @@ public:
 	errorType makeBlock(); //"MINAR"
 	errorType addNeighbour(NodeData neighbour); //agrega fulls
 
+	/***********************************************************************************
+		METHODS USED BY VIEWER
+	***********************************************************************************/
+
+	NodeData getData(); //own nodeData
+	const vector<NodeData>* getNeighbours();
+	const vector<Transaction>* getPendingTX();
+
 private:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
