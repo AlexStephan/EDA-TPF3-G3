@@ -5,9 +5,9 @@
 #include "manifestHandler.h"
 #include "sSocket.h"
 #include "blockChain.h"
+#include "layout.h"
 
 typedef enum {IDLE, WAITING_LAYOUT, COLLECTING_MEMBERS, SENDING_LAYOUT, NETWORK_CREATED} fullNodeStates;
-typedef string Layout;
 
 
 class FULLNode :
