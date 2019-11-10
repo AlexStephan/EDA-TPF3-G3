@@ -14,7 +14,7 @@
 
 FULLviewer::FULLviewer() :
 	nodedata(NO_DATA), neigbours(), pendingTX(),
-	windowName("NO_DATA")
+	windowName("NO_DATA"), treeHandler()
 {
 }
 
@@ -27,7 +27,14 @@ void FULLviewer::update(void*n)
 	pendingTX = node->getPendingTX();
 
 	windowName = nodedata.getID();
+	
+	treeHandler.setId(nodedata.getID());
+}
 
+void FULLviewer::cycle()
+{
+	drawWindow();
+	treeHandler.draw();
 }
 
 void FULLviewer::printNodeData()
@@ -62,6 +69,7 @@ void FULLviewer::printPendingTX()
 			ImGui::SameLine();
 			ImGui::BeginChild("Txs", ImVec2(CCHILD_W, CCHILD_H));
 			for (int i = 0; i < pendingTX->size(); i++) {
+				//
 				string subWindowName = (*pendingTX)[i].txId + "##" + to_string(i);
 				if (ImGui::CollapsingHeader(subWindowName.c_str())) {
 
@@ -69,6 +77,7 @@ void FULLviewer::printPendingTX()
 					printVin(i);
 					printVout(i);
 				}
+				//
 			}
 			ImGui::EndChild();
 		}

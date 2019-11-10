@@ -2,6 +2,7 @@
 #include "observer.h"
 
 #include "FULLNode.h"
+#include "TreeWindowHandler.h"
 
 class FULLviewer :
 	public Observer
@@ -16,6 +17,9 @@ private:
 	string windowName;
 	const vector<NodeData>* neigbours;
 	const vector<Transaction>* pendingTX;
+	TreeWindowHandler treeHandler;
+
+	void drawWindow();
 
 	void printNodeData();
 	void printNeighbours();

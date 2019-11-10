@@ -44,6 +44,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="NodeData.h" />
     <ClInclude Include="observer.h" />
+    <ClInclude Include="printTXroutine.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="server.h" />
     <ClInclude Include="Socket.h" />
@@ -78,6 +79,7 @@
     <ClCompile Include="NETviewer.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NodeData.cpp" />
+    <ClCompile Include="printTXroutine.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="SPVcontroller.cpp" />

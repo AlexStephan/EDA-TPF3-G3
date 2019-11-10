@@ -162,6 +162,9 @@
     <ClInclude Include="TreeWindowHandler.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
+    <ClInclude Include="printTXroutine.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -248,6 +251,9 @@
       <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
     <ClCompile Include="TreeWindow.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="printTXroutine.cpp">
       <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
   </ItemGroup>
