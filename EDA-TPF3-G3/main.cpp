@@ -2,6 +2,7 @@
 #include "NETcontroller.h"
 
 int main(void) {
+	srand(time(NULL));
 	EDAcoinsNet network;
 	NETcontroller controller(&network);
 
