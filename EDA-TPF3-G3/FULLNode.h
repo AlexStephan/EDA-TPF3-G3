@@ -16,5 +16,12 @@ public:
 	errorType makeBlock(); //"MINAR"
 	errorType addNeighbour(NodeData neighbour); //agrega fulls
 
+	//Metodos accedidos desde el viewer
+	NodeData getData(); //own nodeData
+	const vector<NodeData>* getNeighbours();
+	const vector<Transaction>* getPendingTX();
+
+
+
 };
 
