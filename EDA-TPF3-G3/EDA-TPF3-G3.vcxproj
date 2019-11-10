@@ -51,6 +51,8 @@
     <ClInclude Include="SPVNode.h" />
     <ClInclude Include="SPVviewer.h" />
     <ClInclude Include="subject.h" />
+    <ClInclude Include="TreeWindow.h" />
+    <ClInclude Include="TreeWindowHandler.h" />
     <ClInclude Include="WarningWindow.h" />
     <ClInclude Include="WarningWindowHandler.h" />
   </ItemGroup>
@@ -81,6 +83,8 @@
     <ClCompile Include="SPVcontroller.cpp" />
     <ClCompile Include="SPVNode.cpp" />
     <ClCompile Include="SPVviewer.cpp" />
+    <ClCompile Include="TreeWindow.cpp" />
+    <ClCompile Include="TreeWindowHandler.cpp" />
     <ClCompile Include="WarningWindow.cpp" />
     <ClCompile Include="WarningWindowHandler.cpp" />
   </ItemGroup>
