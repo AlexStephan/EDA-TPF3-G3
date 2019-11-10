@@ -22,6 +22,7 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="layout.h" />
     <ClInclude Include="EDAcoinsNet.h" />
     <ClInclude Include="errorType.h" />
     <ClInclude Include="FULLcontroller.h" />
