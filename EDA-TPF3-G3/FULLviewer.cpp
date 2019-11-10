@@ -1,16 +1,8 @@
 #include "FULLviewer.h"
 #include "imgui.h"
+#include "printTXroutine.h"
 
 #define NO_DATA "NO DATA",0,0,0,0,0
-
-#define CHILD_W	300
-#define CHILD_H	330
-
-#define CCHILD_W (CHILD_W-40)
-#define CCHILD_H 200
-
-#define VCHILD_W (CCHILD_W-40)
-#define VCHILD_H 100
 
 FULLviewer::FULLviewer() :
 	nodedata(NO_DATA), neigbours(), pendingTX(),
@@ -70,6 +62,14 @@ void FULLviewer::printPendingTX()
 			ImGui::BeginChild("Txs", ImVec2(CCHILD_W, CCHILD_H));
 			for (int i = 0; i < pendingTX->size(); i++) {
 				//
+
+				printTx((*pendingTX)[i],i);
+
+
+
+
+
+				/* //DO NOT ERASE (YET)
 				string subWindowName = (*pendingTX)[i].txId + "##" + to_string(i);
 				if (ImGui::CollapsingHeader(subWindowName.c_str())) {
 
@@ -77,6 +77,7 @@ void FULLviewer::printPendingTX()
 					printVin(i);
 					printVout(i);
 				}
+				*/
 				//
 			}
 			ImGui::EndChild();
@@ -87,6 +88,7 @@ void FULLviewer::printPendingTX()
 	}
 }
 
+/* DO NOT ERASE (YET)
 void FULLviewer::printVin(int i)
 {
 	ImGui::Text("Number of incomes: %u", (*pendingTX)[i].nTxIn);
@@ -116,3 +118,4 @@ void FULLviewer::printVout(int i)
 	}
 	ImGui::EndChild();
 }
+*/

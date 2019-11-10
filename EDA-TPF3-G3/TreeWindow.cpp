@@ -1,5 +1,6 @@
 #include "TreeWindow.h"
 #include "imgui.h"
+#include "printTXroutine.h"
 
 #define verticalStep 25.
 #define horizontalStep 25.
@@ -43,6 +44,22 @@ void TreeWindow::draw()
 		ImGui::Text("NONCE: %lu", block.getNonce());
 		ImGui::Text("MERKLE ROOT: %s", block.getMerkleRoot());
 		ImGui::TreePop();
+	}
+
+	if (ImGui::CollapsingHeader("TX")) {
+		if (block.getNTx() > 0) {
+			ImGui::Text(" ");
+			ImGui::SameLine();
+			ImGui::BeginChild("Txs",ImVec2(CCHILD_W,CCHILD_H));
+
+			vector<Transaction> TXlist = block.getTransactions();
+
+			for(int j=0;j<block.getNTx();j++)
+				printTx(block.getTransactions())
+		}
+		else {
+			ImGui::Text("There are no TX in this block...\n...and that just doesn't feel right...");
+		}
 	}
 
 	drawTree();

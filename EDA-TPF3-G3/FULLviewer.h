@@ -19,12 +19,14 @@ private:
 	const vector<Transaction>* pendingTX;
 	TreeWindowHandler treeHandler;
 
-	void drawWindow();
+	void drawWindow();	//OLI (descripcion WIP)
 
 	void printNodeData();
 	void printNeighbours();
-	void printPendingTX();
-	void printVin(int i);
-	void printVout(int i);
+	void printPendingTX();	//OLI!! Fijarse en la funcion printTx para cambiar el comportamiento de esa parte
+
+
+//	void printVin(int i);	//DO NOT ERASE (YET)
+//	void printVout(int i);
 };
 
