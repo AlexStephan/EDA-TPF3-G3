@@ -19,6 +19,39 @@
     <Filter Include="Header Files\Node handlers">
       <UniqueIdentifier>{fa38b241-0edb-40a8-884f-fac28b63dbf5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Gui handlers">
+      <UniqueIdentifier>{1092f088-f056-4db7-85e1-61899b1b151f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Gui handlers">
+      <UniqueIdentifier>{00d9e4d5-c99b-42de-959d-ee6231ac1c9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Node Handlers">
+      <UniqueIdentifier>{a6f2c5ad-a12c-4874-9e49-5da1429ee757}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\_MAINS">
+      <UniqueIdentifier>{d7e65169-6290-4907-8b7d-f1647386ea73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\_NODES">
+      <UniqueIdentifier>{7f06f51e-2fc8-4eec-a846-e7961dfb80f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\_MAINS">
+      <UniqueIdentifier>{2e3bc4c8-de0b-40ed-bba8-ccefdbd6f120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\_NODES">
+      <UniqueIdentifier>{48a1a873-baa7-4af3-ba89-59d640458023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LIBS %28ImGui, Json, etc%29">
+      <UniqueIdentifier>{3e3057dd-05bd-41c9-b352-61ab77721539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LIBS %28ImGui, Json, etc%29">
+      <UniqueIdentifier>{86584b97-0b66-4758-ac7e-37a0ddd4033a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Bitcoins">
+      <UniqueIdentifier>{7db2fd29-85bf-4c2d-aec8-d8f68fd5a676}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bitcoins">
+      <UniqueIdentifier>{9df6882b-f68a-43e0-8022-17f4b8b87988}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="observer.h">
@@ -26,18 +59,6 @@
     </ClInclude>
     <ClInclude Include="subject.h">
       <Filter>Header Files\MVC related</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SPVNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FULLNode.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="client.h">
       <Filter>Header Files\Node handlers</Filter>
@@ -48,8 +69,89 @@
     <ClInclude Include="manifestHandler.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
+    <ClInclude Include="errorType.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="WarningWindow.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="WarningWindowHandler.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeData.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FULLNode.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVNode.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
     <ClInclude Include="EDAcoinsNet.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\_MAINS</Filter>
+    </ClInclude>
+    <ClInclude Include="FULLviewer.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="FULLcontroller.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVcontroller.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="SPVviewer.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="NETcontroller.h">
+      <Filter>Header Files\_MAINS</Filter>
+    </ClInclude>
+    <ClInclude Include="NETviewer.h">
+      <Filter>Header Files\_MAINS</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig_allegro5.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_allegro5.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiHandler.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h">
+      <Filter>Header Files\Bitcoins</Filter>
+    </ClInclude>
+    <ClInclude Include="blockChain.h">
+      <Filter>Header Files\Bitcoins</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -58,26 +160,83 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Node.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="WarningWindow.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
-    <ClCompile Include="SPVNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FULLNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="server.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="WarningWindowHandler.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
     <ClCompile Include="client.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeData.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
     <ClCompile Include="manifestHandler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
     <ClCompile Include="EDAcoinsNet.cpp">
+      <Filter>Source Files\_MAINS</Filter>
+    </ClCompile>
+    <ClCompile Include="FULLNode.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVNode.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="FULLcontroller.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="FULLviewer.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVcontroller.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="SPVviewer.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="NETcontroller.cpp">
+      <Filter>Source Files\_MAINS</Filter>
+    </ClCompile>
+    <ClCompile Include="NETviewer.cpp">
+      <Filter>Source Files\_MAINS</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_allegro5.cpp">
+      <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiHandler.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Source Files\Bitcoins</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
