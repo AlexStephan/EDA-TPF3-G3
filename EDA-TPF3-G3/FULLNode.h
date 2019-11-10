@@ -39,7 +39,7 @@ public:
 	//objeto const !!!! Si durante el proceso de volver const los
 	//getters de Block tropezaron con alguna definicion que yo (Alex)
 	//hice -por imprudencia propia- avisarme y lo arreglo
-	BlockChain& getBlockChain();
+	BlockChain* getBlockChain();
 
 private:
 	/***********************************************************************************

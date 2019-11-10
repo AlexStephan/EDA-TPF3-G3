@@ -17,6 +17,7 @@ private:
 	string windowName;
 	const vector<NodeData>* neigbours;
 	const vector<Transaction>* pendingTX;
+	BlockChain* blockchain;
 	TreeWindowHandler treeHandler;
 
 	void drawWindow();	//	OLI

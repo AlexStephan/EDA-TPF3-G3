@@ -6,7 +6,8 @@
 
 FULLviewer::FULLviewer() :
 	nodedata(NO_DATA), neigbours(), pendingTX(),
-	windowName("NO_DATA"), treeHandler()
+	windowName("NO_DATA"), treeHandler(),
+	blockchain()
 {
 }
 
@@ -17,6 +18,7 @@ void FULLviewer::update(void*n)
 	nodedata = node->getData();
 	neigbours = node->getNeighbours();
 	pendingTX = node->getPendingTX();
+	blockchain = node->getBlockChain();
 
 	windowName = nodedata.getID();
 	
