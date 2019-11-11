@@ -63,36 +63,48 @@ void SPVcontroller::drawMTX() {
 	ImGui::Text("\nMAKE A TRANSACTION\n\n");
 
 	for (int i = 0; i < currTX; i++) {
-		if (drawVout(txData[i])) {
+		if (drawV(txVin[i], txVout[i])) {
 			currTX--;
-			for (int j = i; j < currTX; j++)
-				txData[j] = txData[j + 1];
-			txData.resize(txData.size() - 1);
+			for (int j = i; j < currTX; j++) {
+				txVin[j] = txVin[j + 1];
+				txVout[j] = txVout[j + 1];
+			}
+			txVout.resize(txVout.size() - 1);
 		}
 	}
 
-	if (txData[currTX - 1].publicId.size()) {
-		Vout aux;
+	if (txVout[currTX - 1].publicId.size() && txVout[currTX - 1].publicId.size()) {
+		Vin vin;
+		Vout vout;
 		currTX++;
-		txData.push_back(aux);
+		txVin.push_back(vin);
+		txVout.push_back(vout);
 	}
 
-	ImGui::Text("Amount of Vouts: %d", currTX - 1);
+	ImGui::Text("Amount of Vins and Vouts: %d", currTX - 1);
 	if (ImGui::Button("MAKE TRANSACTION")) {
-		txData.pop_back();
-		warningHandler.check(snode->makeTX(txData));
+		txVin.pop_back();
+		txVout.pop_back();
+		warningHandler.check(snode->makeTX(txVout, txVin));
 		cstate = MENU;
 	}
 
 }
 
-bool SPVcontroller::drawVout(Vout& aux) {
+bool SPVcontroller::drawV(Vin& vin, Vout& vout) {
 	bool r = false;
-	ImGui::InputText("Public ID", &aux.publicId);
-	ImGui::InputText("Monto", &auxstr);
-	aux.amount = _atoi64(auxstr.c_str());
 
-	if (ImGui::Button("Delete Vout"))
+	ImGui::Text("Vin");
+	ImGui::InputText("Block ID", &vin.blockId);
+	ImGui::InputText("Transaction ID", &vin.txId);
+
+	ImGui::Text("Vout");
+	ImGui::InputText("Public ID", &vout.publicId);
+	ImGui::SetNextItemWidth(50);
+	ImGui::InputText("Monto", &auxstr);
+	vout.amount = _atoi64(auxstr.c_str());
+
+	if (ImGui::Button("Delete##"))
 		r = true;
 
 	return r;

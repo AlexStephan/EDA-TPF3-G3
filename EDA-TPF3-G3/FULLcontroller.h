@@ -23,7 +23,7 @@ private:
 	void drawMBlock();
 	void drawMTX();
 	void drawAddNode();
-	bool drawVout(Vout&);
+	bool drawV(Vin&, Vout&);
 	void newPortSelect();
 	void newIpSelect();
 	void returnButton();
@@ -46,9 +46,8 @@ private:
 	int currTX;
 	string auxstr;
 	//int currNeighbour;
-	vector<Vout> txData;
-	//string neighbourNames;
-	//char TXbuf[MAX_TX_ID];
+	vector<Vout> txVout;
+	vector<Vin> txVin;
 	FULLNode* fnode;
 	string windowID;
 	WarningWindowHandler warningHandler;
