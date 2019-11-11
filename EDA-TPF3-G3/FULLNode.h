@@ -13,7 +13,7 @@
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  *****************************************************************************/
-typedef enum {IDLE, WAITING_LAYOUT, COLLECTING_MEMBERS, SENDING_LAYOUT, NETWORK_CREATED} fullNodeStates;
+typedef enum {IDLE, WAITING_LAYOUT, COLLECTING_MEMBERS, SENDING_LAYOUT,GOT_LAYOUT, NETWORK_CREATED} fullNodeStates;
 
 
 class FULLNode :
@@ -27,7 +27,7 @@ public:
 	/***********************************************************************************
 		METHODS USED BY CONTROLLER
 	***********************************************************************************/
-	errorType makeTX(const vector<Vout>& receivers);
+	errorType makeTX(const vector<Vout>& receivers, const vector<Vin>& givers);
 	errorType makeBlock(); //"MINAR"
 	errorType addNeighbour(NodeData neighbour); //agrega fulls
 
@@ -81,13 +81,13 @@ private:
 	chrono::system_clock::time_point clock;					//Current time variable, used in initialization of Network Layout
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
 
-	//INTERACTION WITH STRANGERS
+	//CLIENT POST
 	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
 	errorType postBlock(unsigned int neighbourPos, unsigned int height);
-	errorType postLayout(Socket sock);
-	errorType postPing(Socket sock);
+	errorType postLayout(NodeData data);
+	errorType postPing(NodeData data);
 
-	//INTERACTION WITH NEIGHBOURS
+	//SERVER RESPONSE
 	string serverResponse(STATE rta);
 	jsonHandler JSONHandler;
 

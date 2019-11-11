@@ -17,7 +17,7 @@ public:
 	/***********************************************************************************
 		METHODS USED BY CONTROLLER
 	***********************************************************************************/
-	errorType makeTX(const vector<Vout>& receivers);
+	errorType makeTX(const vector<Vout>& receivers, const vector<Vin>& givers);
 	errorType postFilter();
 	errorType changeFilterNode(NodeData FilterNode);
 	errorType changeHeaderNode(NodeData HeaderNode);
@@ -30,9 +30,20 @@ public:
 	NodeData getHeaderNodeData();
 
 private:
+	/***********************************************************************************
+	NEIGHBOURHOOD AND NODES
+	***********************************************************************************/
 	NodeData filterNode;
 	NodeData headerNode;
+	vector<MerkleBlock> mBlocks;
 	jsonHandler JSONHandler;
+	/***********************************************************************************
+		NETWORKING SH*T
+	***********************************************************************************/
 	vector <Client*> clients;
+	vector <Server*> servers;
+	errorType getBlockHeader(unsigned int height);
+	errorType postTransaction(Transaction tx);
+	void keepListening();
+	void keepSending();
 };
-
