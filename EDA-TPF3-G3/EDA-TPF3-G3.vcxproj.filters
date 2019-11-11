@@ -165,6 +165,12 @@
     <ClInclude Include="printTXroutine.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
+    <ClInclude Include="layoutGeneratorHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="layoutNumericConection.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -255,6 +261,12 @@
     </ClCompile>
     <ClCompile Include="printTXroutine.cpp">
       <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="layoutGeneratorHandler.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="layoutNumericConection.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -38,6 +38,8 @@
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="layoutGeneratorHandler.h" />
+    <ClInclude Include="layoutNumericConection.h" />
     <ClInclude Include="manifestHandler.h" />
     <ClInclude Include="NETcontroller.h" />
     <ClInclude Include="NETviewer.h" />
@@ -73,6 +75,8 @@
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_allegro5.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
+    <ClCompile Include="layoutGeneratorHandler.cpp" />
+    <ClCompile Include="layoutNumericConection.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
     <ClCompile Include="NETcontroller.cpp" />
