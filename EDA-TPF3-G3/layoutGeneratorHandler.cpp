@@ -34,10 +34,8 @@ bool layoutGeneratorHandler::generateLayout()
 		createNumericLayout();
 		generateConections();
 		conectSubGraphs();
-		//ya tengo el layout hecho, pero en numericLayout. Debo traducirlo
 		translateLayout();
 
-		//make layout from graph!!!
 
 		result = true;
 	}
@@ -168,10 +166,17 @@ void layoutGeneratorHandler::unmarkAll()
 
 void layoutGeneratorHandler::translateLayout()
 {
+	//SUPONGO Q FUNCIONA BIEN :V
 	generatedLayout.clear();
 
 	for (index i = 0; i < numericLayout.size(); i++) {
-		generatedLayout.emplace_back();
+		generatedLayout.emplace_back(index2Data(i));
+		
+		const vector<index>& connections = numericLayout[i].getConections();
+		for (index j = 0; j < connections.size(); j++) {
+			index n = connections[j];
+			generatedLayout[i].myNeighbours.emplace_back(index2Data(n));
+		}
 	}
 
 }

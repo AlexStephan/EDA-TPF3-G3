@@ -1,5 +1,7 @@
 #include "FULLNode.h"
 
+#include "layoutGeneratorHandler.h"
+
 FULLNode::FULLNode(NodeData ownData) {
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
@@ -203,6 +205,12 @@ void FULLNode::addTx(string trans) {
 /***********************************************************************************
 	NETWORKING SH*T
 ***********************************************************************************/
+void FULLNode::makeLayout()
+{
+	layoutGeneratorHandler layoutGen(ownData, network);
+	layoutGen.generateLayout();
+	layout = layoutGen.getLayout();
+}
 void FULLNode::keepListening() {
 
 }
