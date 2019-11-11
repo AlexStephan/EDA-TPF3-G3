@@ -12,22 +12,12 @@ static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp)
 /*******************************************************************************
 	CONSTRUTORs
  ******************************************************************************/
-Client::Client(Socket socket)
-{
-	curlm = curl_multi_init();
-	curl = curl_easy_init();
-	ip = socket.getIPString();
-	port = socket.getPortString();
-	running = 0;
-
-}
 
 Client::Client(NodeData data)
 {
 	curlm = curl_multi_init();
 	curl = curl_easy_init();
-	ip = data.getSocket().getIPString();
-	port = data.getSocket().getPortString();
+	receiver = data;
 	running = 0;
 }
 
@@ -49,7 +39,7 @@ Client::~Client()
 void Client::POST(string path, string json)
 {
 	cType = POSTClient;
-	string url = "http://127.0.0.1:" + port + path;
+	string url = "http://127.0.0.1:" + receiver.getSocket().getPortString() + path;
 
 	if (curl && curlm)
 	{
@@ -82,7 +72,7 @@ void Client::POST(string path, string json)
 void Client::GET(string path, string json)
 {
 	cType = GETClient;
-	string url = "http://127.0.0.1:" + port + path;
+	string url = "http://127.0.0.1:" + receiver.getSocket().getPortString() + path;
 
 	if (curl && curlm)
 	{
@@ -138,30 +128,7 @@ errorType Client::sendRequest(void)
 string Client::getResponse(void) { return response; }
 int Client::getRunning() { return running; }
 ClientType Client::getClientType() { return cType; }
-
-Socket Client::getSocket() 
-{
-	Socket sock(atoi(port.c_str()),crackIp()) ;
-	return sock;
-}
-
-
-ip_t Client::crackIp()
-{
-	ip_t _ip;
-	size_t pos1 = ip.find('.');
-	_ip.b1 = atoi(ip.substr(0, pos1).c_str());
-
-	size_t pos2 = ip.find('.', pos1 + 1);
-	_ip.b2 = atoi(ip.substr(pos1 + 1, pos2).c_str());
-
-	size_t pos3 = ip.find('.', pos2 + 1);
-	_ip.b3 = atoi(ip.substr(pos2 + 1, pos3).c_str());
-
-	_ip.b4 = atoi(ip.substr(pos3 + 1).c_str());
-
-	return _ip;
-}
+NodeData Client::getReceiverData() { return receiver; }
 
 
 /*******************************************************************************

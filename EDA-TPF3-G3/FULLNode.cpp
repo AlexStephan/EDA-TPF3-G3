@@ -51,7 +51,7 @@ void FULLNode::cycle() {
 		if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
 			nodeState = COLLECTING_MEMBERS;						//We take care of the layout
 			for (int i = 0; i < nodesInManifest.size(); i++) {
-				postPing(nodesInManifest[i].getSocket());		//Ping each node in manifest who isn't me (just a bit, rest of sending is done in COLLECTING_MEMBERS)
+				postPing(nodesInManifest[i]);		//Ping each node in manifest who isn't me (just a bit, rest of sending is done in COLLECTING_MEMBERS)
 			}
 		}
 		break;
@@ -67,12 +67,12 @@ void FULLNode::cycle() {
 					break;
 				}
 				else if (curr->getResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
-					network.push_back(curr->getRecepientNodeData());
+					network.push_back(curr->getReceiverData());
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
 				else{												//If none of the responses is received
-					postPing(clients[i]->getSocket());				//Post ping again
+					postPing(clients[i]->getReceiverData());				//Post ping again
 					delete clients[i];								//Destroy failed client
 					clients.erase(clients.begin() + i);				//Remove failed client from list
 				}
@@ -95,7 +95,7 @@ void FULLNode::cycle() {
 			makeLayout();
 			layoutMsg = JSONHandler.createJsonLayout(layout);
 			if (gotReady != -1) {
-				addNeighbour(clients[gotReady]->getRecepientNodeData());						//SPEAK WITH NETWORKING PPL
+				addNeighbour(clients[gotReady]->getReceiverData());						//SPEAK WITH NETWORKING PPL
 			}
 			for (int i = 0; i < clients.size(); i++) {
 				delete clients[i];								//Destroy client
@@ -103,7 +103,7 @@ void FULLNode::cycle() {
 			}
 			clients.empty();
 			for (int i = 0; i < network.size(); i++)
-				postLayout(clients[i]->getSocket());				//Start posting Layout to all nodes in network
+				postLayout(clients[i]->getReceiverData());				//Start posting Layout to all nodes in network
 		}
 		break;
 	case WAITING_LAYOUT:
@@ -141,7 +141,7 @@ void FULLNode::cycle() {
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
 				else {
-					postLayout(clients[i]->getSocket());			//Post layout again
+					postLayout(clients[i]->getReceiverData());			//Post layout again
 					delete clients[i];								//Destroy failed client
 					clients.erase(clients.begin() + i);				//Remove failed client from list
 				}
@@ -386,7 +386,7 @@ errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 }
 
 
-errorType FULLNode::postLayout(Socket sock)
+errorType FULLNode::postLayout(NodeData sock)
 {
 	Client* client = new Client(sock);
 	client->POST("/eda_coin/NETWORK_LAYOUT", layoutMsg);
@@ -399,7 +399,7 @@ errorType FULLNode::postLayout(Socket sock)
 
 
 
-errorType FULLNode::postPing(Socket sock)
+errorType FULLNode::postPing(NodeData sock)
 {
 	Client* client = new Client(sock);
 	client->POST("/eda_coin/PING");
@@ -410,6 +410,48 @@ errorType FULLNode::postPing(Socket sock)
 	return err;
 }
 
+/***********************************************************************************
+	SEREVR REPONSE
+***********************************************************************************/
+string FULLNode::serverResponse(STATE rta)
+{
+	string message;
+
+	switch (rta)
+	{
+	case GET:
+		message = createServerOkRsp("/eda_coin/get_block_header/");
+		break;
+
+	case TX:
+		message = createServerOkRsp("/eda_coin/send_tx/");
+		break;
+
+
+	case BLOCK:
+		message = createServerOkRsp("/eda_coin/send_block/");
+		break;
+
+
+	case MERKLE:
+		message = createServerOkRsp("/eda_coin/send_merkle_block/");
+		break;
+
+
+	case FILTER:
+		message = createServerOkRsp("/eda_coin/send_filter/");
+		break;
+
+
+
+	case ERR:
+		message = createServerErrRsp();
+		break;
+	}
+
+	return message;
+
+}
 
 /***********************************************************************************
 		FLOODING / VERIFICATION
