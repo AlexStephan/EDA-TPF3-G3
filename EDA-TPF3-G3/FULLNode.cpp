@@ -1,6 +1,14 @@
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 #include "FULLNode.h"
 
-FULLNode::FULLNode(NodeData ownData) {
+/*******************************************************************************
+	CONSTRUTOR
+ ******************************************************************************/
+FULLNode::FULLNode(NodeData ownData)
+	: Node(ownData)
+{
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
 	JSONHandler.getNodesInLayout("manifest.json", ownData, nodesInManifest);
@@ -11,6 +19,9 @@ FULLNode::FULLNode(NodeData ownData) {
 	timeout = dur;
 }
 
+/*******************************************************************************
+	DESTRUCTOR
+ ******************************************************************************/
 FULLNode::~FULLNode() {
 	cout << "Destroyed node" << endl;
 
@@ -26,6 +37,9 @@ FULLNode::~FULLNode() {
 	}
 }
 
+/*******************************************************************************
+	CYCLE
+ ******************************************************************************/
 void FULLNode::cycle() {
 	switch (nodeState) {
 	case IDLE:
@@ -186,6 +200,10 @@ const vector<Transaction>* FULLNode::getPendingTX() {
 	return &txs;
 }
 
+const BlockChain* FULLNode::getBlockChain() {
+	return &blockChain;
+}
+
 /***********************************************************************************
 	INNER EDACoin VARIABLES
 ***********************************************************************************/
@@ -247,27 +265,50 @@ void FULLNode::keepSending() {
 
 errorType FULLNode::postTransaction(unsigned int neighbourPos, Transaction tx)
 {
-	errorType err = { false,"" };
 	Client* client = new Client(neighbourhood[neighbourPos]);
 	string tx_ = JSONHandler.createJsonTx(tx);
 	cout << "JSON:" << endl << tx_ << endl;	//DEBUG
 	client->POST("/eda_coin/send_tx", tx_);
-	client->sendRequest();
+	errorType err = client->sendRequest();
 	clients.push_back(client);
-	cout << "Created Client" << endl;
+
 	notifyAllObservers();
 	return err;
 }
 
 errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 {
-	errorType err = { false,"" };
+	Block bl0ck;
+	for (int i = 0; i < blockChain.size(); i++)
+	{
+		blockChain[i].getHeight = height;
+		{
+			bl0ck = blockChain[i];
+		}
+	}
+
 	Client* client = new Client(neighbourhood[neighbourPos]);
-	string blck = JSONHandler.createJsonBlock(height);
+	string blck = JSONHandler.createJsonBlock(bl0ck);
 	client->POST("/eda_coin/send_block", blck);
-	client->sendRequest();
+	errorType err = client->sendRequest();
 	clients.push_back(client);
-	cout << "Created Client" << endl;		//DEBUG
+
+	notifyAllObservers();
+	return err;
+}
+
+
+errorType FULLNode::postLayout(Socket socket);
+
+
+
+errorType FULLNode::postPing(Socket socket)
+{
+	Client* client = new Client(neighbourhood[neighbourPos]);
+	client->POST("/eda_coin/send_block", blck);
+	errorType err = client->sendRequest();
+	clients.push_back(client);
+
 	notifyAllObservers();
 	return err;
 }

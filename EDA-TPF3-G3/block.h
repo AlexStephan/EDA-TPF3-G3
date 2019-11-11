@@ -10,18 +10,30 @@ using namespace std;
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  *****************************************************************************/
-typedef std::string newIDstr;	//Cambie de parecer. Q los IDs sean strings
+typedef std::string newIDstr;
 typedef unsigned long int longN;
 typedef vector<newIDstr> MerkleTree;
 
+
+/********
+ * VIN	*
+********/
 struct Vin {
 	string blockId;
 	string txId;
 };
+
+/********
+ * VOUT	*
+********/
 struct Vout {
 	string publicId;
 	unsigned long int amount;
 };
+
+/****************
+ * TRANSACTION	*
+****************/
 struct Transaction {
 	string txId;
 	unsigned long int nTxIn;
@@ -30,6 +42,9 @@ struct Transaction {
 	vector<Vout> vOut;
 };
 
+/****************
+ * MERKLE BLOCK	*
+****************/
 struct MerkleBlock {
 	string blockId;
 	vector<Transaction> tx;
@@ -44,24 +59,35 @@ struct MerkleBlock {
 
 class Block {
 public:
-	//TPF2 Methods
+	/***********************************************************************************
+		BLOCK RELATED METHODS
+	***********************************************************************************/
 	bool validateBlock(string block);
 	void saveBlock(string blck);
-	//Getters
-	vector<string> getMerklePath(Transaction trx);
-	vector<Transaction>& getTransactions() { return tx; };
-	Transaction getTx(vector<Transaction>::iterator it) { for (auto i = tx.begin(); i != tx.end(); i++) { if (i == it) return *i; } };
-	Transaction getTx(unsigned int it) { if (it >= 0 && it < tx.size())	return tx[it]; };
-	unsigned long int getHeight() { return height; };
-	unsigned long int getNonce() { return nonce; };
-	string getBlockID() { return blockId; };
-	string getPreviousBlockID() { return previousBlockId; };
-	string getMerkleRoot() { return merkleRoot; };
-	unsigned long int getNTx() { return nTx; };
-	long int getBlockPos(vector<Block>* BlockChain);
-	vector<newIDstr> getMerkleTree();
+	
+	/***********************************************************************************
+		GETTERS
+	***********************************************************************************/
+	const vector<Transaction>& getTransactions();
+	const Transaction getTx(vector<Transaction>::iterator it);
+	const Transaction getTx(unsigned int it);
+	const unsigned long int getHeight();
+	const unsigned long int getNonce();
+	const unsigned long int getNTx();
+	const long int getBlockPos(vector<Block>* BlockChain);
+	const string getBlockID();
+	const string getPreviousBlockID();
+	const string getMerkleRoot();
 
-	//Setters
+	/***********************************************************************************
+		MERKLE TREE & MERKLE PATH
+	***********************************************************************************/
+	vector<newIDstr> getMerkleTree();
+	vector<string> getMerklePath(Transaction trx);
+
+	/***********************************************************************************
+		SETTERS
+	***********************************************************************************/
 	void addTx(Transaction _tx) { tx.push_back(_tx); };
 	void setHeight(unsigned long int h) { height = h; };
 	void setNonce(unsigned long int h) { nonce = h; };
@@ -69,11 +95,18 @@ public:
 	void setPrevBlockId(string s) { previousBlockId = s; };
 	void setMerkleRoot(string s) { merkleRoot = s; };
 	void setNTx(unsigned long int n) { nTx = n; };
-private:
 
+
+private:
+	/***********************************************************************************
+		MERKLE TREE & MERKLE PATH
+	***********************************************************************************/
 	void fillLevel(int level, int* nearestPow, vector<newIDstr>::iterator it, vector<newIDstr>* tree);
 	void fillMerklePath(vector<newIDstr>* path, vector<newIDstr>* tree, int j);
 
+	/***********************************************************************************
+		BLOCK STRUCTURE
+	***********************************************************************************/
 	vector<Transaction> tx;
 	unsigned long int height;
 	unsigned long int nonce;

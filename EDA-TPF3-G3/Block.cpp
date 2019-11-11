@@ -25,6 +25,9 @@ using namespace std;
 using json = nlohmann::json;
 
 
+/***********************************************************************************
+	BLOCK RELATED METHODS
+***********************************************************************************/
 bool Block::validateBlock(string blck)
 {
 	bool ret = false;
@@ -159,6 +162,9 @@ void Block::saveBlock(string blck)
 }
 
 
+/***********************************************************************************
+	MERKLE PATH
+***********************************************************************************/
 vector<newIDstr> Block::getMerklePath(Transaction trx) {
 	vector<newIDstr> path;
 	vector<newIDstr> tree = getMerkleTree();
@@ -210,17 +216,10 @@ void Block::fillMerklePath(vector<newIDstr>* path, vector<newIDstr>* tree, int j
 	return;
 }
 
-long int Block::getBlockPos(vector<Block>* BlockChain) {
-	if (!BlockChain->empty()) {
-		auto i = BlockChain->begin();
-		for (int j = 0; i != BlockChain->end(); i++, j++) {
-			if (i->getHeight() == height)
-				return j;
-		}
-	}
-	return -1;
-}
 
+/***********************************************************************************
+	MERKLE TREE
+***********************************************************************************/
 vector<newIDstr> Block::getMerkleTree() {
 	vector<string> tree;
 	tree.clear();
@@ -284,6 +283,32 @@ void Block::fillLevel(int level, int* prevLvlAmount, vector<newIDstr>::iterator 
 	}
 	return;
 }
+
+
+/***********************************************************************************
+	GETTERS
+***********************************************************************************/
+const long int Block::getBlockPos(vector<Block>* BlockChain) {
+	if (!BlockChain->empty()) {
+		auto i = BlockChain->begin();
+		for (int j = 0; i != BlockChain->end(); i++, j++) {
+			if (i->getHeight() == height)
+				return j;
+		}
+	}
+	return -1;
+}
+
+const vector<Transaction>& Block::getTransactions() { return tx; }
+const Transaction Block::getTx(vector<Transaction>::iterator it) { for (auto i = tx.begin(); i != tx.end(); i++) { if (i == it) return *i; } }
+const Transaction Block::getTx(unsigned int it) { if (it >= 0 && it < tx.size())	return tx[it]; }
+const unsigned long int Block::getHeight() { return height; }
+const unsigned long int Block::getNonce() { return nonce; }
+const unsigned long int Block::getNTx() { return nTx; }
+const string Block::getBlockID() { return blockId; }
+const string Block::getPreviousBlockID() { return previousBlockId; }
+const string Block::getMerkleRoot() { return merkleRoot; }
+
 /*******************************************************************************
  * FUNCTION DEFINITIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/

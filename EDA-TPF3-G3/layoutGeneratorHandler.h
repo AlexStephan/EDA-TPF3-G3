@@ -1,11 +1,10 @@
 #pragma once
-
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 #include <vector>
 #include "NodeData.h"
 #include "layout.h"
-
-
-
 
 class layoutGeneratorHandler
 {

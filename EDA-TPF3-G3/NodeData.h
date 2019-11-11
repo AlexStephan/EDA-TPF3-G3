@@ -12,6 +12,8 @@ public:
 	string getID() const;
 	Socket getSocket() const;
 
+	NodeData& operator=(const NodeData& data);
+
 private:
 	string id;
 	Socket socket;
