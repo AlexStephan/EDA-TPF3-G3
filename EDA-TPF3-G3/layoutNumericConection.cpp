@@ -19,6 +19,20 @@ bool layoutNumericConection::initialConection(layoutNumericConection& newConecti
 	return marked;
 }
 
+bool layoutNumericConection::initialConection(layoutNumericConection& newConection, size_t& marks)
+{
+	if ((isAlreadyConectedToMe(newConection) == false) &&
+		(myself != newConection.myself)) {
+
+		forcedConection(newConection);
+		initialCheckMark(marks);
+		newConection.forcedConection(*this);
+		newConection.initialCheckMark(marks);
+	}
+
+	return marked;
+}
+
 bool layoutNumericConection::isMarked()
 {
 	return marked;
@@ -53,6 +67,16 @@ void layoutNumericConection::initialCheckMark()
 {
 	if (conections.size() >= NUMBER_OF_CONECTIONS)
 		marked = true;
+}
+
+void layoutNumericConection::initialCheckMark(size_t& marks)
+{
+	if ((marked == false) &&
+		(conections.size() >= NUMBER_OF_CONECTIONS)) {
+		marked = true;
+		marks++;
+	}
+
 }
 
 bool layoutNumericConection::isAlreadyConectedToMe(layoutNumericConection& newConection)
