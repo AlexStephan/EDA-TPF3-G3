@@ -46,7 +46,7 @@ Client::~Client()
 /*******************************************************************************
 	NETWORK CONFIGURATION
  ******************************************************************************/
-void Client::POST(string path, string& json)
+void Client::POST(string path, string json)
 {
 	cType = POSTClient;
 	string url = "http://127.0.0.1:" + port + path;
@@ -71,7 +71,7 @@ void Client::POST(string path, string& json)
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)(json.size()) + 1);
-		cout << json << endl;
+		cout << json << endl; //DEBUG
 		curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, json.c_str());
 
 		curl_multi_add_handle(curlm, curl);
@@ -79,7 +79,7 @@ void Client::POST(string path, string& json)
 }
 
 
-void Client::GET(string path, string& json)
+void Client::GET(string path, string json)
 {
 	cType = GETClient;
 	string url = "http://127.0.0.1:" + port + path;

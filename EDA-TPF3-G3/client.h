@@ -36,8 +36,8 @@ public:
 	/****************************************************************************
 		 NETWOTK CONFIGURATON
 	*****************************************************************************/
-	void POST(string path, string& json);
-	void GET(string path, string& json);
+	void POST(string path, string json = "");
+	void GET(string path, string json);
 
 	/****************************************************************************
 		COMMUNICATION
