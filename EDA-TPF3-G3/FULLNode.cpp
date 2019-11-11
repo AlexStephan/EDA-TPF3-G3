@@ -162,7 +162,7 @@ void FULLNode::cycle() {
 /***********************************************************************************
 		METHODS USED BY CONTROLLER
 ***********************************************************************************/
-errorType FULLNode::makeTX(const vector<Vout>& receivers) {
+errorType FULLNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers){
 	Transaction tx;
 	for (int i = 0; i < neighbourhood.size(); i++)
 		postTransaction(i, tx);												//Post Tx to all neighbours
