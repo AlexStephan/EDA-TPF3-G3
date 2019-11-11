@@ -156,6 +156,21 @@
     <ClInclude Include="layout.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
+    <ClInclude Include="TreeWindow.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeWindowHandler.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="printTXroutine.h">
+      <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="layoutGeneratorHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="layoutNumericConection.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
     <ClInclude Include="jsonHandler.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
@@ -240,9 +255,6 @@
     </ClCompile>
     <ClCompile Include="Block.cpp">
       <Filter>Source Files\Bitcoins</Filter>
-    </ClCompile>
-    <ClCompile Include="jasonHandler.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

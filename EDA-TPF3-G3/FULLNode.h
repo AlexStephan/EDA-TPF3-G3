@@ -25,26 +25,45 @@ public:
 	errorType makeBlock(); //"MINAR"
 	errorType addNeighbour(NodeData neighbour); //agrega fulls
 
+	/***********************************************************************************
+		METHODS USED BY VIEWER
+	***********************************************************************************/
+
+	NodeData getData(); //own nodeData
+	const vector<NodeData>* getNeighbours();
+	const vector<Transaction>* getPendingTX();
+	//NOTA: seria super chevere si se modificaran los metodos de Block
+	//para hacerlos const, asi la siguiente funcion es libre de devolver
+	//referencia a const Blockchain, y no a simplemente blockchain (si
+	//no hay getters const, no puedo acceder a los getters desde un
+	//objeto const !!!! Si durante el proceso de volver const los
+	//getters de Block tropezaron con alguna definicion que yo (Alex)
+	//hice -por imprudencia propia- avisarme y lo arreglo
+	BlockChain* getBlockChain();
+
+
 private:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
 	***********************************************************************************/
 	BlockChain blockChain;											//THE BlockChain
-	void saveBlockChain(BlockChain& blockchain, string path);		//Sve blockChain from .json file
 	vector<string> filters;											//List of inner filters
 	vector<Transaction> txs;										//List of transactions
 	vector<MerkleBlock> merkleBlocks;								//List of merkleBlocks (?)
 	void addBlock(Block block);										//Add a block to blockChain
-	void saveTx(string trans);										//Save received transaction, add to tx list
-	void saveMerkleBlock(string merkleBlock);						//Save received merkleBlock, add to merkleBlock list
+	void addTx(string trans);										//Save received transaction, add to tx list
 	/***********************************************************************************
 		NEIGHBOURHOOD AND NODES
 	***********************************************************************************/
-	vector<sSocket> neighbourhood;									//List of neighbour nodes
-	Layout layout;
+	vector<NodeData> neighbourhood;									//List of neighbour nodes
+	vector<NodeData> network;
+	Layout layout;													//Layout in vector<connection> form
+	string layoutMsg;												//Layout in JSON form
+	vector<NodeData> nodesInManifest;
 	/***********************************************************************************
 		NETWORKING SH*T
 	***********************************************************************************/
+	void makeLayout(); //me apodere de la declaracion : parametros: ownData, network, layout
 	fullNodeStates nodeState;
 	vector <Server*> servers;								//Server List
 	vector <Client*> clients;								//Client Lis
@@ -53,17 +72,12 @@ private:
 	void keepSending();										//All active clients keep sending their messages, parse if completed, destroy if completed.
 	chrono::system_clock::time_point clock;					//Current time variable, used in initialization of Network Layout
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
-	//Json creation for network usage
-	string createJsonBlock(unsigned int height);
-	string createJsonTx(Transaction tx);
-	string createJsonMerkle();
-	string createJsonFilter(string filter);
-	string createHeader(unsigned int height);
-	//Response creation for newtwork usage
+	//INTERACTION WITH STRANGERS
+	errorType postLayout(Socket socket);
+	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
+	errorType postBlock(unsigned int neighbourPos, unsigned int height);
+	errorType postPing(Socket socket);
+	//INTERACTION WITH NEIGHBOURS
 	string serverResponse(STATE rta);
-	string createServerErrRsp();
-	string createServerBlock(string path);
-	string createServerOkRsp(string path);
-	void createDates(char*, char*);
 };
 
