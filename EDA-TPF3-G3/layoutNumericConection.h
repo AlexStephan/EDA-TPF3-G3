@@ -18,6 +18,7 @@ public:
 	void mark();
 	void unmark();
 
+	const vector<index>& getConections();
 	void secondaryConection(layoutNumericConection& newConection); //doesn't change marks
 private:
 	index myself;

@@ -48,6 +48,11 @@ void layoutNumericConection::unmark()
 	marked = false;
 }
 
+const vector<index>& layoutNumericConection::getConections()
+{
+	return conections;
+}
+
 void layoutNumericConection::secondaryConection(layoutNumericConection& newConection)
 {
 	if ((isAlreadyConectedToMe(newConection) == false) &&

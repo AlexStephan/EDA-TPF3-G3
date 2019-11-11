@@ -33,12 +33,15 @@ private:
 	void generate2Nodes();
 
 	void conectSubGraphs();
+	void recursiveMark(size_t index,size_t& markedNodes);
 
 	bool allNodesMarked(size_t& markedNodes);
 	size_t getRandomNode();
 	size_t getUnmarkedNode();
+	size_t getMarkedNode();
 	void unmarkAll();
 
-	
+	void translateLayout();
+	const NodeData& index2Data(index i);
 };
 

@@ -34,6 +34,8 @@ bool layoutGeneratorHandler::generateLayout()
 		createNumericLayout();
 		generateConections();
 		conectSubGraphs();
+		//ya tengo el layout hecho, pero en numericLayout. Debo traducirlo
+		translateLayout();
 
 		//make layout from graph!!!
 
@@ -97,10 +99,36 @@ void layoutGeneratorHandler::generate2Nodes()
 
 void layoutGeneratorHandler::conectSubGraphs()
 {
-	unmarkAll();
 	bool connectedGraph = false;
 
+	do {
+		unmarkAll();
+		size_t markedNodes = 0;
+		recursiveMark(getRandomNode(), markedNodes);
+		if (markedNodes == numericLayout.size()) {
+			connectedGraph = true;
+		}
+		else {
+			//connectedGraph = false; //redundant...
+			size_t marked = getMarkedNode();
+			size_t unmarked = getUnmarkedNode();
+			numericLayout[marked].secondaryConection(numericLayout[unmarked]);
+		}
+	} while (connectedGraph == false);
 
+}
+
+void layoutGeneratorHandler::recursiveMark(size_t i, size_t& markedNodes)
+{
+	if (numericLayout[i].isMarked() == true)
+		return;
+	else {
+		numericLayout[i].mark();
+		markedNodes++;
+		const vector<index>& connections = numericLayout[i].getConections();
+		for (size_t j = 0; j < connections.size(); j++)
+			recursiveMark(j, markedNodes);
+	}
 }
 
 bool layoutGeneratorHandler::allNodesMarked(size_t& markedNodes)
@@ -124,8 +152,34 @@ size_t layoutGeneratorHandler::getUnmarkedNode()
 	return rta;
 }
 
+size_t layoutGeneratorHandler::getMarkedNode()
+{
+	size_t rta = getRandomNode();
+	while (numericLayout[rta].isMarked() == false)
+		rta = (rta + 1) % numericLayout.size();
+	return rta;
+}
+
 void layoutGeneratorHandler::unmarkAll()
 {
 	for (size_t i = 0; i < numericLayout.size(); i++)
 		numericLayout[i].unmark();
+}
+
+void layoutGeneratorHandler::translateLayout()
+{
+	generatedLayout.clear();
+
+	for (index i = 0; i < numericLayout.size(); i++) {
+		generatedLayout.emplace_back();
+	}
+
+}
+
+const NodeData& layoutGeneratorHandler::index2Data(index i)
+{
+	if (i == 0)
+		return *callingNode;
+	else
+		return (*network)[i-1];
 }
