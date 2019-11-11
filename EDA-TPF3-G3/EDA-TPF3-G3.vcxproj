@@ -22,6 +22,7 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="jsonHandler.h" />
     <ClInclude Include="layout.h" />
     <ClInclude Include="EDAcoinsNet.h" />
     <ClInclude Include="errorType.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="imgui_draw.cpp" />
     <ClCompile Include="imgui_impl_allegro5.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
+    <ClCompile Include="jasonHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
     <ClCompile Include="NETcontroller.cpp" />
