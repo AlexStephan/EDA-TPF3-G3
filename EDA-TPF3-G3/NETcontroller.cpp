@@ -14,6 +14,11 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 	ScontrolList(), SviewList()
 {
 	netmodel->attach(netviewer);
+	findFullNames();
+	for (int i = 0; i < 4; i++)
+		IParr[i] = 0;
+	type = 0;
+	nodePort = 0;
 }
 
 NETcontroller::~NETcontroller(){
@@ -81,5 +86,57 @@ void NETcontroller::cycle()
 
 	guiHandler.end_frame();
 }
+
+void NETcontroller::drawControlWindow() {
+	ImGui::Begin(myWindowName.c_str());
+	ImGui::Text("Elija el tipo de nodo que desee crear");
+	
+	ImGui::RadioButton("FULL Node", &type, 0); ImGui::SameLine();
+	ImGui::RadioButton("SPV Node", &type, 1); ImGui::SameLine();
+
+	ImGui::SetNextItemWidth(250);
+	ImGui::InputTextWithHint("Node ID", "enter ID (\"name\" of the node) here", IDbuf, sizeof(IDbuf) - 1);
+
+	ImGui::SetNextItemWidth(50);
+	ImGui::DragInt("Port", &nodePort, 0.5);
+
+	ImGui::PushItemWidth(25);
+	ImGui::DragInt(".##1", IParr, 0.5);
+	ImGui::SameLine();
+	ImGui::DragInt(".##2", IParr + 1, 0.5);
+	ImGui::SameLine();
+	ImGui::DragInt(".##3", IParr + 2, 0.5);
+	ImGui::SameLine();
+	ImGui::DragInt("Node IP##4", IParr + 3, 0.5);
+	ImGui::PopItemWidth();
+
+	if (!type) {
+		if(ImGui::Button("Create Full Node"))
+			warningHandler.check(netmodel->createFULLNode(NodeData(IDbuf, nodePort, IParr[0], IParr[1], IParr[2], IParr[3])));
+	}
+	else {
+		ImGui::Combo("Seleccione el nodo FULL vecino al que se le postearan los filters", &currFilter, FullNames.c_str());
+		ImGui::Combo("Seleccione el nodo FULL vecino al que se le pediran los merkle blocks", &currHeader, FullNames.c_str());
+		if (ImGui::Button("Create SPV Node")) {
+			if (currFilter != currHeader)
+				warningHandler.check(netmodel->createSPVNode(NodeData(IDbuf, nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
+			else
+				ImGui::Text("No puede elegir el mismo nodo para ambos campos");
+		}
+	}
+
+	ImGui::End();
+}
+	
+void NETcontroller::findFullNames() {
+
+	for (int i = 0; i < netmodel->getFULLamount(); i++) {
+		FullNames += netmodel->getFULLnode(i)->getData().getID();
+		FullNames += '\0';
+	}
+	FullNames += '\0';
+}
+
+
 
 
