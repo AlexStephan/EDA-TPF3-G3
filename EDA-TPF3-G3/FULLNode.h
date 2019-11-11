@@ -87,5 +87,12 @@ private:
 	//INTERACTION WITH NEIGHBOURS
 	string serverResponse(STATE rta);
 	jsonHandler JSONHandler;
+
+	/***********************************************************************************
+		FLOODING / VERIFICATION
+	***********************************************************************************/
+	void checkForFilter(Block blck);
+	void floodBlock(Block blck, NodeData sender);
+	void floodTx(Transaction tx, NodeData sender);
 };
 
