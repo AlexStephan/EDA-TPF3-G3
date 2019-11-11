@@ -259,26 +259,26 @@
     <ClCompile Include="Block.cpp">
       <Filter>Source Files\Bitcoins</Filter>
     </ClCompile>
-    <ClCompile Include="layoutGeneratorHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="layoutNumericConection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="printTXroutine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TreeWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TreeWindowHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="jasonHandler.cpp">
       <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
     <ClCompile Include="imgui_stdlib.cpp">
       <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClCompile>
+    <ClCompile Include="layoutGeneratorHandler.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="layoutNumericConection.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeWindow.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeWindowHandler.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="printTXroutine.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
