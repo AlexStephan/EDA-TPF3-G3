@@ -168,6 +168,13 @@ void FULLNode::cycle() {
 ***********************************************************************************/
 errorType FULLNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers){
 	Transaction tx;
+	Block aux;
+	//BUILD TX
+	tx.vIn = givers;
+	tx.nTxIn = givers.size();
+	tx.vOut = receivers;
+	tx.nTxOut = receivers.size();
+	tx.txId = aux.getTxId(tx);
 	for (int i = 0; i < neighbourhood.size(); i++)
 		postTransaction(i, tx);												//Post Tx to all neighbours
 	errorType ret;

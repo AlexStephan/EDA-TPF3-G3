@@ -299,6 +299,18 @@ const long int Block::getBlockPos(vector<Block>* BlockChain) {
 	return -1;
 }
 
+string Block::getTxId(Transaction tx) {
+	string concatenate;
+	concatenate.clear();
+	for (int j = 0; j < tx.nTxIn; j++)
+		concatenate += tx.vIn[j].txId;
+	char aux[9];
+	unsigned int ID = generateID(concatenate.c_str());
+	sprintf_s(&aux[0], 9, "%08X", ID);
+	newIDstr leafID(aux);
+	return leafID;
+}
+
 const vector<Transaction>& Block::getTransactions() { return tx; }
 const Transaction Block::getTx(vector<Transaction>::iterator it) { for (auto i = tx.begin(); i != tx.end(); i++) { if (i == it) return *i; } }
 const Transaction Block::getTx(unsigned int it) { if (it >= 0 && it < tx.size())	return tx[it]; }

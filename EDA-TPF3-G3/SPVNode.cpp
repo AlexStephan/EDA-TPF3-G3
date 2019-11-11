@@ -44,9 +44,14 @@ void SPVNode::cycle() {
 ***********************************************************************************/
 errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers) {
 	Transaction tx;
-
-	//MODIFY TX
-	//END OF MANUPULATION
+	Block aux;
+	//BUILD TX
+	tx.vIn = givers;
+	tx.nTxIn = givers.size();
+	tx.vOut = receivers;
+	tx.nTxOut = receivers.size();
+	tx.txId = aux.getTxId(tx);
+	//POST TX TO A NEIGHBOUR, JUST ONE
 	postTransaction(tx);
 }
 

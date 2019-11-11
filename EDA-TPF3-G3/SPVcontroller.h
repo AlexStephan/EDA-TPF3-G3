@@ -21,7 +21,7 @@ public:
 private:
 	void drawWindow(); 
 	void drawMTX();
-	bool drawVout(Vout&);
+	bool drawV(Vin&, Vout&);
 	void drawPFilter();
 	void drawChangeFN();
 	void drawChangeHN();
@@ -40,7 +40,8 @@ private:
 	int cstate;
 	int currTX;
 	string auxstr;
-	vector<Vout> txData;
+	vector<Vin> txVin;
+	vector<Vout> txVout;
 	string newID;
 	int newPort;
 	int newIP[4];
