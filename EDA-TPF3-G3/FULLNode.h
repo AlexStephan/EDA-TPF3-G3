@@ -63,7 +63,7 @@ private:
 	/***********************************************************************************
 		NETWORKING SH*T
 	***********************************************************************************/
-	void makeLayout(NodeData own, vector<NodeData> network, Layout& layout);
+	void makeLayout(); //me apodere de la declaracion : parametros: ownData, network, layout
 	fullNodeStates nodeState;
 	vector <Server*> servers;								//Server List
 	vector <Client*> clients;								//Client Lis
