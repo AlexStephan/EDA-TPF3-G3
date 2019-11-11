@@ -2,6 +2,7 @@
  * INCLUDE HEADER FILES
  ******************************************************************************/
 #include "FULLNode.h"
+#include "layoutGeneratorHandler.h"
 
 /*******************************************************************************
 	CONSTRUTOR
@@ -9,9 +10,6 @@
 FULLNode::FULLNode(NodeData ownData)
 	: Node(ownData)
 {
-#include "layoutGeneratorHandler.h"
-
-FULLNode::FULLNode(NodeData ownData) {
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
 	JSONHandler.getNodesInLayout("manifest.json", ownData, nodesInManifest);
