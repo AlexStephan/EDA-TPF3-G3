@@ -78,6 +78,7 @@ public:
 	const string getBlockID();
 	const string getPreviousBlockID();
 	const string getMerkleRoot();
+	string getTxId(Transaction tx);
 
 	/***********************************************************************************
 		MERKLE TREE & MERKLE PATH
