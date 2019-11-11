@@ -32,6 +32,14 @@ public:
 	NodeData getData(); //own nodeData
 	const vector<NodeData>* getNeighbours();
 	const vector<Transaction>* getPendingTX();
+	//NOTA: seria super chevere si se modificaran los metodos de Block
+	//para hacerlos const, asi la siguiente funcion es libre de devolver
+	//referencia a const Blockchain, y no a simplemente blockchain (si
+	//no hay getters const, no puedo acceder a los getters desde un
+	//objeto const !!!! Si durante el proceso de volver const los
+	//getters de Block tropezaron con alguna definicion que yo (Alex)
+	//hice -por imprudencia propia- avisarme y lo arreglo
+	BlockChain* getBlockChain();
 
 
 private:
