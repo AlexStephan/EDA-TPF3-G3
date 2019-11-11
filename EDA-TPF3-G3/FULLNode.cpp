@@ -5,11 +5,10 @@
 #include "layoutGeneratorHandler.h"
 
 /*******************************************************************************
-	CONSTRUTOR
+	CONSTRUCTOR
  ******************************************************************************/
-FULLNode::FULLNode(NodeData ownData)
-	: Node(ownData)
-{
+
+FULLNode::FULLNode(NodeData ownData) : Node(ownData) {
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
 	JSONHandler.getNodesInLayout("manifest.json", ownData, nodesInManifest);
@@ -62,12 +61,12 @@ void FULLNode::cycle() {
 			Client* curr = clients[i];
 			curr->sendRequest();
 			if (curr->getRunning == 0)
-				if (curr->getResponse() == MSG_NETWORK_READY) {
+				if (curr->getResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
 					gotReady = i;
 					break;
 				}
-				else if (curr->getResponse() == MSG_NETWORK_NOT_READY) {
+				else if (curr->getResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
 					network.push_back(curr->getRecepientNodeData());
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
@@ -93,10 +92,10 @@ void FULLNode::cycle() {
 				nodeState = SENDING_LAYOUT;
 		}
 		if (nodeState == SENDING_LAYOUT) {
-			makeLayout(ownData, network, layout);
-			layoutMsg = JSONHandler.createLayout(layout);
+			makeLayout();
+			layoutMsg = JSONHandler.createJsonLayout(layout);
 			if (gotReady != -1) {
-				addNeighbour(clients[gotReady]->getRecepientNodeData());
+				addNeighbour(clients[gotReady]->getRecepientNodeData());						//SPEAK WITH NETWORKING PPL
 			}
 			for (int i = 0; i < clients.size(); i++) {
 				delete clients[i];								//Destroy client
@@ -115,8 +114,8 @@ void FULLNode::cycle() {
 		else if(!servers.back()->getDoneSending())
 			servers.back()->sendMessage(serverResponse(servers.back()->getState()));
 		if (servers.back()->getDoneSending()) {
-			if (servers.back()->getState() == GOT_LAYOUT) {					//If layout was correctly received
-				JSONHandler.readLayout(servers.back()->getMessage(), ownData.getSocket(), neighbourhood);		//Read layout, and add my neighbours
+			if (servers.back()->getState() == GOT_LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
+				JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
 				delete servers.back();
 				servers.pop_back();											//Remove useless server
 				Server* newServer = new Server(port);
@@ -137,7 +136,7 @@ void FULLNode::cycle() {
 		for (int i = 0; i < clients.size(); i++) {
 			clients[i]->sendRequest();
 			if(clients[i]->getRunning == 0)
-				if (clients[i]->getResponse() == HTTP_OK) {
+				if (clients[i]->getResponse() == HTTP_OK) {					//SPEAK WITH NETWORKING PPL
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
@@ -166,7 +165,7 @@ void FULLNode::cycle() {
 errorType FULLNode::makeTX(const vector<Vout>& receivers) {
 	Transaction tx;
 	for (int i = 0; i < neighbourhood.size(); i++)
-		postTransaction(i, tx);
+		postTransaction(i, tx);												//Post Tx to all neighbours
 	errorType ret;
 	return ret;
 }
@@ -178,7 +177,7 @@ errorType FULLNode::makeBlock() {
 	//END OF BLOCK CONFIG
 	blockChain.push_back(block);
 	for (int i = 0; i < neighbourhood.size(); i++)
-		postBlock(i, blockChain.size());
+		postBlock(i, blockChain.size());									//Post Block to all neighbours
 	errorType ret;
 	return ret;
 }
@@ -229,7 +228,77 @@ void FULLNode::makeLayout()
 	layout = layoutGen.getLayout();
 }
 void FULLNode::keepListening() {
+	vector<vector<Server*>::iterator> deleteThis;
+	vector<Server*> doneServers;
+	servers.back()->listening();
 
+	if ((*(servers.end() - 1))->getDoneListening()) {
+		cout << "Latest Server picked up something!" << endl;
+		Server* newServer = new Server(port);
+		newServer->startConnection();
+		servers.push_back(newServer);
+		cout << "New Server created and pushed!" << endl;
+	}
+	auto i = servers.begin();
+	for (; i != servers.end() - 1; i++) {
+		if (!(*i)->getDoneDownloading())
+			(*i)->receiveMessage();
+		else if (!(*i)->getDoneSending())
+			(*i)->sendMessage(serverResponse((*i)->getState()));
+		if ((*i)->getDoneSending()) {
+			cout << "Server done servering" << endl;
+			doneServers.push_back(*i);
+			deleteThis.push_back(i);
+		}
+	}
+	//Handle finished servers
+	auto j = doneServers.begin();
+	for (; j != doneServers.end(); j++) {
+		Block blck;
+		switch ((*j)->getState()) {
+		case BLOCK:			//Done
+			blck.saveBlock((*j)->getMessage());
+			bool found = false;
+			for (int i = 0; i < blockChain.size(); i++) {
+				if (blck.getBlockID() == blockChain[i].getBlockID())			//If received block is already in chain, it gets ignored
+					found = true;
+			}
+			blockChain.push_back(blck);										//Save block into blockchain
+			floodBlock(blck, (*j)->getSender());							//And flood the block
+			if (!found)														//If it's a new block
+				checkForFilter(blck);											//Inform possible suscripted SPVNodes
+			else
+				blockChain.pop_back();										//Remove block if repeated
+			break;
+		case TX:			//Done
+			JSONHandler.saveTx((*j)->getMessage(), txs);
+			bool found = false;
+			for (int i = 0; i < txs.size() - 1; i++) {
+				if (txs.back().txId == txs[i].txId)
+					found = true;
+			}
+			if(found)														
+				blockChain.pop_back();										//Remove tx if repeated
+			floodTx(txs.back(), (*j)->getSender());							//And flood the tx
+			break;
+		case MERKLE:														//FULL NODES DONT CARE ABOUT RECEIVING MERKLE BLOCKS
+			break;
+		case FILTER:		
+			filters.push_back((*j)->getMessage());
+			break;
+		}
+	}
+	i = servers.begin();
+	for (; i != servers.end() - 1; i++) {
+		if ((*i)->getDoneSending())
+			delete* i;
+	}
+	auto k = deleteThis.begin();
+	for (; k != deleteThis.end(); k++) {
+		servers.erase(*k);
+	}
+	if (!deleteThis.empty())
+		notifyAllObservers();
 }
 
 void FULLNode::keepSending() {
@@ -248,7 +317,7 @@ void FULLNode::keepSending() {
 		else
 			(*i)->sendRequest();
 	}
-	//Handle finished servers
+	//Handle finished clients
 	auto j = doneClients.begin();
 	for (; j != doneClients.end(); j++) {
 		/*//Parse their msgs
@@ -269,7 +338,9 @@ void FULLNode::keepSending() {
 		notifyAllObservers();
 }
 
-
+/***********************************************************************************
+	POSTING / GETTING METHODS
+***********************************************************************************/
 errorType FULLNode::postTransaction(unsigned int neighbourPos, Transaction tx)
 {
 	Client* client = new Client(neighbourhood[neighbourPos]);
@@ -318,4 +389,24 @@ errorType FULLNode::postPing(Socket socket)
 
 	notifyAllObservers();
 	return err;
+}
+
+
+/***********************************************************************************
+		FLOODING / VERIFICATION
+***********************************************************************************/
+/*void FULLNode::checkForFilter(Block blck) {
+	
+}*/
+void FULLNode::floodBlock(Block blck, NodeData sender) {
+	for (int i = 0; i < neighbourhood.size(); i++) {
+		if (sender.getID() != neighbourhood[i].getID())					//If neighbour is not the one who sent the block
+			postBlock(i, blockChain.size());							//Send neighbour the block ()
+	}
+}
+void FULLNode::floodTx(Transaction tx, NodeData sender) {
+	for (int i = 0; i < neighbourhood.size(); i++) {
+		if (sender.getID() != neighbourhood[i].getID())					//If neighbour is not the one who sent the tx
+			postTransaction(i, tx);										//Send neighbour the tx
+	}
 }
