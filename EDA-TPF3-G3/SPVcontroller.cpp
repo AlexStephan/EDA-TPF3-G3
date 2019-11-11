@@ -10,7 +10,7 @@
 void SPVcontroller::cycle()
 {
 	ImGui::Begin(windowID.c_str());
-	ImGui::BeginChild("CONTROL", ImVec2(CHILD_W, CHILD_H));
+	ImGui::BeginChild("SPV CONTROL", ImVec2(CHILD_W, CHILD_H));
 	switch (cstate) {
 	case MENU:
 		drawWindow();

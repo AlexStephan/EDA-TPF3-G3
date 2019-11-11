@@ -30,7 +30,6 @@ class Client
 {
 public:
 	Client(NodeData data);
-	Client(Socket socket);
 	~Client();
 
 	/****************************************************************************
@@ -47,7 +46,7 @@ public:
 	/****************************************************************************
 		 GETTERS
 	*****************************************************************************/
-	Socket getSocket();
+	NodeData getReceiverData();
 	string getResponse(void);
 	int getRunning();
 	ClientType getClientType();
@@ -57,10 +56,7 @@ private:
 	ClientType cType;
 	CURLM* curlm;
 	CURL* curl;
-	string ip;
-	string port;
+	NodeData receiver;
 	string response;
 	int running;
-
-	ip_t crackIp();
 };
