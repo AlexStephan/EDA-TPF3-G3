@@ -41,26 +41,29 @@ public:
 	//hice -por imprudencia propia- avisarme y lo arreglo
 	BlockChain* getBlockChain();
 
+
 private:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
 	***********************************************************************************/
 	BlockChain blockChain;											//THE BlockChain
-	void saveBlockChain(BlockChain& blockchain, string path);		//Sve blockChain from .json file
 	vector<string> filters;											//List of inner filters
 	vector<Transaction> txs;										//List of transactions
 	vector<MerkleBlock> merkleBlocks;								//List of merkleBlocks (?)
 	void addBlock(Block block);										//Add a block to blockChain
-	void saveTx(string trans);										//Save received transaction, add to tx list
-	void saveMerkleBlock(string merkleBlock);						//Save received merkleBlock, add to merkleBlock list
+	void addTx(string trans);										//Save received transaction, add to tx list
 	/***********************************************************************************
 		NEIGHBOURHOOD AND NODES
 	***********************************************************************************/
-	vector<sSocket> neighbourhood;									//List of neighbour nodes
-	Layout layout;
+	vector<NodeData> neighbourhood;									//List of neighbour nodes
+	vector<NodeData> network;
+	Layout layout;													//Layout in vector<connection> form
+	string layoutMsg;												//Layout in JSON form
+	vector<NodeData> nodesInManifest;
 	/***********************************************************************************
 		NETWORKING SH*T
 	***********************************************************************************/
+	void makeLayout(); //me apodere de la declaracion : parametros: ownData, network, layout
 	fullNodeStates nodeState;
 	vector <Server*> servers;								//Server List
 	vector <Client*> clients;								//Client Lis
@@ -71,13 +74,10 @@ private:
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
 	//INTERACTION WITH STRANGERS
 	errorType postLayout(Socket socket);
+	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
+	errorType postBlock(unsigned int neighbourPos, unsigned int height);
 	errorType postPing(Socket socket);
 	//INTERACTION WITH NEIGHBOURS
 	string serverResponse(STATE rta);
-	errorType postBlock(unsigned int neighbourPos, unsigned int height);
-	errorType getBlockHeader(unsigned int height, unsigned int neighbourPos);
-	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
-	errorType postMerkleBlock(unsigned int neighbourPos);
-	errorType postFilter(unsigned int neighbourPos);
 };
 

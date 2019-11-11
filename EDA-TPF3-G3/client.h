@@ -5,6 +5,8 @@
 #include <curl/curl.h>
 
 #define HTTP_OK "HTTP OK"
+#define MSG_NETWORK_READY	"a"
+#define MSG_NETWORK_NOT_READY	"B"
 
 using namespace std;
 
