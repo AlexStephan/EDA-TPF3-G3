@@ -5,28 +5,6 @@
 #define CHILD_W	220
 #define CHILD_H	330
 #define BUTTON_S	100
-#define BUTTONS_PER_ROW 2
-
-FULLcontroller::FULLcontroller(FULLNode* model) : fnode(model), windowID(model->getData().getID()),
-warningHandler(model->getData().getID()) {
-	currNeighbour = 0;
-	currTX = 1;
-	amount = 0;
-	cstate = MENU;
-
-}
-
-void FULLcontroller::cycle() {
-	drawWindow();
-}
-
-void FULLcontroller::drawWindow() {
-	ImGui::Begin(windowID.c_str());
-
-
-
-	ImGui::End();
-}
 
 void FULLcontroller::cycle()
 {
@@ -54,7 +32,7 @@ void FULLcontroller::cycle()
 
 void FULLcontroller::drawWindow()
 {
-	const char* BUTTON_TEXT[6] = {
+	const char* BUTTON_TEXT[3] = {
 		"MAKE\nTX",
 		"MAKE\nBLOCK",
 		"ADD\nNEIGHBOUR"
@@ -66,7 +44,7 @@ void FULLcontroller::drawWindow()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 0.9f, 0.9f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 1.0f, 1.0f));
 		if (ImGui::Button(BUTTON_TEXT[i], ImVec2(BUTTON_S, BUTTON_S)))
-			cstate = controlState(MTX + i);
+			cstate = FULLcontrolState(MTX + i);
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
@@ -82,7 +60,6 @@ void FULLcontroller::drawMBlock() {
 		cstate = MENU;
 	}
 }
-
 
 
 void FULLcontroller::drawMTX() {
@@ -116,6 +93,7 @@ void FULLcontroller::drawMTX() {
 bool FULLcontroller::drawVout(Vout& aux){
 	bool r = false;
 	ImGui::InputText("Public ID", &aux.publicId);
+	ImGui::SetNextItemWidth(50);
 	ImGui::InputText("Monto", &auxstr);
 	aux.amount = _atoi64(auxstr.c_str());
 	
@@ -159,8 +137,8 @@ void FULLcontroller::newIpSelect(){
 }
 
 
-void FULLcontroller::returnButton()
-{
+void FULLcontroller::returnButton() {
+
 	if (ImGui::Button("Return"))
 		cstate = MENU;
 }
