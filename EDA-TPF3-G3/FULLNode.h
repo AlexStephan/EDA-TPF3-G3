@@ -1,12 +1,18 @@
 #pragma once
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 #include <chrono>
 #include "Node.h"
 #include "errorType.h"
 #include "manifestHandler.h"
-#include "sSocket.h"
 #include "blockChain.h"
 #include "layout.h"
+#include"jsonHandler.h"
 
+/*******************************************************************************
+ * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
+ *****************************************************************************/
 typedef enum {IDLE, WAITING_LAYOUT, COLLECTING_MEMBERS, SENDING_LAYOUT, NETWORK_CREATED} fullNodeStates;
 
 
@@ -14,7 +20,7 @@ class FULLNode :
 	public Node
 {
 public:
-	FULLNode(NodeData ownData) : Node(ownData) {};
+	FULLNode(NodeData ownData);
 	~FULLNode();
 	virtual void cycle();
 
@@ -28,7 +34,6 @@ public:
 	/***********************************************************************************
 		METHODS USED BY VIEWER
 	***********************************************************************************/
-
 	NodeData getData(); //own nodeData
 	const vector<NodeData>* getNeighbours();
 	const vector<Transaction>* getPendingTX();
@@ -39,7 +44,7 @@ public:
 	//objeto const !!!! Si durante el proceso de volver const los
 	//getters de Block tropezaron con alguna definicion que yo (Alex)
 	//hice -por imprudencia propia- avisarme y lo arreglo
-	BlockChain* getBlockChain();
+	const BlockChain* getBlockChain();
 
 
 private:
@@ -72,12 +77,22 @@ private:
 	void keepSending();										//All active clients keep sending their messages, parse if completed, destroy if completed.
 	chrono::system_clock::time_point clock;					//Current time variable, used in initialization of Network Layout
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
+
 	//INTERACTION WITH STRANGERS
 	errorType postLayout(Socket socket);
 	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
 	errorType postBlock(unsigned int neighbourPos, unsigned int height);
 	errorType postPing(Socket socket);
+
 	//INTERACTION WITH NEIGHBOURS
 	string serverResponse(STATE rta);
+	jsonHandler JSONHandler;
+
+	/***********************************************************************************
+		FLOODING / VERIFICATION
+	***********************************************************************************/
+	void checkForFilter(Block blck);
+	void floodBlock(Block blck, NodeData sender);
+	void floodTx(Transaction tx, NodeData sender);
 };
 

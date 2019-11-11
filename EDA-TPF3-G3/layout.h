@@ -1,9 +1,10 @@
 #pragma once
-#include "Socket.h"
+#include "NodeData.h"
 #include <vector>
 using namespace std;
 
 struct Connection {
+	Connection(const NodeData& ownData) : ownData(ownData), myNeighbours() {}
 	NodeData ownData;
 	vector<NodeData> myNeighbours;
 };

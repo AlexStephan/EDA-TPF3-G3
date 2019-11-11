@@ -1,6 +1,10 @@
 #pragma once
+/*******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 #include "Node.h"
 #include "blockChain.h"
+#include "jsonHandler.h"
 
 class SPVNode :
 	public Node
@@ -10,13 +14,17 @@ public:
 		Node(ownData), filterNode(FilterNode), headerNode(HeaderNode) {}
 	virtual void cycle();
 
-	//Metodos accedidos desde el controller
+	/***********************************************************************************
+		METHODS USED BY CONTROLLER
+	***********************************************************************************/
 	errorType makeTX(const vector<Vout>& receivers);
 	errorType postFilter();
 	errorType changeFilterNode(NodeData FilterNode);
 	errorType changeHeaderNode(NodeData HeaderNode);
 
-	//Accedidas desde el viewer:
+	/***********************************************************************************
+		METHODS USED BY VIEWER
+	***********************************************************************************/
 	NodeData getData();
 	NodeData getFilterNodeData();
 	NodeData getHeaderNodeData();
@@ -24,5 +32,7 @@ public:
 private:
 	NodeData filterNode;
 	NodeData headerNode;
+	jsonHandler JSONHandler;
+	vector <Client*> clients;
 };
 

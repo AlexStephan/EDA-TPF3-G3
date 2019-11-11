@@ -9,9 +9,14 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
+/*******************************************************************************
+ * NAMESPACES
+ ******************************************************************************/
 using namespace std;
 
-
+/*******************************************************************************
+ * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
+ *****************************************************************************/
 typedef enum { TX, BLOCK, MERKLE, FILTER, GET, ERR } STATE;
 
 class Server

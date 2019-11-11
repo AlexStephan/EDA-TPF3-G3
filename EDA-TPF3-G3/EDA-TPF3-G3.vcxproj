@@ -22,6 +22,7 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="jsonHandler.h" />
     <ClInclude Include="imgui_stdlib.h" />
     <ClInclude Include="layout.h" />
     <ClInclude Include="EDAcoinsNet.h" />
@@ -77,6 +78,7 @@
     <ClCompile Include="imgui_impl_allegro5.cpp" />
     <ClCompile Include="imgui_stdlib.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
+    <ClCompile Include="jasonHandler.cpp" />
     <ClCompile Include="layoutGeneratorHandler.cpp" />
     <ClCompile Include="layoutNumericConection.cpp" />
     <ClCompile Include="main.cpp" />
@@ -150,7 +152,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Allegro_AddonImage>true</Allegro_AddonImage>
+    <Allegro_AddonPrimitives>true</Allegro_AddonPrimitives>
+    <Allegro_AddonFont>true</Allegro_AddonFont>
+    <Allegro_AddonColor>true</Allegro_AddonColor>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -168,11 +175,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\boost_1_71_0\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\boost_1_71_0;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\include;C:\boost_1_71_0\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\boost_1_71_0\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\boost_1_71_0\lib64-msvc-14.2;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\lib;C:\boost_1_71_0\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

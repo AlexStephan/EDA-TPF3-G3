@@ -43,3 +43,9 @@ bool Socket::operator==(Socket& s)
 	else
 		return false;
 }
+
+Socket& Socket::operator=(const Socket& s)
+{
+	port = s.port;
+	ip = s.ip;
+}
