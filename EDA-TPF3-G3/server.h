@@ -41,6 +41,7 @@ public:
 	bool getDoneSending();
 	STATE getState();
 	string getMessage();
+	string getFilterId();
 
 private:
 
@@ -56,6 +57,7 @@ private:
 	***********************************************************************************/
 	string receiveMsg;
 	string bodyMsg;
+	string flterId;
 	
 	/***********************************************************************************
 		BOOST SH*T

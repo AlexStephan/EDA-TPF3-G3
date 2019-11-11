@@ -110,7 +110,7 @@ void SPVNode::keepListening() {
 		case MERKLE:														//SPV NODES ONLY CARE ABOUT RECEIVING MERKLEBLOCKS ON SERVER
 			JSONHandler.saveMerkleBlock((*j)->getMessage(), mBlocks);
 			//REQUEST CONFIRMATION OF VALIDATION
-			getBlockHeader(mBlocks.back().txPos);							//SUPER DUDOSO LO QUE ACABO DE HACER, PERO ONDA, SUPER DUDOSO
+			getBlockHeader(mBlocks.back().blockId);							//SUPER DUDOSO LO QUE ACABO DE HACER, PERO ONDA, SUPER DUDOSO
 			break;
 		}
 	}
@@ -164,11 +164,11 @@ void SPVNode::keepSending() {
 /***********************************************************************************
 	POSTING / GETTING METHODS
 ***********************************************************************************/
-errorType SPVNode::getBlockHeader(unsigned int height)
+errorType SPVNode::getBlockHeader(string id)
 {
 	errorType err = { false,"" };
 	Client* client = new Client(headerNode);
-	string header = createHeader(height);
+	string header = JSONHandler.createHeader(id);
 	cout << "JSON:" << endl << header << endl;	//DEBUG
 	client->GET("/eda_coin/get_block_header/", header);
 	client->sendRequest();

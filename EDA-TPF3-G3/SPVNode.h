@@ -42,7 +42,7 @@ private:
 	***********************************************************************************/
 	vector <Client*> clients;
 	vector <Server*> servers;
-	errorType getBlockHeader(unsigned int height);
+	errorType getBlockHeader(string id);
 	errorType postTransaction(Transaction tx);
 	void keepListening();
 	void keepSending();

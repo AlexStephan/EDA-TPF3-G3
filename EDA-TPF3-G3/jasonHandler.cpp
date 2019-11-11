@@ -216,6 +216,17 @@ string jsonHandler::createJsonBlockHeader(BlockChain blckchain, string id)
 	return arrayHeaders.dump();
 }
 
+string jsonHandler::createJsonBlockchain(BlockChain blckchain)
+{
+	json chain = json::array();
+	for (int i = 0; i < blckchain.size(); i++)
+	{
+		chain[i] = json::parse(createJsonBlock(blckchain[i]));
+	}
+
+	return chain.dump();
+}
+
 string jsonHandler::createJsonBlock(Block block)
 {
 	json blck;
@@ -310,6 +321,16 @@ string jsonHandler::createJsonNotReady()
 	return cont.dump();
 }
 
+string jsonHandler::createJsonReady(Layout layout, BlockChain blockchain)
+{
+	json message;
+	message["status"] = true;
+	message["layout"] = json::parse(createJsonLayout(layout));
+	message["blockchain"] = json::parse(createJsonBlockchain(blockchain));
+
+	return message.dump();
+
+}
 
 /***********************************************************************************
 	JSONS's VALIDATION

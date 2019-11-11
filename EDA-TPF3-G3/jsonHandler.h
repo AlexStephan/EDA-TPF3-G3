@@ -26,11 +26,15 @@ public:
 	/***********************************************************************************
 		JSONS's CREATION
 	***********************************************************************************/
+	//Blockchain related
 	string createJsonBlockHeader(BlockChain blckchain, string id);
+	string createJsonBlockchain(BlockChain blckchain);
 	string createJsonBlock(Block block);
 	string createJsonTx(Transaction tx);
 	string createJsonMerkle(Block block);
 	string createJsonFilter(string id);
+
+	//Server response related
 	string createHeader(string id);
 	string createJsonOk();
 	string createJsonErr();

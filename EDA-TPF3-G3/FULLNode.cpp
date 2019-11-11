@@ -450,7 +450,7 @@ string FULLNode::serverResponse(STATE rta)
 
 
 	case FILTER:
-		message = createServerOkRsp("/eda_coin/send_filter");
+    		message = createServerOkRsp("/eda_coin/send_filter");
 		break;
 
 	case LAYOUT:
@@ -474,7 +474,6 @@ string FULLNode::serverResponse(STATE rta)
 	return message;
 
 }
-
 
 string FULLNode::createServerNotReadyRsp()
 {
@@ -507,6 +506,35 @@ string FULLNode::createServerNotReadyRsp()
 	return message;
 }
 
+string FULLNode::createServerReadyRsp()
+{
+	string message;
+	char dateLine[100];
+	char expiresLine[100];
+	createDates(dateLine, expiresLine);
+	string content = JSONHandler.createJsonReady(layout, blockChain);
+
+	message += "HTTP/1.1 200 OK";
+	message += CRLF;
+	message += dateLine;
+	message += CRLF;
+	message += "Location: 127.0.0.1/eda_coin/PING";
+	message += CRLF;
+	message += "Cache-Control: max-age=30";
+	message += CRLF;
+	message += expiresLine;
+	message += CRLF;
+	message += "Content-Length: ";
+	message += to_string(content.length());
+	message += CRLF;
+	message += "Content-Type: application/x-www-form-urlencoded";
+	message += CRLF;
+	message += CRLF;
+	message += content;
+	message += CRLF;
+
+	return message;
+}
 
 string FULLNode::createServerErrRsp()
 {
@@ -543,7 +571,7 @@ string FULLNode::createServerHeader(string path, string id)
 	char dateLine[100];
 	char expiresLine[100];
 	createDates(dateLine, expiresLine);
-	string content = JSONHandler.createJsonBlockHeader(blockChain, id); //Falta 
+	string content = JSONHandler.createJsonBlockHeader(blockChain, id); 
 
 	message += "HTTP/1.1 200 OK";
 	message += CRLF;
