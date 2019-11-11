@@ -9,7 +9,7 @@
 void FULLcontroller::cycle()
 {
 	ImGui::Begin(windowID.c_str());
-	ImGui::BeginChild("CONTROL", ImVec2(CHILD_W, CHILD_H));
+	ImGui::BeginChild("FULL CONTROL", ImVec2(CHILD_W, CHILD_H));
 	switch (cstate) {
 	case MENU:
 		drawWindow();
