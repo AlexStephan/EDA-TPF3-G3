@@ -141,7 +141,7 @@ ClientType Client::getClientType() { return cType; }
 
 Socket Client::getSocket() 
 {
-	Socket sock(atoi(port.c_str()),crakIp()) ;
+	Socket sock(atoi(port.c_str()),crackIp()) ;
 	return sock;
 }
 

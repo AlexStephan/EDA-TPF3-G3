@@ -443,4 +443,32 @@ void jsonHandler::readLayout(string layout, NodeData mySocket, vector <NodeData>
 void jsonHandler::getNodesInLayout(string path, NodeData ownData, vector<NodeData>& nodes)
 {
 	ifstream i(path.c_str());
+	json j;
+	i >> j;
+
+	for (auto& nods : j)
+	{
+		if (nods["id"].get<string>() != ownData.getID())
+		{
+			NodeData dat(nods["id"].get<string>(), nods["port"], crackIp(nods["ip"].get<string>()));
+			nodes.push_back(dat);
+		}
+	}
+}
+
+ip_t jsonHandler::crackIp(string ip)
+{
+	ip_t _ip;
+	size_t pos1 = ip.find('.');
+	_ip.b1 = atoi(ip.substr(0, pos1).c_str());
+
+	size_t pos2 = ip.find('.', pos1 + 1);
+	_ip.b2 = atoi(ip.substr(pos1 + 1, pos2).c_str());
+
+	size_t pos3 = ip.find('.', pos2 + 1);
+	_ip.b3 = atoi(ip.substr(pos2 + 1, pos3).c_str());
+
+	_ip.b4 = atoi(ip.substr(pos3 + 1).c_str());
+
+	return _ip;
 }
