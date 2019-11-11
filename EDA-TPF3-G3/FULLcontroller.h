@@ -5,14 +5,16 @@
 #include "WarningWindowHandler.h"
 
 #define MAX_TX_ID	280
-enum controlState { MENU, MTX, MBLOCK, ADDN };
+enum FULLcontrolState { MENU, MTX, MBLOCK, ADDN };
 
-class FULLcontroller :
-	public Observer
+class FULLcontroller : public Observer
 {
 public:
 	FULLcontroller(FULLNode* model) : fnode(model), windowID(model->getData().getID()),
-		warningHandler(model->getData().getID());
+		warningHandler(model->getData().getID()) {
+		currTX = 1;
+		cstate = MENU;
+	}
 	virtual void update(void*) {} //no se me ocurre q necesite el controller q se actualice
 	void cycle();
 
@@ -46,7 +48,7 @@ private:
 	//int currNeighbour;
 	vector<Vout> txData;
 	//string neighbourNames;
-	char TXbuf[MAX_TX_ID];
+	//char TXbuf[MAX_TX_ID];
 	FULLNode* fnode;
 	string windowID;
 	WarningWindowHandler warningHandler;
