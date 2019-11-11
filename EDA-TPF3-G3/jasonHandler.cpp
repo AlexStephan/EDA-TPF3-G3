@@ -9,6 +9,10 @@
 using namespace std;
 using json = nlohmann::json;
 
+
+/***********************************************************************************
+	SAVING METHODS
+***********************************************************************************/
 void jsonHandler::saveBlockChain(BlockChain& blockchain, string path)
 {
 	std::ifstream i(path.c_str()); //Se puede cambiar, no se como recibo el JSON;
@@ -187,34 +191,9 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 	mrkl.push_back(mBlock);
 }
 
-
-
-void jsonHandler::readLayout(string layout, NodeData mySocket, vector <NodeData>& neighbourhood)
-{
-	json lay = json::parse(layout);
-	auto nodes = lay["nodes"];
-	for (int i = 0; i < nodes.size(); i++)
-	{
-		if (nodes[i].get<string>() == mySocket.getID())
-		{
-			auto arr = lay["edges"][i];
-			for (auto& trjt : arr)
-			{
-				NodeData n(trjt.get<string>());
-				neighbourhood.push_back(n);
-			}
-		}
-	}
-
-}
-
-
-void jsonHandler::getNodesInLayout(string path, NodeData ownData, vector<NodeData>& nodes)
-{
-	ifstream i(path.c_str());
-}
-
-
+/***********************************************************************************
+	JSONS's CREATION
+***********************************************************************************/
 string jsonHandler::createJsonBlock(Block block)
 {
 	json blck;
@@ -289,6 +268,10 @@ string jsonHandler::createHeader(string id)
 	return head;
 }
 
+
+/***********************************************************************************
+	JSONS's VALIDATION
+***********************************************************************************/
 errorType jsonHandler::validateBlock(string blck)
 {
 	errorType err = { true, "Wrong amount of fields/Wrong format" };
@@ -416,6 +399,10 @@ errorType jsonHandler::validateFilter(string filter)
 	return err;
 }
 
+
+/***********************************************************************************
+	LAYOUT CONTROLLERS
+***********************************************************************************/
 string jsonHandler::createJsonLayout(Layout& layout)
 {
 	json lays = json::object();
@@ -431,4 +418,29 @@ string jsonHandler::createJsonLayout(Layout& layout)
 	}
 
 	return lays.dump();
+}
+
+void jsonHandler::readLayout(string layout, NodeData mySocket, vector <NodeData>& neighbourhood)
+{
+	json lay = json::parse(layout);
+	auto nodes = lay["nodes"];
+	for (int i = 0; i < nodes.size(); i++)
+	{
+		if (nodes[i].get<string>() == mySocket.getID())
+		{
+			auto arr = lay["edges"][i];
+			for (auto& trjt : arr)
+			{
+				NodeData n(trjt.get<string>());
+				neighbourhood.push_back(n);
+			}
+		}
+	}
+
+}
+
+
+void jsonHandler::getNodesInLayout(string path, NodeData ownData, vector<NodeData>& nodes)
+{
+	ifstream i(path.c_str());
 }

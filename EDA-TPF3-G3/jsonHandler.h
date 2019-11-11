@@ -46,6 +46,4 @@ public:
 	void readLayout(string layout, NodeData mySockt, vector <NodeData>& neighbourhood);
 	void getNodesInLayout(string path, NodeData ownData, vector<NodeData>& nodes);
 
-private:
-	ip_t crackIp(string ip);
 };

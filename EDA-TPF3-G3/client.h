@@ -2,7 +2,8 @@
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
-#include "Socket.h"
+#include "NodeData.h"
+#include "errorType.h"
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
@@ -32,19 +33,34 @@ public:
 	Client(Socket socket);
 	~Client();
 
-	errorType sendRequest(void);
+	/****************************************************************************
+		 NETWOTK CONFIGURATON
+	*****************************************************************************/
 	void POST(string path, string& json);
 	void GET(string path, string& json);
+
+	/****************************************************************************
+		COMMUNICATION
+	*****************************************************************************/
+	errorType sendRequest(void);
+
+	/****************************************************************************
+		 GETTERS
+	*****************************************************************************/
 	Socket getSocket();
 	string getResponse(void);
 	int getRunning();
-	ClientType getClientType() { return cType; };
+	ClientType getClientType();
 
 private:
+
 	ClientType cType;
 	CURLM* curlm;
 	CURL* curl;
-	string host;
+	string ip;
+	string port;
 	string response;
 	int running;
+
+	ip_t crackIp();
 };
