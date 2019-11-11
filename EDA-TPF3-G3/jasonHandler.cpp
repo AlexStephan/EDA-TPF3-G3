@@ -192,43 +192,21 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 void jsonHandler::readLayout(string layout, NodeData mySocket, vector <NodeData>& neighbourhood)
 {
 	json lay = json::parse(layout);
-	for (auto& node : lay)
+	auto nodes = lay["nodes"];
+	for (int i = 0; i < nodes.size(); i++)
 	{
-		auto id = node["id"];
-		if (id.get<string>() == mySocket.getID())
+		if (nodes[i].get<string>() == mySocket.getID())
 		{
-			auto hood = node["neighbours"];
-			for (auto& n : hood)
+			auto arr = lay["edges"][i];
+			for (auto& trjt : arr)
 			{
-				auto id = n["id"];
-				auto ip = n["ip"];
-				auto port = n["port"];
-				NodeData bff(id.get<string>(), port, crackIp(ip.get<string>()));
-				neighbourhood.push_back(bff);
+				NodeData n(trjt.get<string>());
+				neighbourhood.push_back(n);
 			}
 		}
 	}
 
-
 }
-
-ip_t jsonHandler::crackIp(string ip)
-{
-	ip_t _ip;
-	size_t pos1 = ip.find('.');
-	_ip.b1 = atoi(ip.substr(0, pos1).c_str());
-
-	size_t pos2 = ip.find('.', pos1 + 1);
-	_ip.b2 = atoi(ip.substr(pos1 + 1, pos2).c_str());
-
-	size_t pos3 = ip.find('.', pos2 + 1);
-	_ip.b3 = atoi(ip.substr(pos2 + 1, pos3).c_str());
-
-	_ip.b4 = atoi(ip.substr(pos3 + 1).c_str());
-
-	return _ip;
-}
-
 
 
 void jsonHandler::getNodesInLayout(string path, NodeData ownData, vector<NodeData>& nodes)
@@ -440,23 +418,17 @@ errorType jsonHandler::validateFilter(string filter)
 
 string jsonHandler::createJsonLayout(Layout& layout)
 {
-	json lays = json::array();
+	json lays = json::object();
 	for (int i = 0; i < layout.size(); i++)
 	{
-		lays[i]["id"] = layout[i].ownData.getID();
-		lays[i]["ip"] = layout[i].ownData.getSocket().getIPString();
-		lays[i]["port"] = layout[i].ownData.getSocket().getPort();
-		json hood = json::array();
+		lays["nodes"][i] = layout[i].ownData.getID();
+		auto kcyo = json::object();
 		for (int j = 0; j < layout[i].myNeighbours.size(); j++)
 		{
-			
-			hood[j]["id"] = layout[i].myNeighbours[j].getID();
-			hood[j]["ip"] = layout[i].myNeighbours[j].getSocket().getIPString();
-			hood[j]["port"] = layout[i].myNeighbours[j].getSocket().getPort();
+			kcyo += {"tarjet" + to_string(j + 1), layout[i].myNeighbours[j].getID()};
 		}
-
-		lays[i]["neighbours"] = hood;
+		lays["edges"][i] = kcyo;
 	}
-	
+
 	return lays.dump();
 }
