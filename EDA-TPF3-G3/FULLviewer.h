@@ -3,6 +3,7 @@
 
 #include "FULLNode.h"
 #include "TreeWindowHandler.h"
+#include "layoutWindowHandler.h"
 
 class FULLviewer :
 	public Observer
@@ -16,9 +17,11 @@ private:
 	NodeData nodedata;
 	string windowName;
 	const vector<NodeData>* neigbours;
+	const Layout* layout;
 	const vector<Transaction>* pendingTX;
-	BlockChain* blockchain;
+	const BlockChain* blockchain; //fijarse si no volo todo aca...
 	TreeWindowHandler treeHandler;
+	layoutWindowHandler layoutHandler;
 
 	void drawWindow();	//	OLI
 	/*
@@ -54,7 +57,24 @@ private:
 
 	Buena suerte. Cualquier cosa consultame.
 
-	Proximamente, parte 3/3
+	3/3
+	Me complace anunciar que los handlers de FULLviewer estan practicamente terminados
+	drawWindow ahora deberia hacer una llamada a drawBigRedButton.
+	Este deberia tener un boton super copado (solo estoy presumiendo) tal que,
+	cuando lo presiones, se llame al layout handler asi:
+
+	layoutHandler.createWindow(nodedata,*layout,*neighbours);
+
+	como siempre, no te tienes q preocupar sobre como funciona exactamente, con tal de q le pases esos 3 parametros (actualizados en el update)
+	acaso no molan un monton los handlers? Si pudiera, me casaria con uno...
+
+	bueno ya, creo q no tengo por el momento ninguna otra mision para darte.
+	Como te ha estado llendo? no me fije en los avances q hiciste, pero tampoco
+	me preguntaste demasiado.
+	Bueno, no habia demasiado para preguntar, era cuestion de hacer ventanitas, no?
+	Como sea, ya se me hizo tarde, deberia ir volviendo a casa antes de q Mama se enoje conmigo
+	Nos vemos temprano mañana!
+	(van a tener q definir "temprano" rigurosamente...)
 
 	*/
 
@@ -62,7 +82,10 @@ private:
 	void printNeighbours();
 	void printPendingTX();	//OLI!! Fijarse en la funcion printTx para cambiar el comportamiento de esa parte
 
-	void printBlockList();
+	void printBlockList(); //OLI
+
+	void drawBigRedButton(); //OLI
+
 
 
 //	void printVin(int i);	//DO NOT ERASE (YET)

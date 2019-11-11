@@ -46,8 +46,7 @@ public:
 	//hice -por imprudencia propia- avisarme y lo arreglo
 	const BlockChain* getBlockChain();
 
-	const Layout& getLayout();
-	const vector<NodeData>& getNeighbourhood();
+	const Layout* getLayout();
 
 
 private:

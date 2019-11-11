@@ -215,15 +215,11 @@ const BlockChain* FULLNode::getBlockChain() {
 	return &blockChain;
 }
 
-const Layout& FULLNode::getLayout()
+const Layout* FULLNode::getLayout()
 {
-	return layout;
+	return &layout;
 }
 
-const vector<NodeData>& FULLNode::getNeighbourhood()
-{
-	return neighbourhood;
-}
 
 /***********************************************************************************
 	INNER EDACoin VARIABLES
