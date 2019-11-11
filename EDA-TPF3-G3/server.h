@@ -17,13 +17,15 @@ using namespace std;
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  *****************************************************************************/
-typedef enum { TX, BLOCK, MERKLE, FILTER, GET, ERR } STATE;
+typedef enum { BLOCK,TX, MERKLE, FILTER, GET, LAYOUT, PING, READY, NOTREADY, ERR } STATE;
 
 class Server
 {
 public:
 	Server(unsigned int port);
 	~Server();
+
+
 	void startConnection();
 	void listening();
 	void receiveMessage();
@@ -48,7 +50,5 @@ private:
 	boost::asio::ip::tcp::acceptor* acceptor;
 
 	STATE parseMessage();
-	bool validateBlock(string blck);
-	bool validateTx(string tx);
-	bool validateFilter(string filter);
+	jsonHandler JSON;
 };

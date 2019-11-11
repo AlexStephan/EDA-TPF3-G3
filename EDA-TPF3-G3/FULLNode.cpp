@@ -204,6 +204,16 @@ const BlockChain* FULLNode::getBlockChain() {
 	return &blockChain;
 }
 
+const Layout& FULLNode::getLayout()
+{
+	return layout;
+}
+
+const vector<NodeData>& FULLNode::getNeighbourhood()
+{
+	return neighbourhood;
+}
+
 /***********************************************************************************
 	INNER EDACoin VARIABLES
 ***********************************************************************************/
@@ -376,14 +386,23 @@ errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 }
 
 
-errorType FULLNode::postLayout(Socket socket);
-
-
-
-errorType FULLNode::postPing(Socket socket)
+errorType FULLNode::postLayout(Socket sock)
 {
-	Client* client = new Client(neighbourhood[neighbourPos]);
-	client->POST("/eda_coin/send_block", blck);
+	Client* client = new Client(sock);
+	client->POST("/eda_coin/NETWORK_LAYOUT", layoutMsg);
+	errorType err = client->sendRequest();
+	clients.push_back(client);
+
+	notifyAllObservers();
+	return err;
+}
+
+
+
+errorType FULLNode::postPing(Socket sock)
+{
+	Client* client = new Client(sock);
+	client->POST("/eda_coin/PING");
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 

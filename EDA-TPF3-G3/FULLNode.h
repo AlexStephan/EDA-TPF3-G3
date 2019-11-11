@@ -46,6 +46,9 @@ public:
 	//hice -por imprudencia propia- avisarme y lo arreglo
 	const BlockChain* getBlockChain();
 
+	const Layout& getLayout();
+	const vector<NodeData>& getNeighbourhood();
+
 
 private:
 	/***********************************************************************************
@@ -79,10 +82,10 @@ private:
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
 
 	//INTERACTION WITH STRANGERS
-	errorType postLayout(Socket socket);
 	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
 	errorType postBlock(unsigned int neighbourPos, unsigned int height);
-	errorType postPing(Socket socket);
+	errorType postLayout(Socket sock);
+	errorType postPing(Socket sock);
 
 	//INTERACTION WITH NEIGHBOURS
 	string serverResponse(STATE rta);

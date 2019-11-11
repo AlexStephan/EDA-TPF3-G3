@@ -4,19 +4,32 @@
 #include "SPVNode.h"
 #include "WarningWindowHandler.h"
 
+enum SPVcontrolState { MENU, MTX, PFILTER, CHANGEFN, CHANGEHN };
+
 class SPVcontroller :
 	public Observer
 {
 public:
 	SPVcontroller(SPVNode* model) : snode(model), windowID(model->getData().getID()),
-		warningHandler(model->getData().getID()) {}
-	virtual void update(void*) {} //tampoco se q le interese al controller
-	void cycle() {
-		drawWindow();
-		warningHandler.draw();
+		warningHandler(model->getData().getID()) {
+		cstate = MENU;
+		currTX = 0;
 	}
+	virtual void update(void*) {} //tampoco se q le interese al controller
+	void cycle();
+
 private:
-	void drawWindow(); //OLI
+	void drawWindow(); 
+	void drawMTX();
+	bool drawVout(Vout&);
+	void drawPFilter();
+	void drawChangeFN();
+	void drawChangeHN();
+	void newPortSelect();
+	void newIpSelect();
+	void returnButton();
+
+
 	//Mismas indicaciones q drawWindow de FULLcontroller, pero en este caso accede a:
 	/*
 	errorType makeTX(const vector<Vout>& receivers);
@@ -24,7 +37,13 @@ private:
 	errorType changeFilterNode(NodeData FilterNode);
 	errorType changeHeaderNode(NodeData HeaderNode);
 	*/
-
+	int cstate;
+	int currTX;
+	string auxstr;
+	vector<Vout> txData;
+	string newID;
+	int newPort;
+	int newIP[4];
 	SPVNode* snode;
 	string windowID;
 	WarningWindowHandler warningHandler;
