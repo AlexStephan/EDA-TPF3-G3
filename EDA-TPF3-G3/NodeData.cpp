@@ -20,6 +20,16 @@ NodeData::NodeData(const NodeData& c) :
 {
 }
 
+void NodeData::setID(const string& s)
+{
+	id = s;
+}
+
+void NodeData::setSocket(const Socket& s)
+{
+	socket = s;
+}
+
 string NodeData::getID() const
 {
 	return id;

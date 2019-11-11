@@ -35,7 +35,7 @@ public:
 	uint getPort();
 	ip_t getIP();
 
-	bool operator==(Socket& s);
+	bool operator==(const Socket& s);
 	Socket& operator=(const Socket& s);
 
 private:

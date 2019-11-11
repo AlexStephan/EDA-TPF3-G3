@@ -9,10 +9,20 @@ public:
 	NodeData(string id, Socket& c);
 	NodeData(const NodeData& c);
 
+	void setID(const string& s);
+	void setSocket(const Socket& s);
+
 	string getID() const;
 	Socket getSocket() const;
 
 	NodeData& operator=(const NodeData& data);
+
+	bool operator==(const NodeData& n) {
+		if ((id == n.id) && (socket == n.socket))
+			return true;
+		else
+			return false;
+	}
 
 private:
 	string id;

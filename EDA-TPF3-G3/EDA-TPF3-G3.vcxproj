@@ -42,6 +42,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="layoutGeneratorHandler.h" />
     <ClInclude Include="layoutNumericConection.h" />
+    <ClInclude Include="layoutWindowHandler.h" />
     <ClInclude Include="manifestHandler.h" />
     <ClInclude Include="NETcontroller.h" />
     <ClInclude Include="NETviewer.h" />
@@ -79,8 +80,10 @@
     <ClCompile Include="imgui_stdlib.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="jasonHandler.cpp" />
+    <ClCompile Include="layout.cpp" />
     <ClCompile Include="layoutGeneratorHandler.cpp" />
     <ClCompile Include="layoutNumericConection.cpp" />
+    <ClCompile Include="layoutWindowHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
     <ClCompile Include="NETcontroller.cpp" />
