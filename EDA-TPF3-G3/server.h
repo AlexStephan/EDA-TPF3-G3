@@ -17,7 +17,7 @@ using namespace std;
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  *****************************************************************************/
-typedef enum { BLOCK,TX, MERKLE, FILTER, GET, LAYOUT, PING, READY, NOTREADY, ERR } STATE;
+typedef enum { BLOCK,TX, MERKLE, FILTER, GET, LAYOUT, READY, NOTREADY, ERR } STATE;
 
 class Server
 {

@@ -194,6 +194,28 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 /***********************************************************************************
 	JSONS's CREATION
 ***********************************************************************************/
+string jsonHandler::createJsonBlockHeader(BlockChain blckchain, string id)
+{
+	json arrayHeaders = json::array();
+
+	for (BlockChain::reverse_iterator it = blckchain.rbegin(), int i = 0; 
+		(it != blckchain.rend()) && (it->getBlockID() == id); 
+		it++, i++) 
+	{
+		json blck;
+		blck["height"] = it->getHeight();
+		blck["nonce"] = it->getNonce();
+		blck["blockid"] = it->getBlockID();
+		blck["previousblockid"] = it->getPreviousBlockID();
+		blck["merkleroot"] = it->getMerkleRoot();
+		blck["nTx"] = it->getNTx();
+
+		arrayHeaders[i] = blck;
+	}
+
+	return arrayHeaders.dump();
+}
+
 string jsonHandler::createJsonBlock(Block block)
 {
 	json blck;
@@ -262,10 +284,30 @@ string jsonHandler::createJsonFilter(string id)
 
 	return filter.dump();
 }
+
 string jsonHandler::createHeader(string id)
 {
 	string head = "Header:'block_id':" + id;
 	return head;
+}
+
+string jsonHandler::createJsonOk()
+{
+	json content = { {"result",true},{"errorCode",nullptr} };
+	return content.dump();
+}
+
+string jsonHandler::createJsonErr()
+{
+	json content = { {"result",false},{"errorCode","ERROR"} };
+	return content.dump();
+
+}
+
+string jsonHandler::createJsonNotReady()
+{
+	json cont = { {"status", false} };
+	return cont.dump();
 }
 
 

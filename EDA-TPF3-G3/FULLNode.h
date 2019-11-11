@@ -89,6 +89,12 @@ private:
 
 	//SERVER RESPONSE
 	string serverResponse(STATE rta);
+	string createServerOkRsp(string path);
+	string createServerHeader(string path, string id);
+	string createServerErrRsp();
+	string createServerReadyRsp();
+	string createServerNotReadyRsp();
+	void createDates(char* c1, char* c2);
 	jsonHandler JSONHandler;
 
 	/***********************************************************************************
