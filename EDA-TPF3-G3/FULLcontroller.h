@@ -4,19 +4,30 @@
 #include "FULLNode.h"
 #include "WarningWindowHandler.h"
 
+#define MAX_TX_ID	280
+enum controlState { MENU, MTX, MBLOCK, ADDN };
+
 class FULLcontroller :
 	public Observer
 {
 public:
 	FULLcontroller(FULLNode* model) : fnode(model), windowID(model->getData().getID()),
-		warningHandler(model->getData().getID()){}
+		warningHandler(model->getData().getID());
 	virtual void update(void*) {} //no se me ocurre q necesite el controller q se actualice
-	void cycle() {
-		drawWindow();
-		warningHandler.draw();
-	}
+	void cycle();
+
 private:
-	void drawWindow(); //OLI
+	void drawWindow();
+	void drawMBlock();
+	void drawMTX();
+	void drawAddNode();
+	bool drawVout(Vout&);
+	void newPortSelect();
+	void newIpSelect();
+	void returnButton();
+
+	//void neighbourSelect();
+	//const char* findNeighbourNames();
 	//Dibuja la ventana con el nombre windowID, y llama a las siguientes funciones
 	//del model, cuando corresponda:
 	/*
@@ -26,7 +37,16 @@ private:
 	*/
 	//Recordar hacer warningHandler.check() con los retornos de dichas funciones
 
-
+	int newPort;
+	int newIP[4];
+	string newID;
+	int cstate;
+	int currTX;
+	string auxstr;
+	//int currNeighbour;
+	vector<Vout> txData;
+	//string neighbourNames;
+	char TXbuf[MAX_TX_ID];
 	FULLNode* fnode;
 	string windowID;
 	WarningWindowHandler warningHandler;

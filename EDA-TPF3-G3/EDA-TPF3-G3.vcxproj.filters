@@ -171,6 +171,9 @@
     <ClInclude Include="layoutNumericConection.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_stdlib.h">
+      <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -267,6 +270,9 @@
     </ClCompile>
     <ClCompile Include="layoutNumericConection.cpp">
       <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_stdlib.cpp">
+      <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
