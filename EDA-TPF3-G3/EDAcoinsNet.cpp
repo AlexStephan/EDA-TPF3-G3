@@ -13,6 +13,13 @@ EDAcoinsNet::~EDAcoinsNet()
 	for (size_t i = 0; i < SPVvector.size(); i++)
 		delete SPVvector[i];
 }
+void EDAcoinsNet::cycle()
+{
+	for (size_t i = 0; i < FULLvector.size(); i++)
+		FULLvector[i]->cycle();
+	for (size_t i = 0; i < SPVvector.size(); i++)
+		SPVvector[i]->cycle();
+}
 errorType EDAcoinsNet::createFULLNode(NodeData newNode)
 {
 	errorType creationState;

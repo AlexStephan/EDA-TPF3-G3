@@ -7,24 +7,32 @@
 #define BUTTON_S	100
 #define BUTTONS_PER_ROW 2
 
+void SPVcontroller::update(void* m)
+{
+	errorType newMessage;
+	while ((newMessage = snode->getVerificationError()).error == true) {
+		warningHandler.check(newMessage);
+	}
+}
+
 void SPVcontroller::cycle()
 {
 	ImGui::Begin(windowID.c_str());
 	ImGui::BeginChild("SPV CONTROL", ImVec2(CHILD_W, CHILD_H));
 	switch (cstate) {
-	case MENU:
+	case SPV_MENU:
 		drawWindow();
 		break;
-	case MTX:
+	case SPV_MTX:
 		drawMTX();
 		break;
-	case PFILTER:
+	case SPV_PFILTER:
 		drawPFilter();
 		break;
-	case CHANGEFN:
+	case SPV_CHANGEFN:
 		drawChangeFN();
 		break;
-	case CHANGEHN:
+	case SPV_CHANGEHN:
 		drawChangeHN();
 		break;
 	}
@@ -51,7 +59,7 @@ void SPVcontroller::drawWindow()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 0.9f, 0.9f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 1.0f, 1.0f));
 		if (ImGui::Button(BUTTON_TEXT[i], ImVec2(BUTTON_S, BUTTON_S)))
-			cstate = SPVcontrolState(MTX + i);
+			cstate = SPVcontrolState(SPV_MTX + i);
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
@@ -86,7 +94,7 @@ void SPVcontroller::drawMTX() {
 		txVin.pop_back();
 		txVout.pop_back();
 		warningHandler.check(snode->makeTX(txVout, txVin));
-		cstate = MENU;
+		cstate = SPV_MENU;
 	}
 
 }
@@ -116,7 +124,7 @@ void SPVcontroller::drawPFilter() {
 
 	if (ImGui::Button("POST FILTER")) {
 		warningHandler.check(snode->postFilter());
-		cstate = MENU;
+		cstate = SPV_MENU;
 	}
 }
 
@@ -130,7 +138,7 @@ void SPVcontroller::drawChangeFN() {
 
 	if (ImGui::Button("CHANGE FILTER NODE")) {
 		warningHandler.check(snode->changeFilterNode(NodeData(newID, newPort, newIP[0], newIP[1], newIP[2], newIP[3])));
-		cstate = MENU;
+		cstate = SPV_MENU;
 	}
 }
 
@@ -144,7 +152,7 @@ void SPVcontroller::drawChangeHN() {
 
 	if (ImGui::Button("CHANGE HEADER NODE")) {
 		warningHandler.check(snode->changeHeaderNode(NodeData(newID, newPort, newIP[0], newIP[1], newIP[2], newIP[3])));
-		cstate = MENU;
+		cstate = SPV_MENU;
 	}
 }
 
@@ -170,7 +178,7 @@ void SPVcontroller::newIpSelect(){
 void SPVcontroller::returnButton() {
 
 	if (ImGui::Button("Return"))
-		cstate = MENU;
+		cstate = SPV_MENU;
 }
 
 

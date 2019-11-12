@@ -45,6 +45,8 @@ private:
 	ImGuiHandler guiHandler;
 	WarningWindowHandler warningHandler;
 
+	bool network_created;
+
 	//Para los nodos locales
 	vector<FULLcontroller*> FcontrolList;
 	vector<FULLviewer*> FviewList;

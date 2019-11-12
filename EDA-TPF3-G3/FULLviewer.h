@@ -4,6 +4,8 @@
 #include "FULLNode.h"
 #include "TreeWindowHandler.h"
 #include "layoutWindowHandler.h"
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_image.h>
 
 class FULLviewer :
 	public Observer
@@ -12,18 +14,24 @@ public:
 	FULLviewer();
 	virtual void update(void*);
 	void cycle();
+	~FULLviewer();
 
 private:
 	NodeData nodedata;
 	string windowName;
-	const vector<NodeData>* neigbours;
+	const vector<NodeData>* neighbours;
 	const Layout* layout;
 	const vector<Transaction>* pendingTX;
 	const BlockChain* blockchain; //fijarse si no volo todo aca...
 	TreeWindowHandler treeHandler;
 	layoutWindowHandler layoutHandler;
+	ALLEGRO_BITMAP* nbutton;
+	ALLEGRO_BITMAP* pbutton;
+	bool redButton;
 
 	void drawWindow();	//	OLI
+
+						
 	/*
 
 	1/3
@@ -69,7 +77,7 @@ private:
 	acaso no molan un monton los handlers? Si pudiera, me casaria con uno...
 
 	bueno ya, creo q no tengo por el momento ninguna otra mision para darte.
-	Como te ha estado llendo? no me fije en los avances q hiciste, pero tampoco
+	Como te ha estado yendo? no me fije en los avances q hiciste, pero tampoco
 	me preguntaste demasiado.
 	Bueno, no habia demasiado para preguntar, era cuestion de hacer ventanitas, no?
 	Como sea, ya se me hizo tarde, deberia ir volviendo a casa antes de q Mama se enoje conmigo

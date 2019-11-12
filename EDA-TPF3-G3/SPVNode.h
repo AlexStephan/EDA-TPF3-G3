@@ -11,7 +11,7 @@ class SPVNode :
 {
 public:
 	SPVNode(NodeData ownData, NodeData FilterNode, NodeData HeaderNode) :
-		Node(ownData), filterNode(FilterNode), headerNode(HeaderNode) {}
+		Node(ownData), filterNode(FilterNode), headerNode(HeaderNode), blockVerification() {}
 	virtual void cycle();
 
 	/***********************************************************************************
@@ -28,6 +28,7 @@ public:
 	NodeData getData();
 	NodeData getFilterNodeData();
 	NodeData getHeaderNodeData();
+	errorType getVerificationError();
 
 private:
 	/***********************************************************************************
@@ -37,6 +38,8 @@ private:
 	NodeData headerNode;
 	vector<MerkleBlock> mBlocks;
 	jsonHandler JSONHandler;
+
+	vector<errorType> blockVerification;
 	/***********************************************************************************
 		NETWORKING SH*T
 	***********************************************************************************/
