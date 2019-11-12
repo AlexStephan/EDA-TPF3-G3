@@ -1,6 +1,9 @@
 #include "NETcontroller.h"
 #include "imgui.h"
 
+#define FIRST	6
+#define LAST	8
+
 #define WINDOW_NAME "EDA Coins Net"
 
 #define CLEAN(vector)	for(int i=0;i<(vector).size();i++) delete (vector)[i]
@@ -21,7 +24,7 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 	type = 0;
 	nodePort = 0;
 
-
+	makeFirstFULL();
 }
 
 NETcontroller::~NETcontroller(){
@@ -152,9 +155,14 @@ void NETcontroller::findFullNames() {
 
 void NETcontroller::makeFirstFULL()
 {
-	netmodel->createFULLNode();
-	netmodel->createFULLNode();
-	netmodel->createFULLNode();
+	vector<NodeData> genesisNodes = {};
+	NodeData dummyNode("NO_DATA");
+
+	jsonhandler.getNodesInLayout("manifest.json", dummyNode, genesisNodes);
+
+	for (size_t i = FIRST; i <= LAST; i++) {
+		netmodel->createFULLNode(genesisNodes[i]);
+	}
 }
 
 void NETcontroller::checkIfDoneConnecting()

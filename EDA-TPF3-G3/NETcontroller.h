@@ -44,6 +44,7 @@ private:
 
 	ImGuiHandler guiHandler;
 	WarningWindowHandler warningHandler;
+	jsonHandler jsonhandler;
 
 	bool network_created;
 
