@@ -156,7 +156,8 @@ STATE Server::parseMessage()
 		if (Msg.find("/eda_coin/get_block_header/") && Msg.find("Header:'block_id':") != string::npos)
 		{
 			size_t pos = Msg.find("'block_id':");
-			bodyMsg = Msg.substr(pos + strlen("'block_id':")); //FALTAAAAAA
+			size_t pos1 = Msg.find(CRLF, pos);
+			bodyMsg = Msg.substr(pos + strlen("'block_id':"),pos1 ); 
 			rta = HEADER;
 		}
 	}
