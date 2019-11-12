@@ -20,6 +20,8 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 		IParr[i] = 0;
 	type = 0;
 	nodePort = 0;
+
+
 }
 
 NETcontroller::~NETcontroller(){
@@ -78,7 +80,11 @@ void NETcontroller::cycle()
 	//ALEX.EXE
 	netmodel->cycle();
 
-	if (network_created) {
+	if (network_created == false) {
+		checkIfDoneConnecting();
+		waitWindow();
+	}
+	else {
 
 		drawControlWindow();
 		netviewer.cycle();
@@ -142,6 +148,31 @@ void NETcontroller::findFullNames() {
 		FullNames += '\0';
 	}
 	FullNames += '\0';
+}
+
+void NETcontroller::makeFirstFULL()
+{
+	netmodel->createFULLNode();
+	netmodel->createFULLNode();
+	netmodel->createFULLNode();
+}
+
+void NETcontroller::checkIfDoneConnecting()
+{
+	if (netmodel->checkIfConnectionMade())
+		network_created = true;
+}
+
+void NETcontroller::waitWindow()
+{
+	ImGui::Begin("CREATING INITIAL LAYOUT...");
+
+	ImGui::Text("Please, wait until the initial connection has been made");
+	ImGui::Text("Oh... viste ese manejo del english, haha, beri biutiful");
+	ImGui::Text("Haha... igual, si llegaste hasta aca y no se rompio, tremendo, no? Porque, segun yo, ni a palos funciona esto antes de las 10 de la noche");
+	ImGui::Text("EN EDA ANDA TODO!!!");
+	ImGui::Text("che, vamos a quitar este mensaje antes de la entrega, no?");
+	ImGui::End();
 }
 
 

@@ -90,6 +90,20 @@ SPVNode* EDAcoinsNet::getSPVnode(size_t pos)
 	return node;
 }
 
+bool EDAcoinsNet::checkIfConnectionMade()
+{
+	bool rta = false;
+	for (size_t i = 0;
+		(rta == false) && (i < FULLvector.size());
+		i++) {
+
+		if (FULLvector[i]->getState() == NETWORK_CREATED) {
+			rta = true;
+		}
+	}
+	return rta;
+}
+
 bool EDAcoinsNet::existAlready(NodeData node)
 {
 	if ((existAlready(node.getID()) == false)

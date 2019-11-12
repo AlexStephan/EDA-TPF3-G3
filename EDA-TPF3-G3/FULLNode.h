@@ -48,7 +48,7 @@ public:
 
 	const Layout* getLayout();
 
-
+	fullNodeStates getState();
 private:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES

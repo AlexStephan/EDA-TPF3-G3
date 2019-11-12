@@ -220,6 +220,11 @@ const Layout* FULLNode::getLayout()
 	return &layout;
 }
 
+fullNodeStates FULLNode::getState()
+{
+	return nodeState;
+}
+
 
 /***********************************************************************************
 	INNER EDACoin VARIABLES

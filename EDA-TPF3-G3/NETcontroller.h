@@ -59,5 +59,10 @@ private:
 	void drawControlWindow();
 	void findFullNames();
 
+	//ALEX.EXE.EXE
+	void makeFirstFULL();
+	void checkIfDoneConnecting();
+	void waitWindow();
+
 };
 
