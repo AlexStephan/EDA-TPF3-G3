@@ -1,7 +1,15 @@
-
+/******************************************************************************
+ * INCLUDE HEADER FILES
+ ******************************************************************************/
 #include "jsonHandler.h"
 #include "json.hpp"
 #include <fstream>
+
+/*******************************************************************************
+ * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+ ******************************************************************************/
+#define BLOCK_FIELDS 7
+#define TRANS_FIELDS 5
 
 /*******************************************************************************
  * NAMESPACES
@@ -344,7 +352,7 @@ errorType jsonHandler::validateBlock(string blck)
 		json block = json::parse(blck);
 
 		//Block
-		if (block.size() == 7) //Si son 7 elementos
+		if (block.size() == BLOCK_FIELDS) //Si son 7 elementos
 		{
 			block.at("height");
 			block.at("nonce");
@@ -359,7 +367,7 @@ errorType jsonHandler::validateBlock(string blck)
 			auto arrayTrans = block["tx"];
 			for (auto& trans : arrayTrans)	//Parsea todas las transacciones
 			{
-				if (arrayTrans.size() == ntx && trans.size() == 5)	//Si son 5 elementos
+				if (arrayTrans.size() == ntx && trans.size() == TRANS_FIELDS)	//Si son 5 elementos
 				{
 					trans.at("txid");
 					int txin = trans.at("nTxin");
@@ -406,7 +414,7 @@ errorType jsonHandler::validateTx(string tx)
 	{
 		json trans = json::parse(tx);
 
-		if (trans.size() == 5)	//Si son 5 elementos
+		if (trans.size() == TRANS_FIELDS)	//Si son 5 elementos
 		{
 			trans.at("txid");
 			int txin = trans.at("nTxin");

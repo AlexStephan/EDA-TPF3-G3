@@ -2,12 +2,18 @@
 /*******************************************************************************
  * INCLUDE HEADER FILES
  ******************************************************************************/
+#include "jsonHandler.h"
 #include <iostream>
 #include <cstdio>
 #include <cstring>
 #include <boost/asio.hpp>
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
+
+/*******************************************************************************
+* CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+******************************************************************************/
+#define MAX_LENGTH 10000
 
 /*******************************************************************************
  * NAMESPACES
@@ -42,6 +48,7 @@ public:
 	STATE getState();
 	string getMessage();
 	string getFilterId();
+	NodeData getSender(); //Imposible creo
 
 private:
 
@@ -55,9 +62,10 @@ private:
 	/***********************************************************************************
 		MESSAGES
 	***********************************************************************************/
-	string receiveMsg;
+	string Msg;
 	string bodyMsg;
 	string flterId;
+	char buf[MAX_LENGTH];
 	
 	/***********************************************************************************
 		BOOST SH*T
@@ -66,11 +74,18 @@ private:
 	boost::asio::io_service* IO_handler;
 	boost::asio::ip::tcp::socket* socket;
 	boost::asio::ip::tcp::acceptor* acceptor;
+	boost::asio::io_service::work* active;
 
 	/***********************************************************************************
-		RESPONSE METHODS
+		THINKING METHODS
 	***********************************************************************************/
 	STATE parseMessage();
 	STATE state;
 	jsonHandler JSON;
+
+	/***********************************************************************************
+		CALLBACKS/HANDLERS
+	***********************************************************************************/
+	void messaggeHandler(const boost::system::error_code err, std::size_t bytes);
+	void connectionHandler(const boost::system::error_code& err);
 };
