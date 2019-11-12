@@ -113,16 +113,23 @@ void FULLviewer::printPendingTX()
 
 void FULLviewer::printBlockList() {
 	if (ImGui::CollapsingHeader("Blockchain")) {
-		vector<pair<const unsigned long, int>> tags;
+		//vector<pair<const unsigned long, int>> tags;
+		//for (int i = 0; i < blockchain->size(); i++) {
+		//	pair<const unsigned long, int> par((*blockchain)[i].getHeight(), i);
+		//	tags.emplace_back(par);
+		//}
+		//sort(tags.begin(), tags.end());
+		//for (int j = 0; j < tags.size(); j++) {
+		//	string blockid = "Block " + (*blockchain)[tags[j].second].getBlockID();
+			//if (ImGui::Selectable(blockid.c_str()))
+			//	treeHandler.createWindow((*blockchain)[tags[j].second]);
+		//}
+
 		for (int i = 0; i < blockchain->size(); i++) {
-			pair<const unsigned long, int> par((*blockchain)[i].getHeight(), i);
-			tags.push_back(par);
-		}
-		sort(tags.begin(), tags.end());
-		for (int j = 0; j < tags.size(); j++) {
-			string blockid = "Block " + (*blockchain)[tags[j].second].getBlockID();
+			string blockid = "Block " + (*blockchain)[i].getBlockID();
 			if (ImGui::Selectable(blockid.c_str()))
-				treeHandler.createWindow((*blockchain)[tags[j].second]);
+				treeHandler.createWindow((*blockchain)[i]);
+
 		}
 	}
 }
