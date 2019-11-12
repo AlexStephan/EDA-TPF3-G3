@@ -47,9 +47,21 @@ FULLNode::~FULLNode() {
 void FULLNode::cycle() {
 	switch (nodeState) {
 	case IDLE:
-		if (servers.back()->getDoneListening()) {					//If latest server picks up a ping, we stop trying
-			nodeState = WAITING_LAYOUT;
-			break;
+		if (!servers.back()->getDoneListening())
+			servers.back()->listening();
+		else if (!servers.back()->getDoneDownloading())
+			servers.back()->receiveMessage();
+		else if (!servers.back()->getDoneSending())
+			servers.back()->sendMessage(serverResponse(servers.back()->getState()));
+		if (servers.back()->getDoneSending()) {
+			if (servers.back()->getState() == PING) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
+				nodeState = WAITING_LAYOUT;
+			}
+			delete servers.back();
+			servers.pop_back();											//Remove useless server
+			Server* newServer = new Server(port);
+			newServer->startConnection();								//Create new server
+			servers.push_back(newServer);
 		}
 		//Pick random timeout
 		if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
@@ -158,7 +170,7 @@ void FULLNode::cycle() {
 		keepSending();
 		break;
 	default:
-		cout << "You fucked up with the FSM, Morty!" << endl;
+		cout << "You fucked up with the FSM, Morty!"<< endl;
 		break;
 	}
 }
@@ -218,6 +230,11 @@ const BlockChain* FULLNode::getBlockChain() {
 const Layout* FULLNode::getLayout()
 {
 	return &layout;
+}
+
+fullNodeStates FULLNode::getState()
+{
+	return nodeState;
 }
 
 
@@ -280,12 +297,11 @@ void FULLNode::keepListening() {
 				if (blck.getBlockID() == blockChain[i].getBlockID())			//If received block is already in chain, it gets ignored
 					found = true;
 			}
-			blockChain.push_back(blck);										//Save block into blockchain
-			floodBlock(blck, (*j)->getSender());							//And flood the block
-			if (!found)														//If it's a new block
+			if (!found) {														//If it's a new block
+				blockChain.push_back(blck);										//Save block into blockchain
 				checkForFilter(blck);											//Inform possible suscripted SPVNodes
-			else
-				blockChain.pop_back();										//Remove block if repeated
+				floodBlock(blck, (*j)->getSender());							//And flood the block
+			}
 			break;
 		case TX:			//Done
 			JSONHandler.saveTx((*j)->getMessage(), txs);

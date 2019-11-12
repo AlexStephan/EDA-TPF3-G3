@@ -4,8 +4,7 @@
 #include <string>
 using namespace std;
 
-class NETviewer :
-	public Observer
+class NETviewer : public Observer
 {
 public:
 	NETviewer(const string& id);

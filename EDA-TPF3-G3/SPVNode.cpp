@@ -177,6 +177,59 @@ void SPVNode::keepSending() {
 		notifyAllObservers();
 }
 /***********************************************************************************
+	SEREVR REPONSE
+***********************************************************************************/
+string SPVNode::serverResponse(STATE rta)
+{
+	string message;
+
+	switch (rta)
+	{
+	case GET:
+		message = createServerHeader("/eda_coin/get_block_header", );
+		break;
+
+	case TX:
+		message = createServerOkRsp("/eda_coin/send_tx");
+		break;
+
+
+	case BLOCK:
+		message = createServerOkRsp("/eda_coin/send_block");
+		break;
+
+
+	case MERKLE:
+		message = createServerOkRsp("/eda_coin/send_merkle_block");
+		break;
+
+
+	case FILTER:
+		message = createServerOkRsp("/eda_coin/send_filter");
+		break;
+
+	case LAYOUT:
+		message = createServerOkRsp("/eda_coin/send_filter");
+		break;
+
+	case READY:
+		message = createServerReadyRsp();
+		break;
+
+	case NOTREADY:
+		message = createServerNotReadyRsp();
+		break;
+
+
+	case ERR:
+		message = createServerErrRsp();
+		break;
+	}
+
+	return message;
+
+}
+/***********************************************************************************
 	POSTING / GETTING METHODS
 ***********************************************************************************/
 errorType SPVNode::getBlockHeader(string id)
