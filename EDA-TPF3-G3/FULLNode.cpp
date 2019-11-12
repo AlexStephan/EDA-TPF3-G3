@@ -316,8 +316,9 @@ void FULLNode::keepListening() {
 			break;
 		case MERKLE:														//FULL NODES DONT CARE ABOUT RECEIVING MERKLE BLOCKS
 			break;
-		case FILTER:		
+		case FILTER:
 			filters.push_back(JSONHandler.saveFilter((*j)->getMessage()));
+			askedForFilter.push_back((*j)->getSender());
 			break;
 		}
 	}
