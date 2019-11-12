@@ -200,6 +200,13 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 	mrkl.push_back(mBlock);
 }
 
+
+Filter jsonHandler::saveFilter(string filter)
+{
+	json filt = json::parse(filter);
+
+}
+
 /***********************************************************************************
 	JSONS's CREATION
 ***********************************************************************************/

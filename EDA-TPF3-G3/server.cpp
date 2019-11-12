@@ -88,6 +88,7 @@ void Server::connectionHandler(const boost::system::error_code& err)
 	if (!err)
 	{
 		doneListening = true;
+		fillSenderData();
 	}
 
 	else
@@ -123,10 +124,21 @@ void Server::messaggeHandler(const boost::system::error_code err, std::size_t by
 	 GETTERS
 ***********************************************************************************/
 STATE Server::getState() { return state; }
+string Server::getMessage() { return bodyMsg; }
+NodeData Server::getSender() { return data; }
 bool Server::getDoneListening() { return doneListening; }
 bool Server::getDoneSending() { return doneSending; }
 bool Server::getDoneDownloading() { return doneDownloading; }
-string Server::getMessage() { return bodyMsg; }
+
+
+
+/***********************************************************************************
+	 SENDER DATA
+***********************************************************************************/
+void Server::fillSenderData()
+{
+	NodeData("Dummy", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string));
+}
 
 
 

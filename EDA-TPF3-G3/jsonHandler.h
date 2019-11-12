@@ -4,6 +4,7 @@
  ******************************************************************************/
 #include <iostream>
 #include "Socket.h"
+#include "block.h"
 #include "blockChain.h"
 #include "errorType.h"
 #include "layout.h"
@@ -22,6 +23,7 @@ public:
 	void saveBlockChain(BlockChain& blockchain, string path);
 	void saveTx(string trans, vector<Transaction>& txs);
 	void saveMerkleBlock(string merkleBlock,vector <MerkleBlock>& mrkl);
+	Filter saveFilter(string filter);
 	
 
 	/***********************************************************************************
@@ -59,6 +61,8 @@ public:
 	void getNodesInLayout(string path, NodeData ownData, vector<NodeData>& nodes);
 
 
-private:
+	/***********************************************************************************
+		HACKING METHODS
+	***********************************************************************************/
 	ip_t crackIp(string ip);
 };
