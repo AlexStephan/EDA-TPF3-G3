@@ -11,7 +11,7 @@ public:
 	TreeWindowHandler();
 	void setId(const string& id);
 
-	void createWindow(Block& block); // °w° -Estaria bueno hacer const a los getters de Block (no lo q devuelve, sino al metodo en si) asi puedo manejarme con const Blocks!!!! 
+	void createWindow(const Block& block); // °w° -Estaria bueno hacer const a los getters de Block (no lo q devuelve, sino al metodo en si) asi puedo manejarme con const Blocks!!!! 
 	void draw();
 private:
 	string nodeId;
