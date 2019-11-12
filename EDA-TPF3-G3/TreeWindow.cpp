@@ -11,6 +11,14 @@
 #define CLEAF	ImVec4(0.0f,0.5f,0.0f,1.0f)
 #define CNODE	ImVec4(0.25f,0.25f,0.25f,1.0f)
 
+TreeWindow::TreeWindow(const TreeWindow& c) :
+	windowName(c.windowName),open(true),block(c.block),
+	validRoot(false), tree()
+{
+	tree = block.getMerkleTree();
+	validateRoot();
+}
+
 TreeWindow::TreeWindow(const Block& b, const string& nodeId)
 	: windowName(), open(true), block(b),
 	validRoot(false), tree()
