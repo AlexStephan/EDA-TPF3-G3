@@ -11,7 +11,8 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 	netviewer(WINDOW_NAME), running(true),
 	guiHandler(), warningHandler(WINDOW_NAME),
 	FcontrolList(), FviewList(),
-	ScontrolList(), SviewList()
+	ScontrolList(), SviewList(),
+	network_created(false)
 {
 	netmodel->attach(netviewer);
 	findFullNames();
@@ -71,18 +72,24 @@ bool NETcontroller::isRunning()
 
 void NETcontroller::cycle()
 {
+
 	guiHandler.start_frame(running);
 
-	drawControlWindow();
-	netviewer.cycle();
+	//ALEX.EXE
+	netmodel->cycle();
 
-	CYCLE(FcontrolList);
-	CYCLE(FviewList);
-	CYCLE(ScontrolList);
-	CYCLE(SviewList);
+	if (network_created) {
 
-	warningHandler.draw();
+		drawControlWindow();
+		netviewer.cycle();
 
+		CYCLE(FcontrolList);
+		CYCLE(FviewList);
+		CYCLE(ScontrolList);
+		CYCLE(SviewList);
+
+		warningHandler.draw();
+	}
 
 	guiHandler.end_frame();
 }

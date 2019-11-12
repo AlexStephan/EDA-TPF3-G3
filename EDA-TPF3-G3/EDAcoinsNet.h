@@ -18,6 +18,9 @@ public:
 	EDAcoinsNet();
 	~EDAcoinsNet();
 
+	//ALEX.EXE
+	void cycle();
+
 	//Accedidos por NETcontroller
 	errorType createFULLNode(NodeData newNode);
 	errorType createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode);
