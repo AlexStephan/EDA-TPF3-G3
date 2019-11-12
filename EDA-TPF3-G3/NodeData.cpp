@@ -44,4 +44,6 @@ NodeData& NodeData::operator=(const NodeData& data)
 {
 	id = data.id;
 	socket = data.socket;
+
+	return *this;
 }

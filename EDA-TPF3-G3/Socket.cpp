@@ -36,7 +36,7 @@ ip_t Socket::getIP()
 	return ip;
 }
 
-bool Socket::operator==(Socket& s)
+bool Socket::operator==(const Socket& s)
 {
 	if ((this->ip == s.ip) && (this->port == s.port))
 		return true;
@@ -48,4 +48,6 @@ Socket& Socket::operator=(const Socket& s)
 {
 	port = s.port;
 	ip = s.ip;
+
+	return *this;
 }

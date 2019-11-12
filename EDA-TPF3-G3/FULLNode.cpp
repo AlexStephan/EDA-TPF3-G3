@@ -45,6 +45,7 @@ FULLNode::~FULLNode() {
 	CYCLE
  ******************************************************************************/
 void FULLNode::cycle() {
+	int gotReady = -1;
 	switch (nodeState) {
 	case IDLE:
 		if (!servers.back()->getDoneListening())
@@ -72,7 +73,6 @@ void FULLNode::cycle() {
 		}
 		break;
 	case COLLECTING_MEMBERS:									//Look at me, I build the network now
-		int gotReady = -1;
 		for (int i = 0; i < clients.size(); i++) {
 			Client* curr = clients[i];
 			curr->sendRequest();
@@ -700,7 +700,7 @@ void FULLNode::checkForFilter(Block blck)
 {
 	for (int j = 0; j < filters.size(); j++)
 	{
-		for (int i = 0; i < blck.getTransactions().size; i++)
+		for (int i = 0; i < blck.getTransactions().size(); i++)
 		{
 			for (int k = 0; k < blck.getTransactions()[i].vIn.size(); k++)
 			{

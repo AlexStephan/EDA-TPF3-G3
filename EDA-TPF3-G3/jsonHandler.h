@@ -25,8 +25,6 @@ public:
 	void saveMerkleBlock(string merkleBlock,vector <MerkleBlock>& mrkl);
 	Filter saveFilter(string filter);
 	
-	
-
 	/***********************************************************************************
 		JSONS's CREATION
 	***********************************************************************************/

@@ -4,6 +4,11 @@
 #include "SPVNode.h"
 
 /*******************************************************************************
+* CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+******************************************************************************/
+#define CRLF "\x0D\x0A"
+
+/*******************************************************************************
 	CONSTRUTOR
  ******************************************************************************/
 SPVNode::SPVNode(NodeData ownData, NodeData FilterNode, NodeData HeaderNode) : Node(ownData), filterNode(FilterNode), headerNode(HeaderNode) {
@@ -17,7 +22,8 @@ SPVNode::SPVNode(NodeData ownData, NodeData FilterNode, NodeData HeaderNode) : N
 /*******************************************************************************
 	DESTRUCTOR
  ******************************************************************************/
-SPVNode::~SPVNode() {
+SPVNode::~SPVNode() 
+{
 	cout << "Destroyed SPV node" << endl;
 
 	if (!servers.empty()) {
@@ -100,7 +106,7 @@ void SPVNode::keepListening() {
 		if (!(*i)->getDoneDownloading())
 			(*i)->receiveMessage();
 		else if (!(*i)->getDoneSending())
-			(*i)->sendMessage(serverResponse((*i)->getState()));
+			(*i)->sendMessage(serverResponse((*i)->getState(),(*i)->getMessage()));
 		if ((*i)->getDoneSending()) {
 			cout << "Server done servering" << endl;
 			doneServers.push_back(*i);
@@ -168,30 +174,23 @@ void SPVNode::keepSending() {
 /***********************************************************************************
 	SEREVR REPONSE
 ***********************************************************************************/
-string SPVNode::serverResponse(STATE rta)
+string SPVNode::serverResponse(STATE rta, string msg)
 {
 	string message;
 
 	switch (rta)
 	{
-	case GET:
-		message = createServerHeader("/eda_coin/get_block_header", );
-		break;
-
 	case TX:
 		message = createServerOkRsp("/eda_coin/send_tx");
 		break;
-
 
 	case BLOCK:
 		message = createServerOkRsp("/eda_coin/send_block");
 		break;
 
-
 	case MERKLE:
 		message = createServerOkRsp("/eda_coin/send_merkle_block");
 		break;
-
 
 	case FILTER:
 		message = createServerOkRsp("/eda_coin/send_filter");
@@ -201,15 +200,6 @@ string SPVNode::serverResponse(STATE rta)
 		message = createServerOkRsp("/eda_coin/send_filter");
 		break;
 
-	case READY:
-		message = createServerReadyRsp();
-		break;
-
-	case NOTREADY:
-		message = createServerNotReadyRsp();
-		break;
-
-
 	case ERR:
 		message = createServerErrRsp();
 		break;
@@ -218,6 +208,91 @@ string SPVNode::serverResponse(STATE rta)
 	return message;
 
 }
+
+string SPVNode::createServerErrRsp()
+{
+	string message;
+	char dateLine[100];
+	char expiresLine[100];
+	createDates(dateLine, expiresLine);
+	string content = JSONHandler.createJsonErr(); //Estari bueno pasarle un errorType
+
+	message += "HTTP/1.1 404 Not Found";
+	message += CRLF;
+	message += dateLine;
+	message += CRLF;
+	message += "Cache-Control: public, max-age=30";
+	message += CRLF;
+	message += expiresLine;
+	message += CRLF;
+	message += "Content-Length: ";
+	message += to_string(content.length());
+	message += CRLF;
+	message += "Content-Type: application/x-www-form-urlencoded";
+	message += CRLF;
+	message += CRLF;
+	message += content;
+	message += CRLF;
+
+	return message;
+}
+
+
+string SPVNode::createServerOkRsp(string path)
+{
+	string message;
+	char dateLine[100];
+	char expiresLine[100];
+	createDates(dateLine, expiresLine);
+
+	string content = JSONHandler.createJsonOk();
+
+	message += "HTTP/1.1 200 OK";
+	message += CRLF;
+	message += dateLine;
+	message += CRLF;
+	message += "Location: 127.0.0.1" + path;
+	message += CRLF;
+	message += "Cache-Control: max-age=30";
+	message += CRLF;
+	message += expiresLine;
+	message += CRLF;
+	message += "Content-Length: ";
+	message += to_string(content.length());
+	message += CRLF;
+	message += "Content-Type: application/x-www-form-urlencoded";
+	message += CRLF;
+	message += CRLF;
+	message += content;
+	message += CRLF;
+
+	return message;
+}
+
+
+void SPVNode::createDates(char* c1, char* c2)
+{
+	//Fecha actual
+	time_t currentTime = time(nullptr);
+	struct tm t;
+	struct tm* currTime = &t;
+	gmtime_s(currTime, &currentTime);
+	strftime(c1, 100, "Date: %a, %d %b %G %X GMT", currTime);
+
+	//Fecha de expiracion
+	struct tm t2 = t;
+	struct tm* nextTime = &t2;
+	if (nextTime->tm_sec >= 30) {
+		if (nextTime->tm_min == 59) {
+			nextTime->tm_hour++;
+		}
+		nextTime->tm_min = ((nextTime->tm_min) + 1) % 60;
+	}
+	nextTime->tm_sec = ((nextTime->tm_sec) + 30) % 60;
+	strftime(c2, 100, "Expires: %a, %d %b %G %X GMT", nextTime);
+}
+
+
 /***********************************************************************************
 	POSTING / GETTING METHODS
 ***********************************************************************************/

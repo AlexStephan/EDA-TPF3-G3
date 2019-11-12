@@ -4,6 +4,7 @@
  ******************************************************************************/
 #include <string>
 #include <vector>
+#include "Socket.h"
 
 /*******************************************************************************
  * NAMESPACES
@@ -85,7 +86,7 @@ public:
 	/***********************************************************************************
 		GETTERS
 	***********************************************************************************/
-	const vector<Transaction>& getTransactions();
+	vector<Transaction>& getTransactions();
 	const Transaction getTx(vector<Transaction>::iterator it);
 	const Transaction getTx(unsigned int it);
 	const unsigned long int getHeight() const;
@@ -95,7 +96,7 @@ public:
 	const string getBlockID() const;
 	const string getPreviousBlockID();
 	const string getMerkleRoot();
-	string getTxId(Transaction tx);
+	const string getTxId(Transaction tx);
 
 	/***********************************************************************************
 		MERKLE TREE & MERKLE PATH

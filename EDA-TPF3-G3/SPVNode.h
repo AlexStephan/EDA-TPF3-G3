@@ -10,8 +10,7 @@ class SPVNode :
 	public Node
 {
 public:
-	SPVNode(NodeData ownData, NodeData FilterNode, NodeData HeaderNode) :
-		Node(ownData), filterNode(FilterNode), headerNode(HeaderNode), blockVerification() {}
+	SPVNode(NodeData ownData, NodeData FilterNode, NodeData HeaderNode);
 	virtual void cycle();
 
 	/***********************************************************************************
@@ -32,14 +31,14 @@ public:
 
 private:
 	/***********************************************************************************
-	NEIGHBOURHOOD AND NODES
+		NEIGHBOURHOOD AND NODES
 	***********************************************************************************/
 	NodeData filterNode;
 	NodeData headerNode;
 	vector<MerkleBlock> mBlocks;
 	jsonHandler JSONHandler;
-
 	vector<errorType> blockVerification;
+
 	/***********************************************************************************
 		NETWORKING SH*T
 	***********************************************************************************/
@@ -50,5 +49,10 @@ private:
 	void verifyMerkleBlock();
 	void keepListening();
 	void keepSending();
-	string serverResponse(STATE rta);
+
+	//SERVER RESPONSE
+	string serverResponse(STATE rta, string massage);
+	string createServerOkRsp(string path);
+	string createServerErrRsp();
+	void createDates(char* c1, char* c2);
 };

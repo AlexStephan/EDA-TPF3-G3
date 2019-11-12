@@ -139,7 +139,7 @@ bool Server::getDoneDownloading() { return doneDownloading; }
 ***********************************************************************************/
 void Server::fillSenderData()
 {
-	NodeData("Dummy", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string));
+	NodeData("Dummy", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string()));
 }
 
 
