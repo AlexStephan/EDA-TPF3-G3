@@ -157,7 +157,7 @@ STATE Server::parseMessage()
 
 		if (Msg.find("/eda_coin/send_block") != string::npos)
 		{
-			if (validateBlock(bodyMsg))
+			if (JSON.validateBlock(bodyMsg).error)
 			{
 				rta = BLOCK;
 			}
@@ -165,7 +165,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_tx") != string::npos)
 		{
-			if (validateTx(bodyMsg))
+			if (JSON.validateTx(bodyMsg).error)
 			{
 				rta = TX;
 			}
@@ -179,7 +179,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_filter") != string::npos)
 		{
-			if (validateFilter(bodyMsg))
+			if (JSON.validateFilter(bodyMsg).error)
 			{
 				rta = FILTER;
 			}

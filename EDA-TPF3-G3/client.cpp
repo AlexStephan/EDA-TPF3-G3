@@ -10,10 +10,10 @@ static size_t myCallback(void* contents, size_t size, size_t nmemb, void* userp)
 
 
 /*******************************************************************************
-	CONSTRUTORs
+	CONSTRUTOR
  ******************************************************************************/
-
 Client::Client(NodeData data)
+	:receiver(data)
 {
 	curlm = curl_multi_init();
 	curl = curl_easy_init();
