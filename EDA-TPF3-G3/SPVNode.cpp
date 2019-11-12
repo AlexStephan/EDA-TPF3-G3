@@ -55,17 +55,6 @@ errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& give
 	postTransaction(tx);
 }
 
-errorType SPVNode::postFilter()
-{
-	Client* client = new Client(filterNode);
-	string id = JSONHandler.createJsonFilter(filterNode.getID());
-	client->POST("/eda_coin/send_filter", id);
-	errorType err = client->sendRequest();
-	clients.push_back(client);
-	notifyAllObservers();
-	return err;
-}
-
 errorType SPVNode::changeFilterNode(NodeData FilterNode) { filterNode = FilterNode; }
 errorType SPVNode::changeHeaderNode(NodeData HeaderNode) { headerNode = HeaderNode; }
 
@@ -237,7 +226,6 @@ errorType SPVNode::getBlockHeader(string id)
 	errorType err = { false,"" };
 	Client* client = new Client(headerNode);
 	string header = JSONHandler.createHeader(id);
-	cout << "JSON:" << endl << header << endl;	//DEBUG
 	client->GET("/eda_coin/get_block_header/", header);
 	client->sendRequest();
 	clients.push_back(client);
@@ -249,8 +237,18 @@ errorType SPVNode::postTransaction(Transaction tx)
 {
 	Client* client = new Client(headerNode);
 	string tx_ = JSONHandler.createJsonTx(tx);
-	cout << "JSON:" << endl << tx_ << endl;	//DEBUG
 	client->POST("/eda_coin/send_tx", tx_);
+	errorType err = client->sendRequest();
+	clients.push_back(client);
+	notifyAllObservers();
+	return err;
+}
+
+errorType SPVNode::postFilter()
+{
+	Client* client = new Client(filterNode);
+	string id = JSONHandler.createJsonFilter(filterNode);
+	client->POST("/eda_coin/send_filter", id);
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 	notifyAllObservers();

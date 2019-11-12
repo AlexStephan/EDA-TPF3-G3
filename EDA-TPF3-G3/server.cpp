@@ -12,6 +12,7 @@
 	CONSTRUCTOR
  ******************************************************************************/
 Server::Server(unsigned int port)
+	:data("",0,0,0,0,0)
 {
 	doneDownloading = false;
 	doneListening = false;
@@ -20,6 +21,7 @@ Server::Server(unsigned int port)
 	Msg.clear();
 	state = ERR;
 	*buf = {};
+
 
 	IO_handler = new boost::asio::io_service();
 	boost::asio::ip::tcp::endpoint ep(boost::asio::ip::tcp::v4(), port);

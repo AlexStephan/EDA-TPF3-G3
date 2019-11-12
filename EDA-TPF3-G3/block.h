@@ -60,6 +60,13 @@ struct MerkleBlock {
 ****************/
 struct Filter{
 	string publicID;
+	ip_t ip;
+	unsigned int port;
+
+	string getIPString()
+	{
+		return (to_string(ip.b1) + '.' + to_string(ip.b2) + '.' + to_string(ip.b3) + '.' + to_string(ip.b4));
+	}
 
 };
 //DUMMY TX

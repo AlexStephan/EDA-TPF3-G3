@@ -148,50 +148,47 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 		mBlock.merklePath.push_back(Id.get<string>());
 	}
 	//Transactions
-	auto arrayTrans = merkleBlock["tx"];
-	for (auto& trans : arrayTrans)
+	auto trans = merkleBlock["tx"];
+	Transaction auxTrans;
+
+	auto txId = trans["txid"];
+	auxTrans.txId = txId.get<string>();
+
+	auto nTxIn = trans["nTxin"];
+	auxTrans.nTxIn = nTxIn;
+
+	auto vIn = trans["vin"];
+	for (auto& elsi : vIn)
 	{
-		Transaction auxTrans;
+		Vin auxVin;
 
-		auto txId = trans["txid"];
-		auxTrans.txId = txId.get<string>();
+		auto tBlockId = elsi["blockid"];
+		auxVin.blockId = tBlockId.get<string>();
 
-		auto nTxIn = trans["nTxin"];
-		auxTrans.nTxIn = nTxIn;
+		auto tTxId = elsi["txid"];
+		auxVin.txId = tTxId.get<string>();
 
-		auto vIn = trans["vin"];
-		for (auto& elsi : vIn)
-		{
-			Vin auxVin;
-
-			auto tBlockId = elsi["blockid"];
-			auxVin.blockId = tBlockId.get<string>();
-
-			auto tTxId = elsi["txid"];
-			auxVin.txId = tTxId.get<string>();
-
-			auxTrans.vIn.push_back(auxVin);
-		}
-
-		auto nTxOut = trans["nTxout"];
-		auxTrans.nTxOut = nTxOut;
-
-		auto vOut = trans["vout"];
-		for (auto& elso : vOut)
-		{
-			Vout auxVout;
-
-			auto publicId = elso["publicid"];
-			auxVout.publicId = publicId.get<string>();
-
-			auto amount = elso["amount"];
-			auxVout.amount = amount;
-
-			auxTrans.vOut.push_back(auxVout);
-		}
-
-		mBlock.tx.push_back(auxTrans);
+		auxTrans.vIn.push_back(auxVin);
 	}
+
+	auto nTxOut = trans["nTxout"];
+	auxTrans.nTxOut = nTxOut;
+
+	auto vOut = trans["vout"];
+	for (auto& elso : vOut)
+	{
+		Vout auxVout;
+
+		auto publicId = elso["publicid"];
+		auxVout.publicId = publicId.get<string>();
+
+		auto amount = elso["amount"];
+		auxVout.amount = amount;
+
+		auxTrans.vOut.push_back(auxVout);
+	}
+
+	mBlock.tx.push_back(auxTrans);
 
 	auto txPos = merkleBlock["txPos"];
 	mBlock.txPos = txPos;
@@ -203,33 +200,29 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 
 Filter jsonHandler::saveFilter(string filter)
 {
+	Filter aux;
 	json filt = json::parse(filter);
+	aux.publicID = filt["Id"].get<string>();
+	aux.ip = crackIp(filt['ip'].get<string>());
+	aux.port = filt["port"];
+
+	return aux;
 
 }
 
 /***********************************************************************************
 	JSONS's CREATION
 ***********************************************************************************/
-string jsonHandler::createJsonBlockHeader(BlockChain blckchain, string id)
+string jsonHandler::createJsonBlockHeader(BlockChain blockChain, string id)
 {
-	json arrayHeaders = json::array();
-
-	for (BlockChain::reverse_iterator it = blckchain.rbegin(), int i = 0; 
-		(it != blckchain.rend()) && (it->getBlockID() == id); 
-		it++, i++) 
+	json blck;
+	for (int i = 0; i < blockChain.size(); i++)
 	{
-		json blck;
-		blck["height"] = it->getHeight();
-		blck["nonce"] = it->getNonce();
-		blck["blockid"] = it->getBlockID();
-		blck["previousblockid"] = it->getPreviousBlockID();
-		blck["merkleroot"] = it->getMerkleRoot();
-		blck["nTx"] = it->getNTx();
-
-		arrayHeaders[i] = blck;
+		blck = json::parse(createJsonBlock(blockChain[i]));
+		blck.erase("tx");
 	}
 
-	return arrayHeaders.dump();
+	return blck.dump();
 }
 
 string jsonHandler::createJsonBlockchain(BlockChain blckchain)
@@ -287,14 +280,20 @@ string jsonHandler::createJsonTx(Transaction trans)
 	return tx.dump();
 }
 
-string jsonHandler::createJsonMerkle(Block block) //DESHARCODEAR
+string jsonHandler::createJsonMerkle(Block block, Transaction trans)
 {
 	json merkle;
 	merkle["blockid"] = block.getBlockID();
-	merkle["tx"][0] = json::parse(createJsonTx(block.getTransactions()[0]));
-	merkle["txPos"] = 4;
+	merkle["tx"] = json::parse(createJsonTx(trans));
+	for (int i = 0; i < block.getNTx(); i++)
+	{
+		if (block.getTransactions()[i].txId == trans.txId)
+		{
+			merkle["txPos"] = i;
+		}
+	}
 	json mpath = json::array();
-	MerkleTree path = block.getMerklePath(block.getTransactions()[0]);
+	MerkleTree path = block.getMerklePath(trans);
 	for (int i = 0; i < path.size(); i++)
 	{
 		mpath.push_back(json::object({ { "Id",path[i] } }));
@@ -304,10 +303,22 @@ string jsonHandler::createJsonMerkle(Block block) //DESHARCODEAR
 	return merkle.dump();
 }
 
-string jsonHandler::createJsonFilter(string id)	//Cambiar
+string jsonHandler::createJsonFilter(Filter filt)
 {
 	json filter;
-	filter["Id"] = id;
+	filter["Id"] = filt.publicID;
+	filter["port"] = filt.port;
+	filter["ip"] = filt.getIPString();
+
+	return filter.dump();
+}
+
+string jsonHandler::createJsonFilter(NodeData data)	
+{
+	json filter;
+	filter["Id"] = data.getID();
+	filter["port"] = data.getSocket().getPort();
+	filter["ip"] = data.getSocket().getIPString();
 
 	return filter.dump();
 }
@@ -461,12 +472,15 @@ errorType jsonHandler::validateTx(string tx)
 
 errorType jsonHandler::validateFilter(string filter)
 {
-	errorType err = { true, "Missing field Id/Wrong format" };
+	errorType err = { true, "Missing field Id/Wrong format" }; //Falta verificar cant de campos
 
 	try
 	{
 		json fltr = json::parse(filter);
 		fltr.at("Id");
+		fltr.at("port");
+		fltr.at("ip");
+
 		err = { false, "OK Filter" };
 	}
 
@@ -555,7 +569,7 @@ void jsonHandler::readLayout(string layout, NodeData mySocket, vector <NodeData>
 }
 
 
-errorType validateLayout(string layout)		//Es imposible hacerlo, todos los campos son variables.
+errorType jsonHandler::validateLayout(string layout)		//Es imposible hacerlo, todos los campos son variables.
 {
 	errorType err = { false, "OK Filter" };
 	return err;
@@ -577,6 +591,9 @@ void jsonHandler::getNodesInLayout(string path, NodeData ownData, vector<NodeDat
 	}
 }
 
+/***********************************************************************************
+	HACKING METHODS
+***********************************************************************************/
 ip_t jsonHandler::crackIp(string ip)
 {
 	ip_t _ip;

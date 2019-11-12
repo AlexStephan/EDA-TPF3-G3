@@ -25,17 +25,19 @@ public:
 	void saveMerkleBlock(string merkleBlock,vector <MerkleBlock>& mrkl);
 	Filter saveFilter(string filter);
 	
+	
 
 	/***********************************************************************************
 		JSONS's CREATION
 	***********************************************************************************/
 	//Blockchain related
-	string createJsonBlockHeader(BlockChain blckchain, string id);
+	string createJsonBlockHeader(BlockChain blockchain, string id);
 	string createJsonBlockchain(BlockChain blckchain);
 	string createJsonBlock(Block block);
 	string createJsonTx(Transaction tx);
-	string createJsonMerkle(Block block);
-	string createJsonFilter(string id);
+	string createJsonMerkle(Block block,Transaction trans);
+	string createJsonFilter(Filter filt);
+	string createJsonFilter(NodeData data);
 
 	//Server response related
 	string createHeader(string id);
