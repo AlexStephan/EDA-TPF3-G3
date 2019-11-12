@@ -48,7 +48,7 @@ public:
 
 	const Layout* getLayout();
 
-
+	fullNodeStates getState();
 private:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
@@ -87,7 +87,7 @@ private:
 	errorType postPing(NodeData data);
 
 	//SERVER RESPONSE
-	string serverResponse(STATE rta);
+	string serverResponse(STATE rta, string massage);
 	string createServerOkRsp(string path);
 	string createServerHeader(string path, string id);
 	string createServerErrRsp();
@@ -100,6 +100,7 @@ private:
 		FLOODING / VERIFICATION
 	***********************************************************************************/
 	void checkForFilter(Block blck);
+	bool checkForId(string id);
 	void floodBlock(Block blck, NodeData sender);
 	void floodTx(Transaction tx, NodeData sender);
 };

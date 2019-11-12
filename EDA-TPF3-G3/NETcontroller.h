@@ -44,6 +44,9 @@ private:
 
 	ImGuiHandler guiHandler;
 	WarningWindowHandler warningHandler;
+	jsonHandler jsonhandler;
+
+	bool network_created;
 
 	//Para los nodos locales
 	vector<FULLcontroller*> FcontrolList;
@@ -56,6 +59,11 @@ private:
 	//METODOS PRIVADOS:
 	void drawControlWindow();
 	void findFullNames();
+
+	//ALEX.EXE.EXE
+	void makeFirstFULL();
+	void checkIfDoneConnecting();
+	void waitWindow();
 
 };
 

@@ -15,7 +15,7 @@ public:
 		cstate = SPV_MENU;
 		currTX = 0;
 	}
-	virtual void update(void*) {} //tampoco se q le interese al controller
+	virtual void update(void*);
 	void cycle();
 
 private:

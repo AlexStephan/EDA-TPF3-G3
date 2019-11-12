@@ -76,6 +76,21 @@ NodeData SPVNode::getData(){ return ownData; }
 NodeData SPVNode::getFilterNodeData() { return filterNode; }
 NodeData SPVNode::getHeaderNodeData() { return headerNode; }
 
+errorType SPVNode::getVerificationError()
+{
+	errorType err;
+	if (blockVerification.size() == 0) {
+		err.error = false;
+		err.datos = "";
+	}
+	else {
+		size_t popping = blockVerification.size() - 1;
+		err = blockVerification[popping];
+		blockVerification.pop_back();
+	}
+	return err;
+}
+
 /***********************************************************************************
 	NETWORKING SH*T
 ***********************************************************************************/

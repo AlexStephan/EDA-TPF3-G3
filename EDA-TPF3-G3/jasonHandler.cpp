@@ -470,6 +470,10 @@ errorType jsonHandler::validateFilter(string filter)
 	return err;
 }
 
+errorType validateMerkle(string merkle)
+{
+
+}
 
 /***********************************************************************************
 	LAYOUT CONTROLLERS
@@ -510,6 +514,12 @@ void jsonHandler::readLayout(string layout, NodeData mySocket, vector <NodeData>
 
 }
 
+
+errorType validateLayout(string layout)		//Es imposible hacerlo, todos los campos son variables.
+{
+	errorType err = { false, "OK Filter" };
+	return err;
+}
 
 void jsonHandler::getNodesInLayout(string path, NodeData ownData, vector<NodeData>& nodes)
 {

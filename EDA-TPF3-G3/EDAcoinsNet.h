@@ -18,6 +18,9 @@ public:
 	EDAcoinsNet();
 	~EDAcoinsNet();
 
+	//ALEX.EXE
+	void cycle();
+
 	//Accedidos por NETcontroller
 	errorType createFULLNode(NodeData newNode);
 	errorType createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode);
@@ -30,6 +33,8 @@ public:
 	size_t getSPVamount();
 	FULLNode* getFULLnode(size_t pos);
 	SPVNode* getSPVnode(size_t pos);
+
+	bool checkIfConnectionMade();
 
 private:
 	vector<NodeData> FULLdata; //listas de nodos full conocidos (del MANIFIESTO -todas- y las siguientes creadas -EN ESTA MAQUINA-)

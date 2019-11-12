@@ -13,6 +13,13 @@ EDAcoinsNet::~EDAcoinsNet()
 	for (size_t i = 0; i < SPVvector.size(); i++)
 		delete SPVvector[i];
 }
+void EDAcoinsNet::cycle()
+{
+	for (size_t i = 0; i < FULLvector.size(); i++)
+		FULLvector[i]->cycle();
+	for (size_t i = 0; i < SPVvector.size(); i++)
+		SPVvector[i]->cycle();
+}
 errorType EDAcoinsNet::createFULLNode(NodeData newNode)
 {
 	errorType creationState;
@@ -81,6 +88,20 @@ SPVNode* EDAcoinsNet::getSPVnode(size_t pos)
 	if (pos < SPVvector.size())
 		node = SPVvector[pos];
 	return node;
+}
+
+bool EDAcoinsNet::checkIfConnectionMade()
+{
+	bool rta = false;
+	for (size_t i = 0;
+		(rta == false) && (i < FULLvector.size());
+		i++) {
+
+		if (FULLvector[i]->getState() == NETWORK_CREATED) {
+			rta = true;
+		}
+	}
+	return rta;
 }
 
 bool EDAcoinsNet::existAlready(NodeData node)
