@@ -44,6 +44,7 @@ private:
 	vector <Server*> servers;
 	errorType getBlockHeader(string id);
 	errorType postTransaction(Transaction tx);
+	void verifyMerkleBlock();
 	void keepListening();
 	void keepSending();
 	string serverResponse(STATE rta);
