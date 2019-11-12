@@ -48,7 +48,9 @@ void SPVNode::cycle() {
 /***********************************************************************************
 	METHODS USED BY CONTROLLER
 ***********************************************************************************/
-errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers) {
+errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers) 
+{
+	errorType err = { false,"" };
 	Transaction tx;
 	Block aux;
 	//BUILD TX
@@ -59,10 +61,11 @@ errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& give
 	tx.txId = aux.getTxId(tx);
 	//POST TX TO A NEIGHBOUR, JUST ONE
 	postTransaction(tx);
+	return err;
 }
 
-errorType SPVNode::changeFilterNode(NodeData FilterNode) { filterNode = FilterNode; }
-errorType SPVNode::changeHeaderNode(NodeData HeaderNode) { headerNode = HeaderNode; }
+errorType SPVNode::changeFilterNode(NodeData FilterNode) { errorType err = { false,"" }; filterNode = FilterNode; return err; }
+errorType SPVNode::changeHeaderNode(NodeData HeaderNode) { errorType err = { false,"" }; headerNode = HeaderNode; return err; }
 
 /***********************************************************************************
 	METHODS USED BY VIEWER

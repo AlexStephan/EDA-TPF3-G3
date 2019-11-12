@@ -5,6 +5,7 @@
 class TreeWindow
 {
 public:
+	TreeWindow(const TreeWindow& c);
 	TreeWindow(const Block& b,const string& nodeId);
 	void replaceBlock(const Block& b, const string& nodeId);
 

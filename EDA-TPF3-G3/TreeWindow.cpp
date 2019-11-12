@@ -11,6 +11,14 @@
 #define CLEAF	ImVec4(0.0f,0.5f,0.0f,1.0f)
 #define CNODE	ImVec4(0.25f,0.25f,0.25f,1.0f)
 
+TreeWindow::TreeWindow(const TreeWindow& c) :
+	windowName(c.windowName),open(true),block(c.block),
+	validRoot(false), tree()
+{
+	tree = block.getMerkleTree();
+	validateRoot();
+}
+
 TreeWindow::TreeWindow(const Block& b, const string& nodeId)
 	: windowName(), open(true), block(b),
 	validRoot(false), tree()
@@ -52,7 +60,7 @@ void TreeWindow::draw()
 			ImGui::SameLine();
 			ImGui::BeginChild("Txs",ImVec2(CCHILD_W,CCHILD_H));
 
-			vector<Transaction>& TXlist = block.getTransactions();
+			const vector<Transaction>& TXlist = block.getTransactions();
 
 			for (int j = 0; j < TXlist.size(); j++)
 				printTx(TXlist[j], j);

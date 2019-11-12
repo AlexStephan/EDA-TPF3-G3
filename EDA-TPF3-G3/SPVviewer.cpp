@@ -1,11 +1,11 @@
 #include "SPVviewer.h"
 #include "imgui.h"
 
-#define NO_DATA	"NO DATA",0,0,0,0,0
+#define NOT_DATA	"NO DATA",0,0,0,0,0
 
 SPVviewer::SPVviewer() :
-	nodedata(NO_DATA), headernodedata(NO_DATA),
-	filternodedata(NO_DATA), windowName("NO_DATA")
+	nodedata(NOT_DATA), headernodedata(NOT_DATA),
+	filternodedata(NOT_DATA), windowName("NO_DATA")
 {
 }
 
