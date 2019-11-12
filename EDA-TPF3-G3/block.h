@@ -81,11 +81,11 @@ public:
 	const vector<Transaction>& getTransactions();
 	const Transaction getTx(vector<Transaction>::iterator it);
 	const Transaction getTx(unsigned int it);
-	const unsigned long int getHeight();
+	const unsigned long int getHeight() const;
 	const unsigned long int getNonce();
 	const unsigned long int getNTx();
 	const long int getBlockPos(vector<Block>* BlockChain);
-	const string getBlockID();
+	const string getBlockID() const;
 	const string getPreviousBlockID();
 	const string getMerkleRoot();
 	string getTxId(Transaction tx);
