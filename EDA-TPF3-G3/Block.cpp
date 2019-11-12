@@ -299,7 +299,7 @@ const long int Block::getBlockPos(vector<Block>* BlockChain) {
 	return -1;
 }
 
-string Block::getTxId(Transaction tx) {
+const string Block::getTxId(Transaction tx) {
 	string concatenate;
 	concatenate.clear();
 	for (int j = 0; j < tx.nTxIn; j++)
@@ -341,13 +341,13 @@ newIDstr Block::getRootFromPath(vector<newIDstr> _path) {
 	}
 }
 
-const vector<Transaction>& Block::getTransactions() { return tx; }
+vector<Transaction>& Block::getTransactions() { return tx; }
 const Transaction Block::getTx(vector<Transaction>::iterator it) { for (auto i = tx.begin(); i != tx.end(); i++) { if (i == it) return *i; } }
 const Transaction Block::getTx(unsigned int it) { if (it >= 0 && it < tx.size())	return tx[it]; }
-const unsigned long int Block::getHeight() { return height; }
+const unsigned long int Block::getHeight() const { return height; }
 const unsigned long int Block::getNonce() { return nonce; }
 const unsigned long int Block::getNTx() { return nTx; }
-const string Block::getBlockID() { return blockId; }
+const string Block::getBlockID() const { return blockId; }
 const string Block::getPreviousBlockID() { return previousBlockId; }
 const string Block::getMerkleRoot() { return merkleRoot; }
 

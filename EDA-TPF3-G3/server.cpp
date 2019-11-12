@@ -12,6 +12,7 @@
 	CONSTRUCTOR
  ******************************************************************************/
 Server::Server(unsigned int port)
+	:data("",0,0,0,0,0)
 {
 	doneDownloading = false;
 	doneListening = false;
@@ -20,6 +21,7 @@ Server::Server(unsigned int port)
 	Msg.clear();
 	state = ERR;
 	*buf = {};
+
 
 	IO_handler = new boost::asio::io_service();
 	boost::asio::ip::tcp::endpoint ep(boost::asio::ip::tcp::v4(), port);
@@ -88,6 +90,7 @@ void Server::connectionHandler(const boost::system::error_code& err)
 	if (!err)
 	{
 		doneListening = true;
+		fillSenderData();
 	}
 
 	else
@@ -123,10 +126,21 @@ void Server::messaggeHandler(const boost::system::error_code err, std::size_t by
 	 GETTERS
 ***********************************************************************************/
 STATE Server::getState() { return state; }
+string Server::getMessage() { return bodyMsg; }
+NodeData Server::getSender() { return data; }
 bool Server::getDoneListening() { return doneListening; }
 bool Server::getDoneSending() { return doneSending; }
 bool Server::getDoneDownloading() { return doneDownloading; }
-string Server::getMessage() { return bodyMsg; }
+
+
+
+/***********************************************************************************
+	 SENDER DATA
+***********************************************************************************/
+void Server::fillSenderData()
+{
+	NodeData("Dummy", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string()));
+}
 
 
 
@@ -154,7 +168,7 @@ STATE Server::parseMessage()
 
 		if (Msg.find("/eda_coin/send_block") != string::npos)
 		{
-			if (JSON.validateBlock(bodyMsg).error)
+			if (!JSON.validateBlock(bodyMsg).error)
 			{
 				rta = BLOCK;
 			}
@@ -162,7 +176,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_tx") != string::npos)
 		{
-			if (JSON.validateTx(bodyMsg).error)
+			if (!JSON.validateTx(bodyMsg).error)
 			{
 				rta = TX;
 			}
@@ -170,7 +184,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_merkle_block") != string::npos)
 		{
-			if (JSON.validateMerkle(bodyMsg).error)
+			if (!JSON.validateMerkle(bodyMsg).error)
 			{
 				rta = MERKLE;
 			}
@@ -178,7 +192,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_filter") != string::npos)
 		{
-			if (JSON.validateFilter(bodyMsg).error)
+			if (!JSON.validateFilter(bodyMsg).error)
 			{
 				rta = FILTER;
 			}
@@ -187,7 +201,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/NETWORK_LAYOUT") != string::npos)
 		{
-			if (JSON.validateLayout(bodyMsg).error)
+			if (!JSON.validateLayout(bodyMsg).error)
 			{
 				rta = LAYOUT;
 			}

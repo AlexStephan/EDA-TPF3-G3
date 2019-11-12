@@ -10,7 +10,7 @@ void TreeWindowHandler::setId(const string& id)
 	nodeId = id;
 }
 
-void TreeWindowHandler::createWindow(Block& block)
+void TreeWindowHandler::createWindow(const Block& block)
 {
 	auto it = windowList.find(block.getHeight()); //because iterators are a pain in the... neck
 	if (it == windowList.end())

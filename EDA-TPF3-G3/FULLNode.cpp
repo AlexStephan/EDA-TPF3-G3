@@ -45,6 +45,7 @@ FULLNode::~FULLNode() {
 	CYCLE
  ******************************************************************************/
 void FULLNode::cycle() {
+	int gotReady = -1;
 	switch (nodeState) {
 	case IDLE:
 		if (!servers.back()->getDoneListening())
@@ -52,7 +53,7 @@ void FULLNode::cycle() {
 		else if (!servers.back()->getDoneDownloading())
 			servers.back()->receiveMessage();
 		else if (!servers.back()->getDoneSending())
-			servers.back()->sendMessage(serverResponse(servers.back()->getState()));
+			servers.back()->sendMessage(serverResponse(servers.back()->getState(),servers.back()->getMessage()));
 		if (servers.back()->getDoneSending()) {
 			if (servers.back()->getState() == PING) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
 				nodeState = WAITING_LAYOUT;
@@ -72,11 +73,10 @@ void FULLNode::cycle() {
 		}
 		break;
 	case COLLECTING_MEMBERS:									//Look at me, I build the network now
-		int gotReady = -1;
 		for (int i = 0; i < clients.size(); i++) {
 			Client* curr = clients[i];
 			curr->sendRequest();
-			if (curr->getRunning == 0)
+			if (curr->getRunning() == 0)
 				if (curr->getResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
 					gotReady = i;
@@ -128,7 +128,7 @@ void FULLNode::cycle() {
 		else if (!servers.back()->getDoneDownloading())
 			servers.back()->receiveMessage();
 		else if(!servers.back()->getDoneSending())
-			servers.back()->sendMessage(serverResponse(servers.back()->getState()));
+			servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
 		if (servers.back()->getDoneSending()) {
 			if (servers.back()->getState() == GOT_LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
 				JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
@@ -151,7 +151,7 @@ void FULLNode::cycle() {
 	case SENDING_LAYOUT:
 		for (int i = 0; i < clients.size(); i++) {
 			clients[i]->sendRequest();
-			if(clients[i]->getRunning == 0)
+			if(clients[i]->getRunning() == 0)
 				if (clients[i]->getResponse() == HTTP_OK) {					//SPEAK WITH NETWORKING PPL
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
@@ -201,7 +201,6 @@ errorType FULLNode::makeBlock() {
 	blockChain.push_back(block);
 	for (int i = 0; i < neighbourhood.size(); i++)
 		postBlock(i, blockChain.size());									//Post Block to all neighbours
-	errorType ret;
 	return ret;
 }
 errorType FULLNode::addNeighbour(NodeData neighbour) {
@@ -278,7 +277,7 @@ void FULLNode::keepListening() {
 		if (!(*i)->getDoneDownloading())
 			(*i)->receiveMessage();
 		else if (!(*i)->getDoneSending())
-			(*i)->sendMessage(serverResponse((*i)->getState()));
+			(*i)->sendMessage(serverResponse((*i)->getState(),(*i)->getMessage()));
 		if ((*i)->getDoneSending()) {
 			cout << "Server done servering" << endl;
 			doneServers.push_back(*i);
@@ -289,10 +288,11 @@ void FULLNode::keepListening() {
 	auto j = doneServers.begin();
 	for (; j != doneServers.end(); j++) {
 		Block blck;
+		bool found = false;
 		switch ((*j)->getState()) {
 		case BLOCK:			//Done
 			blck.saveBlock((*j)->getMessage());
-			bool found = false;
+			found = false;
 			for (int i = 0; i < blockChain.size(); i++) {
 				if (blck.getBlockID() == blockChain[i].getBlockID())			//If received block is already in chain, it gets ignored
 					found = true;
@@ -305,7 +305,7 @@ void FULLNode::keepListening() {
 			break;
 		case TX:			//Done
 			JSONHandler.saveTx((*j)->getMessage(), txs);
-			bool found = false;
+			found = false;
 			for (int i = 0; i < txs.size() - 1; i++) {
 				if (txs.back().txId == txs[i].txId)
 					found = true;
@@ -393,7 +393,7 @@ errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 	Block bl0ck;
 	for (int i = 0; i < blockChain.size(); i++)
 	{
-		blockChain[i].getHeight = height;
+		if(blockChain[i].getHeight() == height)
 		{
 			bl0ck = blockChain[i];
 		}
@@ -405,6 +405,30 @@ errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 
+	notifyAllObservers();
+	return err;
+}
+
+errorType FULLNode::postMerkleBlock(Block blck, Transaction tx, unsigned int neighbourPos)
+{
+	errorType err = { false,"" };
+	Client* client = new Client(neighbourhood[neighbourPos]);
+	string merkle = JSONHandler.createJsonMerkle(blck, tx);
+	client->POST("/eda_coin/send_merkle_block", merkle);
+	client->sendRequest();
+	clients.push_back(client);
+	notifyAllObservers();
+	return err;
+}
+
+errorType FULLNode::postMerkleBlock(Block blck, Transaction tx, NodeData data)
+{
+	errorType err = { false,"" };
+	Client* client = new Client(data);
+	string merkle = JSONHandler.createJsonMerkle(blck, tx);
+	client->POST("/eda_coin/send_merkle_block", merkle);
+	client->sendRequest();
+	clients.push_back(client);
 	notifyAllObservers();
 	return err;
 }
@@ -673,10 +697,34 @@ void FULLNode::createDates(char* c1, char* c2)
 /***********************************************************************************
 		FLOODING / VERIFICATION
 ***********************************************************************************/
-/*void FULLNode::checkForFilter(Block blck) 
+void FULLNode::checkForFilter(Block blck) 
 {
-	
-}*/
+	for (int j = 0; j < filters.size(); j++)
+	{
+		for (int i = 0; i < blck.getTransactions().size(); i++)
+		{
+			for (int k = 0; k < blck.getTransactions()[i].vIn.size(); k++)
+			{
+				if (blck.getTransactions()[i].vIn[k].blockId == filters[j].publicID)
+				{
+					NodeData d("Dummy", filters[j].port, filters[j].ip);
+					postMerkleBlock(blck, blck.getTransactions()[i], d);
+				}
+			}
+
+			for (int k = 0; k < blck.getTransactions()[i].vOut.size(); k++)
+			{
+				if (blck.getTransactions()[i].vOut[k].publicId == filters[j].publicID)
+				{
+					NodeData d("Dummy", filters[j].port, filters[j].ip);
+					postMerkleBlock(blck, blck.getTransactions()[i], d);
+				}
+			}
+
+		}
+
+	}
+}
 
 bool FULLNode::checkForId(string id)
 {

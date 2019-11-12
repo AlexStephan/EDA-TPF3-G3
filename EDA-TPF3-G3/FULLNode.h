@@ -81,6 +81,8 @@ private:
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
 
 	//CLIENT POST
+	errorType postMerkleBlock(Block blck, Transaction tx, unsigned int neighbourPos);
+	errorType postMerkleBlock(Block blck, Transaction tx, NodeData data);
 	errorType postTransaction(unsigned int neighbourPos, Transaction tx);
 	errorType postBlock(unsigned int neighbourPos, unsigned int height);
 	errorType postLayout(NodeData data);

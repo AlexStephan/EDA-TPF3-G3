@@ -4,6 +4,7 @@
  ******************************************************************************/
 #include <string>
 #include <vector>
+#include "Socket.h"
 
 /*******************************************************************************
  * NAMESPACES
@@ -60,6 +61,13 @@ struct MerkleBlock {
 ****************/
 struct Filter{
 	string publicID;
+	ip_t ip;
+	unsigned int port;
+
+	string getIPString()
+	{
+		return (to_string(ip.b1) + '.' + to_string(ip.b2) + '.' + to_string(ip.b3) + '.' + to_string(ip.b4));
+	}
 
 };
 //DUMMY TX
@@ -78,14 +86,14 @@ public:
 	/***********************************************************************************
 		GETTERS
 	***********************************************************************************/
-	const vector<Transaction>& getTransactions();
+	vector<Transaction>& getTransactions();
 	const Transaction getTx(vector<Transaction>::iterator it);
 	const Transaction getTx(unsigned int it);
-	const unsigned long int getHeight();
+	const unsigned long int getHeight() const;
 	const unsigned long int getNonce();
 	const unsigned long int getNTx();
 	const long int getBlockPos(vector<Block>* BlockChain);
-	const string getBlockID();
+	const string getBlockID() const;
 	const string getPreviousBlockID();
 	const string getMerkleRoot();
 	string getTxId(Transaction tx);
