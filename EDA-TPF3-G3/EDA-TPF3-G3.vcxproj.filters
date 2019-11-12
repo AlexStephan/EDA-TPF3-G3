@@ -178,7 +178,7 @@
       <Filter>Header Files\LIBS %28ImGui, Json, etc%29</Filter>
     </ClInclude>
     <ClInclude Include="layoutWindowHandler.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -283,11 +283,11 @@
     <ClCompile Include="printTXroutine.cpp">
       <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
-    <ClCompile Include="layoutWindowHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="layout.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="layoutWindowHandler.cpp">
+      <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
