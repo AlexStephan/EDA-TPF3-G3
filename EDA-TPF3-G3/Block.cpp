@@ -310,6 +310,36 @@ string Block::getTxId(Transaction tx) {
 	newIDstr leafID(aux);
 	return leafID;
 }
+newIDstr Block::getRootFromPath(vector<newIDstr> _path) {
+	newIDstr ret;
+	vector<newIDstr> path = _path;
+	if (path.size() == 1)
+		return path[0];
+	newIDstr concatenate = path[0] + path[1];		//Concatena un par de elementos del nivel anterior
+	char aux[9];
+	unsigned int ID = generateID(concatenate.c_str());
+	sprintf_s(&aux[0], 9, "%08X", ID);
+	newIDstr newID(aux);
+	if (path.size() == 2) {
+		return newID;
+	}
+	else {
+		path.erase(path.begin());
+		path.erase(path.begin() + 1);
+		path.insert(path.begin(), newID);					//Now path only needs to be concatenated by pairs
+		while(path.size() > 1) {
+			newIDstr concatenate = path[0] + path[1];		//Concatena un par de elementos del nivel anterior
+			char aux[9];
+			unsigned int ID = generateID(concatenate.c_str());
+			sprintf_s(&aux[0], 9, "%08X", ID);
+			newIDstr newID(aux);
+			path.erase(path.begin());
+			path.erase(path.begin() + 1);
+			path.insert(path.begin(), newID);				//Insert concatenated pair to begining of list
+		}
+		return path[0];
+	}
+}
 
 const vector<Transaction>& Block::getTransactions() { return tx; }
 const Transaction Block::getTx(vector<Transaction>::iterator it) { for (auto i = tx.begin(); i != tx.end(); i++) { if (i == it) return *i; } }

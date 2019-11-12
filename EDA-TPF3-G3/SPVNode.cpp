@@ -164,6 +164,7 @@ void SPVNode::keepSending() {
 		if ((*j)->getClientType() == GETClient) {
 			//ANALIZE BLOCK HEADER RECEIVED
 			//AND COMPARE TO LATEST MERKLE BLOCK RECEIVED IN mBlocks
+			verifyMerkleBlock(JSONHandler.saveBlockHeader((*j)->getResponse()));
 			//POP BACK LATEST MERKLE BLOCK IN LIST
 		}
 		//And delete completed client
@@ -255,4 +256,19 @@ errorType SPVNode::postTransaction(Transaction tx)
 	clients.push_back(client);
 	notifyAllObservers();
 	return err;
+}
+
+void SPVNode::verifyMerkleBlock(Block head) {
+	errorType error;
+	newIDstr headRoot = head.getMerkleRoot();
+	if (headRoot != head.getRootFromPath(mBlocks.end()->merklePath)) {
+		error.error = true;
+		error.datos = "Merkle Block and Block Header don't match!";
+	}
+	else {
+		error.error = false;
+		error.datos = "Merkle Block and Block Header match!";
+	}
+	mBlocks.pop_back();
+	blockVerification.push_back(error);
 }

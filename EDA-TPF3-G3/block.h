@@ -89,6 +89,7 @@ public:
 	const string getPreviousBlockID();
 	const string getMerkleRoot();
 	string getTxId(Transaction tx);
+	newIDstr getRootFromPath(vector<newIDstr> path);
 
 	/***********************************************************************************
 		MERKLE TREE & MERKLE PATH
