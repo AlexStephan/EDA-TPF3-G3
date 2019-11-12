@@ -47,9 +47,21 @@ FULLNode::~FULLNode() {
 void FULLNode::cycle() {
 	switch (nodeState) {
 	case IDLE:
-		if (servers.back()->getDoneListening()) {					//If latest server picks up a ping, we stop trying
-			nodeState = WAITING_LAYOUT;
-			break;
+		if (!servers.back()->getDoneListening())
+			servers.back()->listening();
+		else if (!servers.back()->getDoneDownloading())
+			servers.back()->receiveMessage();
+		else if (!servers.back()->getDoneSending())
+			servers.back()->sendMessage(serverResponse(servers.back()->getState()));
+		if (servers.back()->getDoneSending()) {
+			if (servers.back()->getState() == PING) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
+				nodeState = WAITING_LAYOUT;
+			}
+			delete servers.back();
+			servers.pop_back();											//Remove useless server
+			Server* newServer = new Server(port);
+			newServer->startConnection();								//Create new server
+			servers.push_back(newServer);
 		}
 		//Pick random timeout
 		if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
@@ -158,7 +170,7 @@ void FULLNode::cycle() {
 		keepSending();
 		break;
 	default:
-		cout << "You fucked up with the FSM, Morty!" << endl;
+		cout << "You fucked up with the FSM, Morty!"<< endl;
 		break;
 	}
 }
@@ -218,6 +230,11 @@ const BlockChain* FULLNode::getBlockChain() {
 const Layout* FULLNode::getLayout()
 {
 	return &layout;
+}
+
+fullNodeStates FULLNode::getState()
+{
+	return nodeState;
 }
 
 
@@ -280,12 +297,11 @@ void FULLNode::keepListening() {
 				if (blck.getBlockID() == blockChain[i].getBlockID())			//If received block is already in chain, it gets ignored
 					found = true;
 			}
-			blockChain.push_back(blck);										//Save block into blockchain
-			floodBlock(blck, (*j)->getSender());							//And flood the block
-			if (!found)														//If it's a new block
+			if (!found) {														//If it's a new block
+				blockChain.push_back(blck);										//Save block into blockchain
 				checkForFilter(blck);											//Inform possible suscripted SPVNodes
-			else
-				blockChain.pop_back();										//Remove block if repeated
+				floodBlock(blck, (*j)->getSender());							//And flood the block
+			}
 			break;
 		case TX:			//Done
 			JSONHandler.saveTx((*j)->getMessage(), txs);
@@ -420,47 +436,55 @@ errorType FULLNode::postPing(NodeData sock)
 /***********************************************************************************
 	SEREVR REPONSE
 ***********************************************************************************/
-string FULLNode::serverResponse(STATE rta)
+string FULLNode::serverResponse(STATE rta, string msg)
 {
 	string message;
 
 	switch (rta)
 	{
-	case GET:
-		message = createServerHeader("/eda_coin/get_block_header", );
+	case HEADER:
+		if (checkForId(msg))
+		{
+			message = createServerHeader("/eda_coin/get_block_header", msg);
+		}
+
+		else
+		{
+			message = createServerErrRsp();
+		}
 		break;
 
 	case TX:
 		message = createServerOkRsp("/eda_coin/send_tx");
 		break;
 
-
 	case BLOCK:
 		message = createServerOkRsp("/eda_coin/send_block");
 		break;
-
 
 	case MERKLE:
 		message = createServerOkRsp("/eda_coin/send_merkle_block");
 		break;
 
-
 	case FILTER:
-    		message = createServerOkRsp("/eda_coin/send_filter");
+    	message = createServerOkRsp("/eda_coin/send_filter");
 		break;
 
 	case LAYOUT:
 		message = createServerOkRsp("/eda_coin/send_filter");
 		break;
 
-	case READY:
-		message = createServerReadyRsp();
-		break;
+	case PING:
+		if (nodeState == NETWORK_CREATED)	//DUDOSISIMO ESPERAR ALEJO
+		{
+			message = createServerReadyRsp();
+		}
 
-	case NOTREADY:
-		message = createServerNotReadyRsp();
+		else
+		{
+			message = createServerNotReadyRsp();
+		}
 		break;
-
 
 	case ERR:
 		message = createServerErrRsp();
@@ -493,7 +517,7 @@ string FULLNode::createServerNotReadyRsp()
 	message += "Content-Length: ";
 	message += to_string(content.length());
 	message += CRLF;
-	message += "Content-Type: application/x-www-form- urlencoded";
+	message += "Content-Type: application/x-www-form-urlencoded";
 	message += CRLF;
 	message += CRLF;
 	message += content;
@@ -551,7 +575,7 @@ string FULLNode::createServerErrRsp()
 	message += "Content-Length: ";
 	message += to_string(content.length());
 	message += CRLF;
-	message += "Content-Type: application/x-www-form- urlencoded";
+	message += "Content-Type: application/x-www-form-urlencoded";
 	message += CRLF;
 	message += CRLF;
 	message += content;
@@ -573,7 +597,7 @@ string FULLNode::createServerHeader(string path, string id)
 	message += CRLF;
 	message += dateLine;
 	message += CRLF;
-	message += "Location: 127.0.0.1 " + path;
+	message += "Location: 127.0.0.1" + path;
 	message += CRLF;
 	message += "Cache-Control: max-age=30";
 	message += CRLF;
@@ -582,7 +606,7 @@ string FULLNode::createServerHeader(string path, string id)
 	message += "Content-Length: ";
 	message += to_string(content.length());
 	message += CRLF;
-	message += "Content-Type: application/x-www-form- urlencoded";
+	message += "Content-Type: application/x-www-form-urlencoded";
 	message += CRLF;
 	message += CRLF;
 	message += content;
@@ -604,7 +628,7 @@ string FULLNode::createServerOkRsp(string path)
 	message += CRLF;
 	message += dateLine;
 	message += CRLF;
-	message += "Location: 127.0.0.1 " + path;
+	message += "Location: 127.0.0.1" + path;
 	message += CRLF;
 	message += "Cache-Control: max-age=30";
 	message += CRLF;
@@ -613,7 +637,7 @@ string FULLNode::createServerOkRsp(string path)
 	message += "Content-Length: ";
 	message += to_string(content.length());
 	message += CRLF;
-	message += "Content-Type: application/x-www-form- urlencoded";
+	message += "Content-Type: application/x-www-form-urlencoded";
 	message += CRLF;
 	message += CRLF;
 	message += content;
@@ -648,9 +672,26 @@ void FULLNode::createDates(char* c1, char* c2)
 /***********************************************************************************
 		FLOODING / VERIFICATION
 ***********************************************************************************/
-/*void FULLNode::checkForFilter(Block blck) {
+/*void FULLNode::checkForFilter(Block blck) 
+{
 	
 }*/
+
+bool FULLNode::checkForId(string id)
+{
+	bool ret = false;
+	for (int i = 0; i < blockChain.size(); i++)
+	{
+		if (blockChain[i].getBlockID() == id)
+		{
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+
 void FULLNode::floodBlock(Block blck, NodeData sender) {
 	for (int i = 0; i < neighbourhood.size(); i++) {
 		if (sender.getID() != neighbourhood[i].getID())					//If neighbour is not the one who sent the block

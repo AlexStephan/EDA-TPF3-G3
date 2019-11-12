@@ -76,6 +76,21 @@ NodeData SPVNode::getData(){ return ownData; }
 NodeData SPVNode::getFilterNodeData() { return filterNode; }
 NodeData SPVNode::getHeaderNodeData() { return headerNode; }
 
+errorType SPVNode::getVerificationError()
+{
+	errorType err;
+	if (blockVerification.size() == 0) {
+		err.error = false;
+		err.datos = "";
+	}
+	else {
+		size_t popping = blockVerification.size() - 1;
+		err = blockVerification[popping];
+		blockVerification.pop_back();
+	}
+	return err;
+}
+
 /***********************************************************************************
 	NETWORKING SH*T
 ***********************************************************************************/
@@ -160,6 +175,59 @@ void SPVNode::keepSending() {
 	}
 	if (!deleteThis.empty())
 		notifyAllObservers();
+}
+/***********************************************************************************
+	SEREVR REPONSE
+***********************************************************************************/
+string SPVNode::serverResponse(STATE rta)
+{
+	string message;
+
+	switch (rta)
+	{
+	case GET:
+		message = createServerHeader("/eda_coin/get_block_header", );
+		break;
+
+	case TX:
+		message = createServerOkRsp("/eda_coin/send_tx");
+		break;
+
+
+	case BLOCK:
+		message = createServerOkRsp("/eda_coin/send_block");
+		break;
+
+
+	case MERKLE:
+		message = createServerOkRsp("/eda_coin/send_merkle_block");
+		break;
+
+
+	case FILTER:
+		message = createServerOkRsp("/eda_coin/send_filter");
+		break;
+
+	case LAYOUT:
+		message = createServerOkRsp("/eda_coin/send_filter");
+		break;
+
+	case READY:
+		message = createServerReadyRsp();
+		break;
+
+	case NOTREADY:
+		message = createServerNotReadyRsp();
+		break;
+
+
+	case ERR:
+		message = createServerErrRsp();
+		break;
+	}
+
+	return message;
+
 }
 /***********************************************************************************
 	POSTING / GETTING METHODS

@@ -1,6 +1,9 @@
 #include "NETcontroller.h"
 #include "imgui.h"
 
+#define FIRST	6
+#define LAST	8
+
 #define WINDOW_NAME "EDA Coins Net"
 
 #define CLEAN(vector)	for(int i=0;i<(vector).size();i++) delete (vector)[i]
@@ -11,7 +14,8 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 	netviewer(WINDOW_NAME), running(true),
 	guiHandler(), warningHandler(WINDOW_NAME),
 	FcontrolList(), FviewList(),
-	ScontrolList(), SviewList()
+	ScontrolList(), SviewList(),
+	network_created(false)
 {
 	netmodel->attach(netviewer);
 	findFullNames();
@@ -19,6 +23,8 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 		IParr[i] = 0;
 	type = 0;
 	nodePort = 0;
+
+	makeFirstFULL();
 }
 
 NETcontroller::~NETcontroller(){
@@ -71,18 +77,28 @@ bool NETcontroller::isRunning()
 
 void NETcontroller::cycle()
 {
+
 	guiHandler.start_frame(running);
 
-	drawControlWindow();
-	netviewer.cycle();
+	//ALEX.EXE
+	netmodel->cycle();
 
-	CYCLE(FcontrolList);
-	CYCLE(FviewList);
-	CYCLE(ScontrolList);
-	CYCLE(SviewList);
+	if (network_created == false) {
+		checkIfDoneConnecting();
+		waitWindow();
+	}
+	else {
 
-	warningHandler.draw();
+		drawControlWindow();
+		netviewer.cycle();
 
+		CYCLE(FcontrolList);
+		CYCLE(FviewList);
+		CYCLE(ScontrolList);
+		CYCLE(SviewList);
+
+		warningHandler.draw();
+	}
 
 	guiHandler.end_frame();
 }
@@ -135,6 +151,36 @@ void NETcontroller::findFullNames() {
 		FullNames += '\0';
 	}
 	FullNames += '\0';
+}
+
+void NETcontroller::makeFirstFULL()
+{
+	vector<NodeData> genesisNodes = {};
+	NodeData dummyNode("NO_DATA");
+
+	jsonhandler.getNodesInLayout("manifest.json", dummyNode, genesisNodes);
+
+	for (size_t i = FIRST; i <= LAST; i++) {
+		netmodel->createFULLNode(genesisNodes[i]);
+	}
+}
+
+void NETcontroller::checkIfDoneConnecting()
+{
+	if (netmodel->checkIfConnectionMade())
+		network_created = true;
+}
+
+void NETcontroller::waitWindow()
+{
+	ImGui::Begin("CREATING INITIAL LAYOUT...");
+
+	ImGui::Text("Please, wait until the initial connection has been made");
+	ImGui::Text("Oh... viste ese manejo del english, haha, beri biutiful");
+	ImGui::Text("Haha... igual, si llegaste hasta aca y no se rompio, tremendo, no? Porque, segun yo, ni a palos funciona esto antes de las 10 de la noche");
+	ImGui::Text("EN EDA ANDA TODO!!!");
+	ImGui::Text("che, vamos a quitar este mensaje antes de la entrega, no?");
+	ImGui::End();
 }
 
 

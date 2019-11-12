@@ -139,14 +139,11 @@ STATE Server::parseMessage()
 
 	if (Msg.find("GET") != string::npos)
 	{
-		if (Msg.find("/eda_coin/get_block_header/"))
+		if (Msg.find("/eda_coin/get_block_header/") && Msg.find("Header:'block_id':") != string::npos)
 		{
-			rta = GET;
-		}
-
-		else
-		{
-			rta = ERR;
+			size_t pos = Msg.find("'block_id':");
+			bodyMsg = Msg.substr(pos + strlen("'block_id':")); //FALTAAAAAA
+			rta = HEADER;
 		}
 	}
 
@@ -173,8 +170,10 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_merkle_block") != string::npos)
 		{
-			//Not yet
-			rta = MERKLE;
+			if (JSON.validateMerkle(bodyMsg).error)
+			{
+				rta = MERKLE;
+			}
 		}
 
 		else if (Msg.find("/eda_coin/send_filter") != string::npos)
@@ -185,11 +184,19 @@ STATE Server::parseMessage()
 			}
 		}
 
-		else
+
+		else if (Msg.find("/eda_coin/NETWORK_LAYOUT") != string::npos)
 		{
-			rta = ERR;
+			if (JSON.validateLayout(bodyMsg).error)
+			{
+				rta = LAYOUT;
+			}
 		}
 
+		else if (Msg.find("/eda_coin/PING") != string::npos)
+		{
+			rta = PING;
+		}
 	}
 
 	else

@@ -48,13 +48,13 @@ public:
 
 	const Layout* getLayout();
 
-
+	fullNodeStates getState();
 private:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
 	***********************************************************************************/
 	BlockChain blockChain;											//THE BlockChain
-	vector<string> filters;											//List of inner filters
+	vector<Filter> filters;											//List of inner filters
 	vector<Transaction> txs;										//List of transactions
 	vector<MerkleBlock> merkleBlocks;								//List of merkleBlocks (?)
 	void addBlock(Block block);										//Add a block to blockChain
@@ -87,7 +87,7 @@ private:
 	errorType postPing(NodeData data);
 
 	//SERVER RESPONSE
-	string serverResponse(STATE rta);
+	string serverResponse(STATE rta, string massage);
 	string createServerOkRsp(string path);
 	string createServerHeader(string path, string id);
 	string createServerErrRsp();
@@ -100,6 +100,7 @@ private:
 		FLOODING / VERIFICATION
 	***********************************************************************************/
 	void checkForFilter(Block blck);
+	bool checkForId(string id);
 	void floodBlock(Block blck, NodeData sender);
 	void floodTx(Transaction tx, NodeData sender);
 };
