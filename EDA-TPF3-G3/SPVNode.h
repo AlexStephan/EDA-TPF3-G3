@@ -11,6 +11,7 @@ class SPVNode :
 {
 public:
 	SPVNode(NodeData ownData, NodeData FilterNode, NodeData HeaderNode);
+	~SPVNode();
 	virtual void cycle();
 
 	/***********************************************************************************

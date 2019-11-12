@@ -86,7 +86,7 @@ public:
 	/***********************************************************************************
 		GETTERS
 	***********************************************************************************/
-	vector<Transaction>& getTransactions();
+	const vector<Transaction>& getTransactions();
 	const Transaction getTx(vector<Transaction>::iterator it);
 	const Transaction getTx(unsigned int it);
 	const unsigned long int getHeight() const;

@@ -52,7 +52,7 @@ void TreeWindow::draw()
 			ImGui::SameLine();
 			ImGui::BeginChild("Txs",ImVec2(CCHILD_W,CCHILD_H));
 
-			vector<Transaction>& TXlist = block.getTransactions();
+			const vector<Transaction>& TXlist = block.getTransactions();
 
 			for (int j = 0; j < TXlist.size(); j++)
 				printTx(TXlist[j], j);
