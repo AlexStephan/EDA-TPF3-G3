@@ -4,7 +4,7 @@
 #include "SPVNode.h"
 #include "WarningWindowHandler.h"
 
-enum SPVcontrolState { MENU, MTX, PFILTER, CHANGEFN, CHANGEHN };
+enum SPVcontrolState { SPV_MENU, SPV_MTX, SPV_PFILTER, SPV_CHANGEFN, SPV_CHANGEHN };
 
 class SPVcontroller :
 	public Observer
@@ -12,7 +12,7 @@ class SPVcontroller :
 public:
 	SPVcontroller(SPVNode* model) : snode(model), windowID(model->getData().getID()),
 		warningHandler(model->getData().getID()) {
-		cstate = MENU;
+		cstate = SPV_MENU;
 		currTX = 0;
 	}
 	virtual void update(void*) {} //tampoco se q le interese al controller

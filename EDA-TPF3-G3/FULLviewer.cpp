@@ -5,10 +5,19 @@
 #define NO_DATA "NO DATA",0,0,0,0,0
 
 FULLviewer::FULLviewer() :
-	nodedata(NO_DATA), neigbours(), pendingTX(),
+	nodedata(NO_DATA), neighbours(), pendingTX(),
 	windowName("NO_DATA"), treeHandler(),
 	blockchain(), layoutHandler()
 {
+	redButton = false;
+	nbutton = al_load_bitmap("Button_normal.png");
+	pbutton = al_load_bitmap("Button_pressed.png");
+}
+
+
+FULLviewer::~FULLviewer() {
+	al_destroy_bitmap(nbutton);
+	al_destroy_bitmap(pbutton);
 }
 
 void FULLviewer::update(void*n)
@@ -16,7 +25,7 @@ void FULLviewer::update(void*n)
 	FULLNode* node = (FULLNode*)n;
 
 	nodedata = node->getData();
-	neigbours = node->getNeighbours();
+	neighbours = node->getNeighbours();
 	pendingTX = node->getPendingTX();
 	blockchain = node->getBlockChain();
 	layout = node->getLayout();
@@ -32,6 +41,17 @@ void FULLviewer::cycle()
 	layoutHandler.draw();
 }
 
+void FULLviewer::drawWindow() {
+	ImGui::Begin(windowName.c_str());
+	printNodeData();
+	printNeighbours();
+	printBlockList();
+	drawBigRedButton();
+
+	ImGui::End();
+}
+
+
 void FULLviewer::printNodeData()
 {
 	if (ImGui::CollapsingHeader("Data")) {
@@ -44,9 +64,9 @@ void FULLviewer::printNodeData()
 void FULLviewer::printNeighbours()
 {
 	if (ImGui::CollapsingHeader("Neighbours")) {
-		if (neigbours->size() > 0) {
-			for (int i = 0; i < neigbours->size(); i++) {
-				ImGui::Text("ID: %s | Port: %s | IP: %s", (*neigbours)[i].getID().c_str(), (*neigbours)[i].getSocket().getPortString().c_str(), (*neigbours)[i].getSocket().getIPString().c_str());
+		if (neighbours->size() > 0) {
+			for (int i = 0; i < neighbours->size(); i++) {
+				ImGui::Text("ID: %s | Port: %s | IP: %s", (*neighbours)[i].getID().c_str(), (*neighbours)[i].getSocket().getPortString().c_str(), (*neighbours)[i].getSocket().getIPString().c_str());
 			}
 		}
 		else {
@@ -65,8 +85,8 @@ void FULLviewer::printPendingTX()
 			ImGui::BeginChild("Txs", ImVec2(CCHILD_W, CCHILD_H));
 			for (int i = 0; i < pendingTX->size(); i++) {
 				//
-
-				printTx((*pendingTX)[i],i);
+				if(ImGui::CollapsingHeader("TX %d", i))
+					printTx((*pendingTX)[i],i);
 
 
 
@@ -88,6 +108,40 @@ void FULLviewer::printPendingTX()
 		else {
 			ImGui::Text("There are no new Transactions");
 		}
+	}
+}
+
+void FULLviewer::printBlockList() {
+	if (ImGui::CollapsingHeader("Blockchain")) {
+		vector<pair<const unsigned long, int>> tags;
+		for (int i = 0; i < blockchain->size(); i++) {
+			pair<const unsigned long, int> par((*blockchain)[i].getHeight(), i);
+			tags.push_back(par);
+		}
+		sort(tags.begin(), tags.end());
+		for (int j = 0; j < tags.size(); j++) {
+			string blockid = "Block " + (*blockchain)[tags[j].second].getBlockID();
+			if (ImGui::Selectable(blockid.c_str()))
+				treeHandler.createWindow((*blockchain)[tags[j].second]);
+		}
+	}
+}
+
+void FULLviewer::drawBigRedButton() {
+	ImVec2 cursor = ImGui::GetCursorPos();
+	cursor.x = ImGui::GetWindowWidth() / 2 - 100 / 2;
+	ImGui::SetCursorPos(cursor);
+	if (!redButton)
+		ImGui::Image(nbutton, ImVec2(100, 100));
+	else
+		ImGui::Image(pbutton, ImVec2(100, 100));
+	//    ImGui::PushStyleColor(1, ImVec4(250, 0, 0, 0));
+  //  ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 100);
+	ImGui::SetCursorPos(cursor);
+	if (ImGui::InvisibleButton("jejox", ImVec2(100, 100))) {
+		redButton = !redButton;
+		if (redButton)
+			layoutHandler.createWindow(nodedata, *layout, *neighbours);
 	}
 }
 

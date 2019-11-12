@@ -11,16 +11,16 @@ void FULLcontroller::cycle()
 	ImGui::Begin(windowID.c_str());
 	ImGui::BeginChild("FULL CONTROL", ImVec2(CHILD_W, CHILD_H));
 	switch (cstate) {
-	case MENU:
+	case FULL_MENU:
 		drawWindow();
 		break;
-	case MTX:
+	case FULL_MTX:
 		drawMTX();
 		break;
-	case MBLOCK:
+	case FULL_MBLOCK:
 		drawMBlock();
 		break;
-	case ADDN:
+	case FULL_ADDN:
 		drawAddNode();
 		break;
 	}
@@ -44,7 +44,7 @@ void FULLcontroller::drawWindow()
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 0.9f, 0.9f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 1.0f, 1.0f));
 		if (ImGui::Button(BUTTON_TEXT[i], ImVec2(BUTTON_S, BUTTON_S)))
-			cstate = FULLcontrolState(MTX + i);
+			cstate = FULLcontrolState(FULL_MTX + i);
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
@@ -57,7 +57,7 @@ void FULLcontroller::drawMBlock() {
 
 	if (ImGui::Button("MAKE BLOCK")) {
 		warningHandler.check(fnode->makeBlock());
-		cstate = MENU;
+		cstate = FULL_MENU;
 	}
 }
 
@@ -90,7 +90,7 @@ void FULLcontroller::drawMTX() {
 		txVin.pop_back();
 		txVout.pop_back();
 		warningHandler.check(fnode->makeTX(txVout, txVin));
-		cstate = MENU;
+		cstate = FULL_MENU;
 	}
 
 }
@@ -124,7 +124,7 @@ void FULLcontroller::drawAddNode() {
 
 	if (ImGui::Button("ADD NEIGHBOUR")) {
 		warningHandler.check(fnode->addNeighbour(NodeData(newID, newPort, newIP[0], newIP[1], newIP[2], newIP[3])));
-		cstate = MENU;
+		cstate = FULL_MENU;
 	}
 }
 
@@ -151,7 +151,7 @@ void FULLcontroller::newIpSelect(){
 void FULLcontroller::returnButton() {
 
 	if (ImGui::Button("Return"))
-		cstate = MENU;
+		cstate = FULL_MENU;
 }
 
 //void FULLcontroller::neighbourSelect()

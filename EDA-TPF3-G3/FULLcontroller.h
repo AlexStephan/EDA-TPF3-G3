@@ -5,7 +5,7 @@
 #include "WarningWindowHandler.h"
 
 #define MAX_TX_ID	280
-enum FULLcontrolState { MENU, MTX, MBLOCK, ADDN };
+enum FULLcontrolState { FULL_MENU, FULL_MTX, FULL_MBLOCK, FULL_ADDN };
 
 class FULLcontroller : public Observer
 {
@@ -13,7 +13,7 @@ public:
 	FULLcontroller(FULLNode* model) : fnode(model), windowID(model->getData().getID()),
 		warningHandler(model->getData().getID()) {
 		currTX = 1;
-		cstate = MENU;
+		cstate = FULL_MENU;
 	}
 	virtual void update(void*) {} //no se me ocurre q necesite el controller q se actualice
 	void cycle();
