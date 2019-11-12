@@ -101,7 +101,6 @@ void jsonHandler::saveBlockChain(BlockChain& blockchain, string path)
 	}
 }
 
-
 void jsonHandler::saveTx(string _trans, vector<Transaction>& txs)
 {
 	json trans;
@@ -208,6 +207,32 @@ Filter jsonHandler::saveFilter(string filter)
 
 	return aux;
 
+}
+
+Block jsonHandler::saveBlockHeader(string header)
+{
+	Block blck;
+	json blocks = json::parse(header);
+
+	auto height = blocks["height"];
+	blck.setHeight(height);
+
+	auto nonce = blocks["nonce"];
+	blck.setNonce(nonce);
+
+	auto blockId = blocks["blockid"];
+	blck.setBlockId(blockId.get<string>());
+
+	auto prevBlockId = blocks["previousblockid"];
+	blck.setPrevBlockId(prevBlockId.get<string>());
+
+	auto root = blocks["merkleroot"];
+	blck.setMerkleRoot(root.get<string>());
+
+	auto nTx = blocks["nTx"];
+	blck.setNTx(nTx);
+
+	return blck;
 }
 
 /***********************************************************************************

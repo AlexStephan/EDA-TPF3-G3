@@ -337,7 +337,6 @@ void SPVNode::verifyMerkleBlock(Block head) {
 	mBlocks.pop_back();
 	blockVerification.push_back(error);
 }
-}
 
 errorType SPVNode::postFilter()
 {

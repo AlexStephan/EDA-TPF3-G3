@@ -24,6 +24,7 @@ public:
 	void saveTx(string trans, vector<Transaction>& txs);
 	void saveMerkleBlock(string merkleBlock,vector <MerkleBlock>& mrkl);
 	Filter saveFilter(string filter);
+	Block saveBlockHeader(string header);
 	
 	/***********************************************************************************
 		JSONS's CREATION
