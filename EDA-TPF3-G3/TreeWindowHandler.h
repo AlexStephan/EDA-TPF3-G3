@@ -5,6 +5,16 @@
 #include <map>
 #include <string>
 
+struct mapp {
+	mapp(unsigned int i, const Block& b, const string& nodeId) :
+		orden(i),window(b,nodeId) {}
+	mapp(const mapp&m) :
+		orden(m.orden), window(m.window) {}
+	mapp(unsigned int i,const TreeWindow&  w) : orden(i), window(w) {}
+	unsigned int orden;
+	TreeWindow window;
+};
+
 class TreeWindowHandler
 {
 public:
@@ -15,6 +25,7 @@ public:
 	void draw();
 private:
 	string nodeId;
-	map<unsigned int,TreeWindow> windowList;
+	//map<unsigned int,TreeWindow> windowList;
+	vector<mapp> windowList;
 };
 
