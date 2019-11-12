@@ -705,10 +705,10 @@ void FULLNode::checkForFilter(Block blck)
 		{
 			for (int k = 0; k < blck.getTransactions()[i].vIn.size(); k++)
 			{
-				if (blck.getTransactions()[i].vIn[k].blockId == filters[j].publicID)
-				{
-					NodeData d("Dummy", filters[j].port, filters[j].ip);
-					postMerkleBlock(blck, blck.getTransactions()[i], d);
+				if (blck.getTransactions()[i].vIn[k].blockId == filters[j].publicID)					//NOT ACTUALLY CORRECT
+				{																						//SHOULD ACTUALLY SEARCH FOR A BLOCK WITH THE SAME ID
+					NodeData d("Dummy", filters[j].port, filters[j].ip);								//AND FIND THE TX WITH THE SAME TXID, AND CHECK ((ITS)) VOUT FOR PUBLIC ID
+					postMerkleBlock(blck, blck.getTransactions()[i], d);								//MAPS PERHAPS?
 				}
 			}
 
