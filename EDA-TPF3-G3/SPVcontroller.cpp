@@ -7,6 +7,14 @@
 #define BUTTON_S	100
 #define BUTTONS_PER_ROW 2
 
+void SPVcontroller::update(void* m)
+{
+	errorType newMessage;
+	while ((newMessage = snode->getVerificationError()).error == true) {
+		warningHandler.check(newMessage);
+	}
+}
+
 void SPVcontroller::cycle()
 {
 	ImGui::Begin(windowID.c_str());
