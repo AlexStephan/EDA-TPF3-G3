@@ -47,6 +47,8 @@ public:
 	errorType validateBlock(string blck);
 	errorType validateTx(string tx);
 	errorType validateFilter(string filter);
+	errorType validateMerkle(string merkle);
+	errorType validateLayout(string layout);
 
 	/***********************************************************************************
 		LAYOUT CONTROLLERS
