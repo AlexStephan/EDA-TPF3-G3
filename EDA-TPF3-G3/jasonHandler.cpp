@@ -10,6 +10,7 @@
  ******************************************************************************/
 #define BLOCK_FIELDS 7
 #define TRANS_FIELDS 5
+#define MRKL_FIELDS 4
 
 /*******************************************************************************
  * NAMESPACES
@@ -279,7 +280,7 @@ string jsonHandler::createJsonTx(Transaction trans)
 	return tx.dump();
 }
 
-string jsonHandler::createJsonMerkle(Block block)
+string jsonHandler::createJsonMerkle(Block block) //DESHARCODEAR
 {
 	json merkle;
 	merkle["blockid"] = block.getBlockID();
@@ -296,7 +297,7 @@ string jsonHandler::createJsonMerkle(Block block)
 	return merkle.dump();
 }
 
-string jsonHandler::createJsonFilter(string id)
+string jsonHandler::createJsonFilter(string id)	//Cambiar
 {
 	json filter;
 	filter["Id"] = id;
@@ -470,9 +471,41 @@ errorType jsonHandler::validateFilter(string filter)
 	return err;
 }
 
-errorType validateMerkle(string merkle)
+errorType jsonHandler::validateMerkle(string merkle)
 {
+	errorType err = { true, "Missing field Id/Wrong format" };
 
+	try
+	{
+		json mrkl = json::parse(merkle);
+
+		if (mrkl.size() == MRKL_FIELDS)
+		{
+			mrkl.at("blockid");
+			mrkl.at("txPos");
+			mrkl.at("tx");
+			auto path = mrkl["merklePath"];
+
+			if (!validateTx(mrkl["tx"]).error)
+			{
+				err = { false, "OK Merkle Block" };
+			}
+
+			for (auto& id : path)
+			{
+				id.at("Id");
+			}
+		}
+
+
+	}
+
+	catch (std::exception& e)
+	{
+		err = { true, "Missing field Id/Wrong format" };
+	}
+
+	return err;
 }
 
 /***********************************************************************************

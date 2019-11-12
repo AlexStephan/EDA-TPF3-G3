@@ -22,6 +22,7 @@ public:
 	void saveBlockChain(BlockChain& blockchain, string path);
 	void saveTx(string trans, vector<Transaction>& txs);
 	void saveMerkleBlock(string merkleBlock,vector <MerkleBlock>& mrkl);
+	
 
 	/***********************************************************************************
 		JSONS's CREATION

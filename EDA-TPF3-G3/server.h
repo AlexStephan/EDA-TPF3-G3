@@ -47,7 +47,6 @@ public:
 	bool getDoneSending();
 	STATE getState();
 	string getMessage();
-	string getFilterId();
 	NodeData getSender(); //Imposible creo
 
 private:
@@ -66,7 +65,12 @@ private:
 	string bodyMsg;
 	string flterId;
 	char buf[MAX_LENGTH];
-	
+
+	/***********************************************************************************
+		 SENDER DATA
+	***********************************************************************************/
+	NodeData data;
+
 	/***********************************************************************************
 		BOOST SH*T
 	***********************************************************************************/

@@ -154,7 +154,7 @@ STATE Server::parseMessage()
 
 		if (Msg.find("/eda_coin/send_block") != string::npos)
 		{
-			if (JSON.validateBlock(bodyMsg).error)
+			if (!JSON.validateBlock(bodyMsg).error)
 			{
 				rta = BLOCK;
 			}
@@ -162,7 +162,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_tx") != string::npos)
 		{
-			if (JSON.validateTx(bodyMsg).error)
+			if (!JSON.validateTx(bodyMsg).error)
 			{
 				rta = TX;
 			}
@@ -170,7 +170,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_merkle_block") != string::npos)
 		{
-			if (JSON.validateMerkle(bodyMsg).error)
+			if (!JSON.validateMerkle(bodyMsg).error)
 			{
 				rta = MERKLE;
 			}
@@ -178,7 +178,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/send_filter") != string::npos)
 		{
-			if (JSON.validateFilter(bodyMsg).error)
+			if (!JSON.validateFilter(bodyMsg).error)
 			{
 				rta = FILTER;
 			}
@@ -187,7 +187,7 @@ STATE Server::parseMessage()
 
 		else if (Msg.find("/eda_coin/NETWORK_LAYOUT") != string::npos)
 		{
-			if (JSON.validateLayout(bodyMsg).error)
+			if (!JSON.validateLayout(bodyMsg).error)
 			{
 				rta = LAYOUT;
 			}
