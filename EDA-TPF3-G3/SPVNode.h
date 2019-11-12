@@ -46,4 +46,5 @@ private:
 	errorType postTransaction(Transaction tx);
 	void keepListening();
 	void keepSending();
+	string serverResponse(STATE rta);
 };

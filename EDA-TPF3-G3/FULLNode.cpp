@@ -280,12 +280,11 @@ void FULLNode::keepListening() {
 				if (blck.getBlockID() == blockChain[i].getBlockID())			//If received block is already in chain, it gets ignored
 					found = true;
 			}
-			blockChain.push_back(blck);										//Save block into blockchain
-			floodBlock(blck, (*j)->getSender());							//And flood the block
-			if (!found)														//If it's a new block
+			if (!found) {														//If it's a new block
+				blockChain.push_back(blck);										//Save block into blockchain
 				checkForFilter(blck);											//Inform possible suscripted SPVNodes
-			else
-				blockChain.pop_back();										//Remove block if repeated
+				floodBlock(blck, (*j)->getSender());							//And flood the block
+			}
 			break;
 		case TX:			//Done
 			JSONHandler.saveTx((*j)->getMessage(), txs);
