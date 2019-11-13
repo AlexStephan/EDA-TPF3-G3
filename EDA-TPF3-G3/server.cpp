@@ -77,6 +77,7 @@ void Server::sendMessage(const string& message) //ES BLOQUEANTE POR AHORA
 	if (error.value() != WSAEWOULDBLOCK)
 	{
 		doneSending = true;
+		cout << "DONESENDINGGGGGG" << endl;
 		cout << message << endl;
 	}
 
@@ -91,6 +92,8 @@ void Server::connectionHandler(const boost::system::error_code& err)
 	{
 		doneListening = true;
 		fillSenderData();
+		cout << "Alguien se conecto" << endl << this->data.getSocket().getPortString() << endl;
+		getchar();
 	}
 
 	else

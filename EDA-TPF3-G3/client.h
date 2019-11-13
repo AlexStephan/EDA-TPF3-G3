@@ -48,6 +48,7 @@ public:
 	*****************************************************************************/
 	NodeData getReceiverData();
 	string getResponse(void);
+	string getTranslatedResponse();
 	int getRunning();
 	ClientType getClientType();
 

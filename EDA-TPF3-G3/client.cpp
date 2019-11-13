@@ -39,7 +39,7 @@ Client::~Client()
 void Client::POST(string path, string json)
 {
 	cType = POSTClient;
-	string url = "http://127.0.0.1:" + receiver.getSocket().getPortString() + path;
+	string url = "http://" + receiver.getSocket().getIPString() + ":" + receiver.getSocket().getPortString() + path;
 
 	if (curl && curlm)
 	{
@@ -72,7 +72,7 @@ void Client::POST(string path, string json)
 void Client::GET(string path, string json)
 {
 	cType = GETClient;
-	string url = "http://127.0.0.1:" + receiver.getSocket().getPortString() + path;
+	string url = "http://" + receiver.getSocket().getIPString() + ":" + receiver.getSocket().getPortString() + path;
 
 	if (curl && curlm)
 	{
@@ -129,6 +129,18 @@ string Client::getResponse(void) { return response; }
 int Client::getRunning() { return running; }
 ClientType Client::getClientType() { return cType; }
 NodeData Client::getReceiverData() { return receiver; }
+string Client::getTranslatedResponse()
+{
+	if (response.find("status:false") != string::npos)
+	{
+		return "B";
+	}
+
+	else
+	{
+		return "a";
+	}
+}
 
 
 /*******************************************************************************

@@ -21,6 +21,11 @@ FULLNode::FULLNode(NodeData ownData) : Node(ownData) {
 	int timing = rand() % 1000 + 1;
 	chrono::duration<int, milli> dur(timing);
 	timeout = dur;
+
+	//Create Genesis Server
+	Server* genesisServer = new Server(ownData.getSocket().getPort());
+	genesisServer->startConnection();			//Preguntar si esto funcaria
+	servers.push_back(genesisServer);
 }
 
 /*******************************************************************************
@@ -46,29 +51,49 @@ FULLNode::~FULLNode() {
  ******************************************************************************/
 void FULLNode::cycle() {
 	int gotReady = -1;
+	cout << "Node" << ownData.getID()<< " Node state: " << nodeState << endl;
+	
 	switch (nodeState) {
 	case IDLE:
-		if (!servers.back()->getDoneListening())
-			servers.back()->listening();
-		else if (!servers.back()->getDoneDownloading())
-			servers.back()->receiveMessage();
-		else if (!servers.back()->getDoneSending())
-			servers.back()->sendMessage(serverResponse(servers.back()->getState(),servers.back()->getMessage()));
-		if (servers.back()->getDoneSending()) {
-			if (servers.back()->getState() == PING) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
-				nodeState = WAITING_LAYOUT;
+		if (servers.back()->getDoneListening()) {
+			if (!servers.back()->getDoneDownloading())
+				servers.back()->receiveMessage();
+			else if (!servers.back()->getDoneSending())
+				servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
+			if (servers.back()->getDoneSending()) {
+				cout << "Server done servering" << endl;
+				//HANDLE FINISHED SERVER
+				if (servers.back()->getState() == PING) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
+					nodeState = WAITING_LAYOUT;
+				}
+				delete servers.back();
+				servers.pop_back();											//Remove useless server
+				Server* newServer = new Server(port);
+				newServer->startConnection();								//Create new server
+				servers.push_back(newServer);
 			}
-			delete servers.back();
-			servers.pop_back();											//Remove useless server
-			Server* newServer = new Server(port);
-			newServer->startConnection();								//Create new server
-			servers.push_back(newServer);
 		}
+		else
+			servers.back()->listening();
+		/*if (!servers.back()->getDoneListening()) {
+			if (!servers.back()->getDoneSending()) {
+				if (servers.back()->getDoneSending()) {
+				}
+				else if (!servers.back()->getDoneDownloading())
+					servers.back()->receiveMessage();
+				servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
+			}
+			else
+				servers.back()->listening();
+		}*/
 		//Pick random timeout
-		if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
-			nodeState = COLLECTING_MEMBERS;						//We take care of the layout
-			for (int i = 0; i < nodesInManifest.size(); i++) {
-				postPing(nodesInManifest[i]);		//Ping each node in manifest who isn't me (just a bit, rest of sending is done in COLLECTING_MEMBERS)
+		if (nodeState == IDLE) {
+			if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
+				nodeState = COLLECTING_MEMBERS;						//We take care of the layout
+				for (int i = 0; i < nodesInManifest.size(); i++) {
+					if (!(ownData == nodesInManifest[i]))
+						postPing(nodesInManifest[i]);		//Ping each node in manifest who isn't me (just a bit, rest of sending is done in COLLECTING_MEMBERS)
+				}
 			}
 		}
 		break;
@@ -77,12 +102,14 @@ void FULLNode::cycle() {
 			Client* curr = clients[i];
 			curr->sendRequest();
 			if (curr->getRunning() == 0)
-				if (curr->getResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
+
+
+				if (curr->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
 					gotReady = i;
 					break;
 				}
-				else if (curr->getResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
+				else if (curr->getTranslatedResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
 					network.push_back(curr->getReceiverData());
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list

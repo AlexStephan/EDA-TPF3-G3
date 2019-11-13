@@ -1,8 +1,8 @@
 #include "NETcontroller.h"
 #include "imgui.h"
 
-#define FIRST	6
-#define LAST	8
+#define FIRST	0
+#define LAST	2
 
 #define WINDOW_NAME "EDA Coins Net"
 
