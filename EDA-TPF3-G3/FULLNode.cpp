@@ -19,6 +19,8 @@ FULLNode::FULLNode(NodeData ownData) : Node(ownData) {
 	//Timing sh*t
 	clock = chrono::system_clock::now();
 	int timing = rand() % 1000 + 1;
+	timing *= 10;
+	cout << "Node " << ownData.getID() << " created with timing = " << timing << endl;
 	chrono::duration<int, milli> dur(timing);
 	timeout = dur;
 
@@ -98,19 +100,16 @@ void FULLNode::cycle() {
 		break;
 	case COLLECTING_MEMBERS:									//Look at me, I build the network now
 		for (int i = 0; i < clients.size(); i++) {
-			Client* curr = clients[i];
-			curr->sendRequest();
-			cout << "Node " << ownData.getID() << " Trying to PING PORT " << curr->getReceiverData().getSocket().getPort() << endl;
-			if (curr->getRunning() == 0)
-
-
-				if (curr->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
+			cout << "Node " << ownData.getID() << " Trying to PING PORT " << clients[i]->getReceiverData().getSocket().getPort() << endl;
+			clients[i]->sendRequest();
+			if (clients[i]->getRunning() == 0)
+				if (clients[i]->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
 					gotReady = i;
 					break;
 				}
-				else if (curr->getTranslatedResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
-					network.push_back(curr->getReceiverData());
+				else if (clients[i]->getTranslatedResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
+					network.push_back(clients[i]->getReceiverData());
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
@@ -121,7 +120,7 @@ void FULLNode::cycle() {
 				}
 		}
 		if (nodesInManifest.size() == network.size()) {				//If the amount of nodes in the manifest is equal to the amount of nodes who responded NETWORK_NOT_READY
-			bool allResponded = true;
+			/*bool allResponded = true;
 			for (int i = 0; i < nodesInManifest.size(); i++) {
 				bool found = false;
 				for (int j = 0; j < network.size(); j++) {
@@ -131,7 +130,7 @@ void FULLNode::cycle() {
 				if (!found)
 					allResponded = false;
 			}		//COMMENT DOUBLE FOR IF UNRESPONSIVE, JUST COMPARING SIZES ((?) MIGHT BE ENOUGH TO ENSURE CONNECTION
-			if (allResponded)
+			if (allResponded)*/
 				nodeState = SENDING_LAYOUT;
 		}
 		if (nodeState == SENDING_LAYOUT) {
@@ -146,32 +145,33 @@ void FULLNode::cycle() {
 			}
 			clients.empty();
 			for (int i = 0; i < network.size(); i++)
-				postLayout(clients[i]->getReceiverData());				//Start posting Layout to all nodes in network
+				postLayout(network[i]);				//Start posting Layout to all nodes in network
 		}
 		break;
 	case WAITING_LAYOUT:
-		if (!servers.back()->getDoneListening())
-			servers.back()->listening();
-		else if (!servers.back()->getDoneDownloading())
-			servers.back()->receiveMessage();
-		else if(!servers.back()->getDoneSending())
-			servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
-		if (servers.back()->getDoneSending()) {
-			if (servers.back()->getState() == GOT_LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
-				JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
-				delete servers.back();
-				servers.pop_back();											//Remove useless server
-				Server* newServer = new Server(port);
-				newServer->startConnection();								//Create new server
-				servers.push_back(newServer);
-				nodeState = NETWORK_CREATED;								//And now we work as usual
+		if (servers.back()->getDoneListening()) {
+			if (servers.back()->getDoneDownloading()) {
+				if (servers.back()->getDoneSending()) {
+					cout << "Server done servering" << endl;
+					if (servers.back()->getState() == GOT_LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
+						JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
+						nodeState = NETWORK_CREATED;								//And now we work as usual
+
+					}
+					delete servers.back();
+					servers.pop_back();											//Remove useless server
+					Server* newServer = new Server(port);
+					newServer->startConnection();								//Create new server
+					servers.push_back(newServer);
+				}
+				else {
+					cout << "Node " << ownData.getID() << " Is RESPONING to a message" << endl;
+					servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
+				}
 			}
-			else {															//If layout wasn't correctly received
-				delete servers.back();
-				servers.pop_back();											//Remove useless server
-				Server* newServer = new Server(port);
-				newServer->startConnection();								//Create new server
-				servers.push_back(newServer);
+			else {
+				cout << "Node " << ownData.getID() << " Is RECEIVING a message" << endl;
+				servers.back()->receiveMessage();
 			}
 		}
 		break;
