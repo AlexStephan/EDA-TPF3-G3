@@ -16,6 +16,7 @@ FULLNode::FULLNode(NodeData ownData) : Node(ownData) {
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
 	JSONHandler.getNodesInLayout("manifest.json", ownData, nodesInManifest);
+
 	//Timing sh*t
 	clock = chrono::system_clock::now();
 	int timing = rand() % 1000 + 1;
@@ -57,6 +58,7 @@ void FULLNode::cycle() {
 	
 	switch (nodeState) {
 	case IDLE:
+		servers.back()->listening();
 		if (servers.back()->getDoneListening()) {
 			if (servers.back()->getDoneDownloading()){
 				if (servers.back()->getDoneSending()) {
@@ -87,10 +89,11 @@ void FULLNode::cycle() {
 			servers.back()->listening();
 		}
 		//Pick random timeout
-		if (nodeState == IDLE) {
+		if (nodeState == IDLE && !isLedaderNode) {
 			if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
 				nodeState = COLLECTING_MEMBERS;						//We take care of the layout
 				cout << "Node " << ownData.getID() << " Just got charged with creating the NETWORK! Entering COLLECTING MEMBERS state!" << endl;
+				isLedaderNode = true;
 				for (int i = 0; i < nodesInManifest.size(); i++) {
 					if (!(ownData == nodesInManifest[i]))
 						postPing(nodesInManifest[i]);		//Ping each node in manifest who isn't me (just a bit, rest of sending is done in COLLECTING_MEMBERS)

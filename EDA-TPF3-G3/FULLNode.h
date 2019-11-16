@@ -37,18 +37,10 @@ public:
 	NodeData getData(); //own nodeData
 	const vector<NodeData>* getNeighbours();
 	const vector<Transaction>* getPendingTX();
-	//NOTA: seria super chevere si se modificaran los metodos de Block
-	//para hacerlos const, asi la siguiente funcion es libre de devolver
-	//referencia a const Blockchain, y no a simplemente blockchain (si
-	//no hay getters const, no puedo acceder a los getters desde un
-	//objeto const !!!! Si durante el proceso de volver const los
-	//getters de Block tropezaron con alguna definicion que yo (Alex)
-	//hice -por imprudencia propia- avisarme y lo arreglo
 	const BlockChain* getBlockChain();
-
 	const Layout* getLayout();
-
 	fullNodeStates getState();
+
 private:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
@@ -75,6 +67,7 @@ private:
 	fullNodeStates nodeState;
 	vector <Server*> servers;								//Server List
 	vector <Client*> clients;								//Client Lis
+	static bool isLedaderNode; 
 	unsigned int port;										//Just port number
 	void keepListening();									//Make all available servers keep receiving messages, parse them if completed. Make last Server listen to void.
 	void keepSending();										//All active clients keep sending their messages, parse if completed, destroy if completed.
@@ -107,4 +100,3 @@ private:
 	void floodBlock(Block blck, NodeData sender);
 	void floodTx(Transaction tx, NodeData sender);
 };
-

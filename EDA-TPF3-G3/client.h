@@ -12,8 +12,8 @@
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 #define HTTP_OK "HTTP OK"
-#define MSG_NETWORK_READY	"a"
-#define MSG_NETWORK_NOT_READY	"B"
+#define MSG_NETWORK_READY	"READY"
+#define MSG_NETWORK_NOT_READY	"NOT_READY"
 
 /*******************************************************************************
  * NAMESPACES

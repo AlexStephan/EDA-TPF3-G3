@@ -113,6 +113,7 @@ errorType Client::sendRequest(void)
 	errorType err = { false, "OK Client" };
 	CURLMcode res;
 	res = curl_multi_perform(curlm, &running);
+	res = curl_multi_perform(curlm, &running);
 	if (res != CURLM_OK)
 	{
 		err = { true, "Connection error" };
@@ -131,16 +132,22 @@ ClientType Client::getClientType() { return cType; }
 NodeData Client::getReceiverData() { return receiver; }
 string Client::getTranslatedResponse()
 {
-	if (response.find("status:false") != string::npos)
+	if (response.find("\"status\":false}") != string::npos)
 	{
-		return "B";
+		return MSG_NETWORK_NOT_READY;
 	}
 
-	else
+	else if (response.find("\"status\":true}") != string::npos)
 	{
-		return "a";
+		return MSG_NETWORK_READY;
+	}
+
+	else if (response.find("\"edges\"") != string::npos)
+	{
+		return HTTP_OK;
 	}
 }
+
 
 
 /*******************************************************************************
