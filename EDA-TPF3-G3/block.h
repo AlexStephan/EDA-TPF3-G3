@@ -115,6 +115,7 @@ public:
 	void setPrevBlockId(string s) { previousBlockId = s; };
 	void setMerkleRoot(string s) { merkleRoot = s; };
 	void setNTx(unsigned long int n) { nTx = n; };
+	void setTransactions(vector <Transaction> txs) { tx = txs; };
 
 
 private:

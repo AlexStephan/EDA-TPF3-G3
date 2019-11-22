@@ -53,49 +53,13 @@ void jsonHandler::saveBlockChain(BlockChain& blockchain, string path)
 
 		//Transactions
 		auto arrayTrans = blocks["tx"];
-		for (auto& trans : arrayTrans)
+		vector <Transaction> auxTrans;
+		for (unsigned i = 0; i < arrayTrans.size(); i++)
 		{
-			Transaction auxTrans;
-
-			auto txId = trans["txid"];
-			auxTrans.txId = txId.get<string>();
-
-			auto nTxIn = trans["nTxin"];
-			auxTrans.nTxIn = nTxIn;
-
-			auto vIn = trans["vin"];
-			for (auto& elsi : vIn)
-			{
-				Vin auxVin;
-
-				auto tBlockId = elsi["blockid"];
-				auxVin.blockId = tBlockId.get<string>();
-
-				auto tTxId = elsi["txid"];
-				auxVin.txId = tTxId.get<string>();
-
-				auxTrans.vIn.push_back(auxVin);
-			}
-
-			auto nTxOut = trans["nTxout"];
-			auxTrans.nTxOut = nTxOut;
-
-			auto vOut = trans["vout"];
-			for (auto& elso : vOut)
-			{
-				Vout auxVout;
-
-				auto publicId = elso["publicid"];
-				auxVout.publicId = publicId.get<string>();
-
-				auto amount = elso["amount"];
-				auxVout.amount = amount;
-
-				auxTrans.vOut.push_back(auxVout);
-			}
-
-			block.addTx(auxTrans);
+			saveTx(arrayTrans[i].dump(), auxTrans);
 		}
+
+		block.setTransactions(auxTrans);
 
 		blockchain.push_back(block);
 	}
@@ -409,35 +373,10 @@ errorType jsonHandler::validateBlock(string blck)
 
 			//Transactions
 			auto arrayTrans = block["tx"];
-			for (auto& trans : arrayTrans)	//Parsea todas las transacciones
+
+			for (unsigned i = 0; i < arrayTrans.size(); i++)
 			{
-				if (arrayTrans.size() == ntx && trans.size() == TRANS_FIELDS)	//Si son 5 elementos
-				{
-					trans.at("txid");
-					int txin = trans.at("nTxin");
-					trans.at("vin");	//Se fija que sean los correctos
-					int txout = trans.at("nTxout");
-					trans.at("vout");
-
-					auto vIn = trans["vin"];
-					auto vOut = trans["vout"];
-					if (vIn.size() == txin && vOut.size() == txout)
-					{
-						for (auto& elsi : vIn)
-						{
-							elsi.at("blockid");
-							elsi.at("txid");
-						}
-
-						for (auto& elso : vOut)
-						{
-							elso.at("publicid");
-							elso.at("amount");
-						}
-
-						err = { false, "OK Block" };
-					}
-				}
+				err = validateTx(arrayTrans[i].dump());
 			}
 		}
 	}
@@ -449,6 +388,7 @@ errorType jsonHandler::validateBlock(string blck)
 
 	return err;
 }
+
 
 errorType jsonHandler::validateTx(string tx)
 {
