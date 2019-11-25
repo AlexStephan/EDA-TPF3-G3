@@ -506,7 +506,7 @@ string jsonHandler::createJsonLayout(Layout& layout)
 		auto kcyo = json::object();
 		for (int j = 0; j < layout[i].myNeighbours.size(); j++)
 		{
-			kcyo += {"tarjet" + to_string(j + 1), layout[i].myNeighbours[j].getID()};
+			kcyo += {"target" + to_string(j + 1), layout[i].myNeighbours[j].getID()};
 		}
 		lays["edges"][i] = kcyo;
 	}

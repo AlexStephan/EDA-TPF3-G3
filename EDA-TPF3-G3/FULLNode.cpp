@@ -55,7 +55,7 @@ FULLNode::~FULLNode() {
 void FULLNode::cycle() {
 	int gotReady = -1;
 	cout << "Node" << ownData.getID()<< " Node state: " << nodeState << endl;
-	
+	bool gotSomething = false;
 	switch (nodeState) {
 	case IDLE:
 		servers.back()->listening();
@@ -68,14 +68,19 @@ void FULLNode::cycle() {
 						cout << "Node " << ownData.getID() << " Just received PING! Entering WAITING LAYOUT state!"<< endl;
 						nodeState = WAITING_LAYOUT;
 					}
+					else {
+						gotSomething = false;
+					}
 					delete servers.back();
 					servers.pop_back();											//Remove useless server
 					Server* newServer = new Server(port);
 					cout << "NEW SERVER" << endl;
 					newServer->startConnection();								//Create new server
+					cout << "Node" << ownData.getID() << " created server to RECEIVE LAYOUT "<< endl;
 					servers.push_back(newServer);
 				}
 				else {
+					gotSomething = true;
 					cout << "Node " << ownData.getID() << " Is RESPONING to a message" << endl;
 					servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
 				}
@@ -90,7 +95,7 @@ void FULLNode::cycle() {
 			servers.back()->listening();
 		}
 		//Pick random timeout
-		if (nodeState == IDLE && !isLedaderNode) {
+		if (nodeState == IDLE && !isLedaderNode && !gotSomething) {
 			if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
 				nodeState = COLLECTING_MEMBERS;						//We take care of the layout
 				cout << "Node " << ownData.getID() << " Just got charged with creating the NETWORK! Entering COLLECTING MEMBERS state!" << endl;
@@ -114,6 +119,7 @@ void FULLNode::cycle() {
 				}
 				else if (clients[i]->getTranslatedResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
 					network.push_back(clients[i]->getReceiverData());
+					cout << "Node " << ownData.getID() << " ADDED " << clients[i]->getReceiverData().getSocket().getPort() << endl;
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
@@ -160,8 +166,12 @@ void FULLNode::cycle() {
 					cout << "Server done servering" << endl;
 					if (servers.back()->getState() == GOT_LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
 						JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
+						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, WAS LAYOUT YAY!!" << endl;
 						nodeState = NETWORK_CREATED;								//And now we work as usual
 
+					}
+					else {
+						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, but SERVER STATE wasn't GOT_LAYOUT!" << endl;
 					}
 					delete servers.back();
 					servers.pop_back();											//Remove useless server
@@ -185,10 +195,12 @@ void FULLNode::cycle() {
 			clients[i]->sendRequest();
 			if(clients[i]->getRunning() == 0)
 				if (clients[i]->getResponse() == HTTP_OK) {					//SPEAK WITH NETWORKING PPL
+					cout << "Node " << ownData.getID() << " succesfully sent LAYOUT to Node " << clients[i]->getReceiverData().getID() << endl;
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
 				else {
+					cout << "Node " << ownData.getID() << " tryied to send LAYOUT to Node " << clients[i]->getReceiverData().getID() << " but was refused!"<< endl;
 					postLayout(clients[i]->getReceiverData());			//Post layout again
 					delete clients[i];								//Destroy failed client
 					clients.erase(clients.begin() + i);				//Remove failed client from list
