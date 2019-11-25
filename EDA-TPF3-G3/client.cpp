@@ -44,7 +44,7 @@ void Client::POST(string path, string json)
 	if (curl && curlm)
 	{
 		//Le decimos a cURL que imprima todos los mensajes que se envían entre cliente y servidor.
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+		//curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
 		//Seteamos primero la pagina donde nos vamos a conectar.
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -61,7 +61,6 @@ void Client::POST(string path, string json)
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)(json.size()) + 1);
-		cout << json << endl; //DEBUG
 		curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, json.c_str());
 
 		curl_multi_add_handle(curlm, curl);
@@ -77,7 +76,7 @@ void Client::GET(string path, string json)
 	if (curl && curlm)
 	{
 		//Le decimos a cURL que imprima todos los mensajes que se envían entre cliente y servidor.
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+		//curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
 		//Seteamos primero la pagina donde nos vamos a conectar.
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
@@ -142,7 +141,7 @@ string Client::getTranslatedResponse()
 		return MSG_NETWORK_READY;
 	}
 
-	else if (response.find("\"edges\"") != string::npos)
+	else if (response.find("true") != string::npos)
 	{
 		return HTTP_OK;
 	}

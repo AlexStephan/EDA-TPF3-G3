@@ -28,5 +28,6 @@ void NETviewer::cycle() {
 		ImGui::SameLine();
 		ImGui::Text("IP: %s", listofSPV[i].getSocket().getIPString().c_str());
 	}
+	ImGui::End();
 }
 

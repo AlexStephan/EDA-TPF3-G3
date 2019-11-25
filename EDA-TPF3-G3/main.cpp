@@ -9,7 +9,6 @@ int main(void) {
 	EDAcoinsNet network;
 	NETcontroller controller(&network);
 
-	network.attach(controller);
 
 	while (controller.isRunning())
 		controller.cycle();

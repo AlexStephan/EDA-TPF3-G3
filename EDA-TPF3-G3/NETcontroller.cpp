@@ -18,6 +18,7 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 	network_created(false)
 {
 	netmodel->attach(netviewer);
+	netmodel->attach(*this);
 	findFullNames();
 	for (int i = 0; i < 4; i++)
 		IParr[i] = 0;

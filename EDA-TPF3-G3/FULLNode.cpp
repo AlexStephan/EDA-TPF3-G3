@@ -12,10 +12,11 @@
 /*******************************************************************************
 	CONSTRUCTOR
  ******************************************************************************/
-FULLNode::FULLNode(NodeData ownData) : Node(ownData) {
+FULLNode::FULLNode(NodeData _ownData) : Node(_ownData) {
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
 	JSONHandler.getNodesInLayout("manifest.json", ownData, nodesInManifest);
+	port = ownData.getSocket().getPort();
 
 	//Timing sh*t
 	clock = chrono::system_clock::now();
@@ -74,7 +75,6 @@ void FULLNode::cycle() {
 					delete servers.back();
 					servers.pop_back();											//Remove useless server
 					Server* newServer = new Server(port);
-					cout << "NEW SERVER" << endl;
 					newServer->startConnection();								//Create new server
 					cout << "Node" << ownData.getID() << " created server to RECEIVE LAYOUT "<< endl;
 					servers.push_back(newServer);
@@ -111,7 +111,7 @@ void FULLNode::cycle() {
 		for (int i = 0; i < clients.size(); i++) {
 			cout << "Node " << ownData.getID() << " Trying to PING PORT " << clients[i]->getReceiverData().getSocket().getPort() << endl;
 			clients[i]->sendRequest();
-			if (clients[i]->getRunning() == 0)
+			if (clients[i]->getRunning() == 0 && nodesInManifest.size() != network.size()) {
 				if (clients[i]->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
 					gotReady = i;
@@ -123,11 +123,12 @@ void FULLNode::cycle() {
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
-				else{												//If none of the responses is received
+				else {												//If none of the responses is received
 					postPing(clients[i]->getReceiverData());				//Post ping again
 					delete clients[i];								//Destroy failed client
 					clients.erase(clients.begin() + i);				//Remove failed client from list
 				}
+			}
 		}
 		if (nodesInManifest.size() == network.size()) {				//If the amount of nodes in the manifest is equal to the amount of nodes who responded NETWORK_NOT_READY
 			/*bool allResponded = true;
@@ -180,7 +181,7 @@ void FULLNode::cycle() {
 					servers.push_back(newServer);
 				}
 				else {
-					cout << "Node " << ownData.getID() << " Is RESPONING to a message" << endl;
+					cout << "Node " << ownData.getID() << " Is RESPONDING to a message" << endl;
 					servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
 				}
 			}
@@ -193,18 +194,19 @@ void FULLNode::cycle() {
 	case SENDING_LAYOUT:
 		for (int i = 0; i < clients.size(); i++) {
 			clients[i]->sendRequest();
-			if(clients[i]->getRunning() == 0)
-				if (clients[i]->getResponse() == HTTP_OK) {					//SPEAK WITH NETWORKING PPL
+			if (clients[i]->getRunning() == 0) {
+				if (clients[i]->getTranslatedResponse() == HTTP_OK) {					//SPEAK WITH NETWORKING PPL
 					cout << "Node " << ownData.getID() << " succesfully sent LAYOUT to Node " << clients[i]->getReceiverData().getID() << endl;
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
 				else {
-					cout << "Node " << ownData.getID() << " tryied to send LAYOUT to Node " << clients[i]->getReceiverData().getID() << " but was refused!"<< endl;
+					cout << "Node " << ownData.getID() << " tryied to send LAYOUT to Node " << clients[i]->getReceiverData().getID() << " but was refused!" << endl;
 					postLayout(clients[i]->getReceiverData());			//Post layout again
 					delete clients[i];								//Destroy failed client
 					clients.erase(clients.begin() + i);				//Remove failed client from list
 				}
+			}
 		}
 		if (clients.empty())										//If all clients were destroyed
 			nodeState = NETWORK_CREATED;							//All nodes received layout, and network is created
@@ -423,7 +425,6 @@ errorType FULLNode::postTransaction(unsigned int neighbourPos, Transaction tx)
 {
 	Client* client = new Client(neighbourhood[neighbourPos]);
 	string tx_ = JSONHandler.createJsonTx(tx);
-	cout << "JSON:" << endl << tx_ << endl;	//DEBUG
 	client->POST("/eda_coin/send_tx", tx_);
 	errorType err = client->sendRequest();
 	clients.push_back(client);
@@ -455,24 +456,24 @@ errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 
 errorType FULLNode::postMerkleBlock(Block blck, Transaction tx, unsigned int neighbourPos)
 {
-	errorType err = { false,"" };
 	Client* client = new Client(neighbourhood[neighbourPos]);
 	string merkle = JSONHandler.createJsonMerkle(blck, tx);
 	client->POST("/eda_coin/send_merkle_block", merkle);
-	client->sendRequest();
+	errorType err = client->sendRequest();
 	clients.push_back(client);
+
 	notifyAllObservers();
 	return err;
 }
 
 errorType FULLNode::postMerkleBlock(Block blck, Transaction tx, NodeData data)
 {
-	errorType err = { false,"" };
 	Client* client = new Client(data);
 	string merkle = JSONHandler.createJsonMerkle(blck, tx);
 	client->POST("/eda_coin/send_merkle_block", merkle);
-	client->sendRequest();
+	errorType err = client->sendRequest();
 	clients.push_back(client);
+
 	notifyAllObservers();
 	return err;
 }
@@ -540,7 +541,7 @@ string FULLNode::serverResponse(STATE rta, string msg)
 		break;
 
 	case LAYOUT:
-		message = createServerOkRsp("/eda_coin/send_filter");
+		message = createServerOkRsp("/eda_coin/NETWORK_LAYOUT");
 		break;
 
 	case PING:
