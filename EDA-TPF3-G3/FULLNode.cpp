@@ -71,6 +71,7 @@ void FULLNode::cycle() {
 					delete servers.back();
 					servers.pop_back();											//Remove useless server
 					Server* newServer = new Server(port);
+					cout << "NEW SERVER" << endl;
 					newServer->startConnection();								//Create new server
 					servers.push_back(newServer);
 				}
@@ -152,6 +153,7 @@ void FULLNode::cycle() {
 		}
 		break;
 	case WAITING_LAYOUT:
+		servers.back()->listening();
 		if (servers.back()->getDoneListening()) {
 			if (servers.back()->getDoneDownloading()) {
 				if (servers.back()->getDoneSending()) {

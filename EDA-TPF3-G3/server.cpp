@@ -95,10 +95,16 @@ void Server::connectionHandler(const boost::system::error_code& err)
 		cout << "Alguien se conecto" << endl << this->data.getSocket().getPortString() << endl;
 	}
 
-	else
+	else if(err)
 	{
 		cout << err.message() << endl;
 		cout << "Error while listening" << endl;
+	}
+
+
+	else
+	{
+		cout << "Listening" << endl;
 	}
 }
 
