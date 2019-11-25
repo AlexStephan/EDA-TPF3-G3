@@ -137,7 +137,7 @@ void SPVNode::keepListening() {
 		servers.erase(*k);
 	}
 	if (!deleteThis.empty())
-		notifyAllObservers();
+		notifyAllObservers(this);
 }
 
 void SPVNode::keepSending() {
@@ -173,7 +173,7 @@ void SPVNode::keepSending() {
 		clients.erase(*k);
 	}
 	if (!deleteThis.empty())
-		notifyAllObservers();
+		notifyAllObservers(this);
 }
 /***********************************************************************************
 	SEREVR REPONSE
@@ -308,7 +308,7 @@ errorType SPVNode::getBlockHeader(string id)
 	client->GET("/eda_coin/get_block_header/", header);
 	client->sendRequest();
 	clients.push_back(client);
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 
@@ -319,7 +319,7 @@ errorType SPVNode::postTransaction(Transaction tx)
 	client->POST("/eda_coin/send_tx", tx_);
 	errorType err = client->sendRequest();
 	clients.push_back(client);
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 
@@ -336,7 +336,7 @@ void SPVNode::verifyMerkleBlock(Block head) {
 	}
 	mBlocks.pop_back();
 	blockVerification.push_back(error);
-	notifyAllObservers();
+	notifyAllObservers(this);
 }
 
 errorType SPVNode::postFilter()
@@ -346,6 +346,6 @@ errorType SPVNode::postFilter()
 	client->POST("/eda_coin/send_filter", id);
 	errorType err = client->sendRequest();
 	clients.push_back(client);
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
