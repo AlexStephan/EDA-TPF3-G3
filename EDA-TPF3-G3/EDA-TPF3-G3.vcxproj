@@ -23,6 +23,7 @@
     <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
     <ClInclude Include="cryptoFunctions.h" />
+    <ClInclude Include="cryptoHandler.h" />
     <ClInclude Include="jsonHandler.h" />
     <ClInclude Include="imgui_stdlib.h" />
     <ClInclude Include="layout.h" />
@@ -71,6 +72,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="client.cpp" />
     <ClCompile Include="cryptoFunctions.cpp" />
+    <ClCompile Include="cryptoHandler.cpp" />
     <ClCompile Include="EDAcoinsNet.cpp" />
     <ClCompile Include="FULLcontroller.cpp" />
     <ClCompile Include="FULLNode.cpp" />

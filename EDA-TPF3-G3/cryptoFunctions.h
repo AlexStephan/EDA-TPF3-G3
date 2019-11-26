@@ -1,5 +1,12 @@
 #pragma once
 
+//       \\\\\           \\\\\           \\\\\           \\\\\    
+//      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o
+//______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_
+//toda la clase
+
+
+
 #include "cryptlib.h"
 #include "osrng.h"
 #include "eccrypto.h"

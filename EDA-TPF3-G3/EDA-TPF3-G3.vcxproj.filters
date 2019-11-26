@@ -186,6 +186,9 @@
     <ClInclude Include="cryptoFunctions.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
+    <ClInclude Include="cryptoHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -299,6 +302,9 @@
       <Filter>Source Files\_NODES</Filter>
     </ClCompile>
     <ClCompile Include="cryptoFunctions.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="cryptoHandler.cpp">
       <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
   </ItemGroup>
