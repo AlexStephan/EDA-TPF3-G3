@@ -180,6 +180,21 @@
     <ClInclude Include="layoutWindowHandler.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
+    <ClInclude Include="MINERNode.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="cryptoFunctions.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="cryptoHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="utxo.h">
+      <Filter>Header Files\Bitcoins</Filter>
+    </ClInclude>
+    <ClInclude Include="utxoHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -288,6 +303,18 @@
     </ClCompile>
     <ClCompile Include="layoutWindowHandler.cpp">
       <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="MINERNode.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="cryptoFunctions.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="cryptoHandler.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="utxoHandler.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,8 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="cryptoFunctions.h" />
+    <ClInclude Include="cryptoHandler.h" />
     <ClInclude Include="jsonHandler.h" />
     <ClInclude Include="imgui_stdlib.h" />
     <ClInclude Include="layout.h" />
@@ -44,6 +46,7 @@
     <ClInclude Include="layoutNumericConection.h" />
     <ClInclude Include="layoutWindowHandler.h" />
     <ClInclude Include="manifestHandler.h" />
+    <ClInclude Include="MINERNode.h" />
     <ClInclude Include="NETcontroller.h" />
     <ClInclude Include="NETviewer.h" />
     <ClInclude Include="Node.h" />
@@ -59,6 +62,8 @@
     <ClInclude Include="subject.h" />
     <ClInclude Include="TreeWindow.h" />
     <ClInclude Include="TreeWindowHandler.h" />
+    <ClInclude Include="utxo.h" />
+    <ClInclude Include="utxoHandler.h" />
     <ClInclude Include="WarningWindow.h" />
     <ClInclude Include="WarningWindowHandler.h" />
   </ItemGroup>
@@ -68,6 +73,8 @@
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="cryptoFunctions.cpp" />
+    <ClCompile Include="cryptoHandler.cpp" />
     <ClCompile Include="EDAcoinsNet.cpp" />
     <ClCompile Include="FULLcontroller.cpp" />
     <ClCompile Include="FULLNode.cpp" />
@@ -86,6 +93,7 @@
     <ClCompile Include="layoutWindowHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
+    <ClCompile Include="MINERNode.cpp" />
     <ClCompile Include="NETcontroller.cpp" />
     <ClCompile Include="NETviewer.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -98,6 +106,7 @@
     <ClCompile Include="SPVviewer.cpp" />
     <ClCompile Include="TreeWindow.cpp" />
     <ClCompile Include="TreeWindowHandler.cpp" />
+    <ClCompile Include="utxoHandler.cpp" />
     <ClCompile Include="WarningWindow.cpp" />
     <ClCompile Include="WarningWindowHandler.cpp" />
   </ItemGroup>
@@ -183,11 +192,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\local\boost_1_71_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\local\boost_1_71_0;C:\biblios\cryptopp820;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalOptions>-DOPENSSL_IA32_SSE2 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\biblios\boost_1_71_0\stage\lib;C:\local\boost_1_71_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\biblios\boost_1_71_0;C:\biblios\cryptopp820\Win32;C:\biblios\boost_1_71_0\stage\lib;C:\local\boost_1_71_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/DOPENSSL_IA32_SSE2 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -196,11 +208,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\include;D:\boost_1_71_0;C:\local\boost_1_71_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\biblios\curl-7.66.0\include;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\include;D:\boost_1_71_0;C:\local\boost_1_71_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\lib;D:\boost_1_71_0\lib64-msvc-14.2;C:\local\boost_1_71_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\biblios\curl-7.66.0\lib;C:\biblios\curl-7.66.0\include;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\lib;D:\boost_1_71_0\lib64-msvc-14.2;C:\local\boost_1_71_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
