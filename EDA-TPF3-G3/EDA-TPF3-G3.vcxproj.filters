@@ -189,6 +189,12 @@
     <ClInclude Include="cryptoHandler.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
+    <ClInclude Include="utxo.h">
+      <Filter>Header Files\Bitcoins</Filter>
+    </ClInclude>
+    <ClInclude Include="utxoHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -305,6 +311,9 @@
       <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
     <ClCompile Include="cryptoHandler.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="utxoHandler.cpp">
       <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
   </ItemGroup>
