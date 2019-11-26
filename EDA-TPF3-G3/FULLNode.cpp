@@ -170,6 +170,10 @@ void FULLNode::cycle() {
 						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, WAS LAYOUT YAY!!" << endl;
 						for (int i = 0; i < neighbourhood.size(); i++) {
 							cout << "Node " << ownData.getID() << "'s new neighbour is Node " << neighbourhood[i].getID() << endl;
+							for (int j = 0; j < nodesInManifest.size(); j++) {
+								if (nodesInManifest[j].getID() == neighbourhood[i].getID())
+									neighbourhood[i].setSocket(nodesInManifest[j].getSocket());
+							}
 						}
 						nodeState = NETWORK_CREATED;								//And now we work as usual
 						for (int i = 0; i < clients.size(); i++) {
