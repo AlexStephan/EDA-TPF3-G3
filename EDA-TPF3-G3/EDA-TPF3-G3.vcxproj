@@ -44,6 +44,7 @@
     <ClInclude Include="layoutNumericConection.h" />
     <ClInclude Include="layoutWindowHandler.h" />
     <ClInclude Include="manifestHandler.h" />
+    <ClInclude Include="MINERNode.h" />
     <ClInclude Include="NETcontroller.h" />
     <ClInclude Include="NETviewer.h" />
     <ClInclude Include="Node.h" />
@@ -86,6 +87,7 @@
     <ClCompile Include="layoutWindowHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
+    <ClCompile Include="MINERNode.cpp" />
     <ClCompile Include="NETcontroller.cpp" />
     <ClCompile Include="NETviewer.cpp" />
     <ClCompile Include="Node.cpp" />
