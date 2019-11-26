@@ -183,6 +183,9 @@
     <ClInclude Include="MINERNode.h">
       <Filter>Header Files\_NODES</Filter>
     </ClInclude>
+    <ClInclude Include="cryptoFunctions.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -294,6 +297,9 @@
     </ClCompile>
     <ClCompile Include="MINERNode.cpp">
       <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="cryptoFunctions.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
