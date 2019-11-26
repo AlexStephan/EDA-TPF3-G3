@@ -145,6 +145,8 @@ string Client::getTranslatedResponse()
 	{
 		return HTTP_OK;
 	}
+	else
+		return "";
 }
 
 

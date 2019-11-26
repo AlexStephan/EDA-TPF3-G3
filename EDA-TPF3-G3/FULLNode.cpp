@@ -165,11 +165,14 @@ void FULLNode::cycle() {
 			if (servers.back()->getDoneDownloading()) {
 				if (servers.back()->getDoneSending()) {
 					cout << "Server done servering" << endl;
-					if (servers.back()->getState() == GOT_LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
+					if (servers.back()->getState() == LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
 						JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
 						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, WAS LAYOUT YAY!!" << endl;
 						nodeState = NETWORK_CREATED;								//And now we work as usual
-
+						for (int i = 0; i < clients.size(); i++) {
+							delete clients[i];								//Destroy client
+							clients.erase(clients.begin() + i);				//Remove client from list
+						}
 					}
 					else {
 						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, but SERVER STATE wasn't GOT_LAYOUT!" << endl;
