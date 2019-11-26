@@ -106,6 +106,13 @@ bool EDAcoinsNet::checkIfConnectionMade()
 	return rta;
 }
 
+void EDAcoinsNet::insertKnownFULLdata(NodeData data)
+{
+	if (existAlready(data) == false) {
+		FULLdata.emplace_back(data);
+	}
+}
+
 bool EDAcoinsNet::existAlready(NodeData node)
 {
 	if ((existAlready(node.getID()) == false)
