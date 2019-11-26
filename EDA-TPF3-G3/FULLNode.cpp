@@ -309,7 +309,7 @@ void FULLNode::addTx(string trans) {
 ***********************************************************************************/
 void FULLNode::makeLayout()
 {
-	layoutGeneratorHandler layoutGen(ownData, network);
+	layoutGeneratorHandler layoutGen(ownData, neighbourhood);
 	layoutGen.generateLayout();
 	layout = layoutGen.getLayout();
 }
