@@ -1,5 +1,6 @@
 #include "NETcontroller.h"
 #include "imgui.h"
+#include "imgui_stdlib.h"
 
 #define FIRST	0
 #define LAST	2
@@ -112,7 +113,7 @@ void NETcontroller::drawControlWindow() {
 	ImGui::RadioButton("SPV Node", &type, 1); ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(250);
-	ImGui::InputTextWithHint("Node ID", "enter ID (\"name\" of the node) here", IDbuf, sizeof(IDbuf) - 1);
+	ImGui::InputText("Node ID", &IDname);
 
 	ImGui::SetNextItemWidth(50);
 	ImGui::DragInt("Port", &nodePort, 0.5);
@@ -129,17 +130,21 @@ void NETcontroller::drawControlWindow() {
 
 	if (!type) {
 		if(ImGui::Button("Create Full Node"))
-			warningHandler.check(netmodel->createFULLNode(NodeData(IDbuf, nodePort, IParr[0], IParr[1], IParr[2], IParr[3])));
+			warningHandler.check(netmodel->createFULLNode(NodeData(IDname, nodePort, IParr[0], IParr[1], IParr[2], IParr[3])));
 	}
 	else {
 		findFullNames();
 		ImGui::Combo("Seleccione el nodo FULL vecino al que se le postearan los filters", &currFilter, FullNames.c_str());
 		ImGui::Combo("Seleccione el nodo FULL vecino al que se le pediran los merkle blocks", &currHeader, FullNames.c_str());
 		if (ImGui::Button("Create SPV Node")) {
-			if (currFilter != currHeader)
-				warningHandler.check(netmodel->createSPVNode(NodeData(IDbuf, nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
+			if (IDname.size() != 0) {
+				if (currFilter != currHeader)
+					warningHandler.check(netmodel->createSPVNode(NodeData(IDname, nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
+				else
+					ImGui::Text("No puede elegir el mismo nodo para ambos campos");
+			}
 			else
-				ImGui::Text("No puede elegir el mismo nodo para ambos campos");
+				ImGui::Text("Por favor complete el campo Node ID");
 		}
 	}
 
