@@ -64,8 +64,8 @@ errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& give
 	return err;
 }
 
-errorType SPVNode::changeFilterNode(NodeData FilterNode) { errorType err = { false,"" }; filterNode = FilterNode; return err; }
-errorType SPVNode::changeHeaderNode(NodeData HeaderNode) { errorType err = { false,"" }; headerNode = HeaderNode; return err; }
+errorType SPVNode::changeFilterNode(NodeData FilterNode) { errorType err = { false,"" }; filterNode = FilterNode; notifyAllObservers(this);  return err; }
+errorType SPVNode::changeHeaderNode(NodeData HeaderNode) { errorType err = { false,"" }; headerNode = HeaderNode; notifyAllObservers(this); return err; }
 
 /***********************************************************************************
 	METHODS USED BY VIEWER
