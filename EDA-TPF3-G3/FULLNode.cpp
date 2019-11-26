@@ -95,7 +95,8 @@ void FULLNode::cycle() {
 			servers.back()->listening();
 		}
 		//Pick random timeout
-		if (nodeState == IDLE && !isLedaderNode && !gotSomething) {
+		//if (nodeState == IDLE && !isLedaderNode && !gotSomething) {
+		if (nodeState == IDLE && !gotSomething) {
 			if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
 				nodeState = COLLECTING_MEMBERS;						//We take care of the layout
 				cout << "Node " << ownData.getID() << " Just got charged with creating the NETWORK! Entering COLLECTING MEMBERS state!" << endl;
@@ -114,6 +115,9 @@ void FULLNode::cycle() {
 			if (clients[i]->getRunning() == 0 && nodesInManifest.size() != neighbourhood.size()) {
 				if (clients[i]->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
+					////////////////////////
+					//TRANSFORMAR LOS MENSAJES RECIBIDOS POR LA NETWORK CREADA (INTERPRETAR LAYOUT Y REEMPLAZAR MI BLOCKCHAIN POR LA MAS RECIENTE)
+					////////////////////////
 					gotReady = i;
 					break;
 				}
