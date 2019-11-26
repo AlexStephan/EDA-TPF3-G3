@@ -36,6 +36,8 @@ public:
 
 	bool checkIfConnectionMade();
 
+	void insertKnownFULLdata(NodeData data);
+
 private:
 	vector<NodeData> FULLdata; //listas de nodos full conocidos (del MANIFIESTO -todas- y las siguientes creadas -EN ESTA MAQUINA-)
 	//empieza con los datos de los FULL del genesis, y se incrementa cada vez q se cre exitosamente un FULL (en ESTA maquina)
