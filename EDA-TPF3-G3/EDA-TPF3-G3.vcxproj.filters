@@ -181,7 +181,7 @@
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
     <ClInclude Include="MINERNode.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\_NODES</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -293,7 +293,7 @@
       <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
     <ClCompile Include="MINERNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\_NODES</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
