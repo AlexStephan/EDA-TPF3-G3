@@ -175,6 +175,7 @@ void FULLNode::cycle() {
 									neighbourhood[i].setSocket(nodesInManifest[j].getSocket());
 							}
 						}
+						makeLayout();
 						nodeState = NETWORK_CREATED;								//And now we work as usual
 						for (int i = 0; i < clients.size(); i++) {
 							delete clients[i];								//Destroy client
