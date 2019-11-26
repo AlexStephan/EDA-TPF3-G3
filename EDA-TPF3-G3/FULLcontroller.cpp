@@ -4,7 +4,8 @@
 
 #define CHILD_W	220
 #define CHILD_H	330
-#define BUTTON_S	100
+#define BUTTON_S		100
+#define BUTTONS_PER_ROW	2
 
 void FULLcontroller::cycle()
 {
@@ -35,16 +36,24 @@ void FULLcontroller::drawWindow()
 	const char* BUTTON_TEXT[3] = {
 		"MAKE\nTX",
 		"MAKE\nBLOCK",
-		"ADD\nNEIGHBOUR"
+		"ADD NEIGHBOUR"
 	};
 
 	for (int i = 0; i < 3; i++) {
+		if ((i % BUTTONS_PER_ROW) != 0)
+			ImGui::SameLine();
 		ImGui::PushID(i);
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 0.8f, 0.8f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 0.9f, 0.9f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 1.0f, 1.0f));
-		if (ImGui::Button(BUTTON_TEXT[i], ImVec2(BUTTON_S, BUTTON_S)))
-			cstate = FULLcontrolState(FULL_MTX + i);
+		if (i < 2) {
+			if (ImGui::Button(BUTTON_TEXT[i], ImVec2(BUTTON_S, BUTTON_S)))
+				cstate = FULLcontrolState(FULL_MTX + i);
+		}
+		else {
+			if (ImGui::Button(BUTTON_TEXT[i], ImVec2(2 * BUTTON_S + 8, BUTTON_S)))
+				cstate = FULLcontrolState(FULL_MTX + i);
+		}
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}

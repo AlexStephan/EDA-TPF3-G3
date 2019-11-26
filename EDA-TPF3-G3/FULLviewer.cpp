@@ -43,11 +43,15 @@ void FULLviewer::cycle()
 
 void FULLviewer::drawWindow() {
 	ImGui::Begin(windowName.c_str());
+	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + CCHILD_W, ImGui::GetCursorPosY() - CHILD_H));
+	ImGui::BeginChild("FULL VIEW", ImVec2(CHILD_W, CHILD_H));
+
 	printNodeData();
 	printNeighbours();
 	printBlockList();
 	drawBigRedButton();
 
+	ImGui::EndChild();
 	ImGui::End();
 }
 
