@@ -111,14 +111,14 @@ void FULLNode::cycle() {
 		for (int i = 0; i < clients.size(); i++) {
 			cout << "Node " << ownData.getID() << " Trying to PING PORT " << clients[i]->getReceiverData().getSocket().getPort() << endl;
 			clients[i]->sendRequest();
-			if (clients[i]->getRunning() == 0 && nodesInManifest.size() != network.size()) {
+			if (clients[i]->getRunning() == 0 && nodesInManifest.size() != neighbourhood.size()) {
 				if (clients[i]->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
 					gotReady = i;
 					break;
 				}
 				else if (clients[i]->getTranslatedResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
-					network.push_back(clients[i]->getReceiverData());
+					neighbourhood.push_back(clients[i]->getReceiverData());
 					cout << "Node " << ownData.getID() << " ADDED " << clients[i]->getReceiverData().getSocket().getPort() << endl;
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
@@ -130,7 +130,7 @@ void FULLNode::cycle() {
 				}
 			}
 		}
-		if (nodesInManifest.size() == network.size()) {				//If the amount of nodes in the manifest is equal to the amount of nodes who responded NETWORK_NOT_READY
+		if (nodesInManifest.size() == neighbourhood.size()) {				//If the amount of nodes in the manifest is equal to the amount of nodes who responded NETWORK_NOT_READY
 			/*bool allResponded = true;
 			for (int i = 0; i < nodesInManifest.size(); i++) {
 				bool found = false;
@@ -155,8 +155,8 @@ void FULLNode::cycle() {
 				clients.erase(clients.begin() + i);				//Remove client from list
 			}
 			clients.empty();
-			for (int i = 0; i < network.size(); i++)
-				postLayout(network[i]);				//Start posting Layout to all nodes in network
+			for (int i = 0; i < neighbourhood.size(); i++)
+				postLayout(neighbourhood[i]);				//Start posting Layout to all nodes in network
 		}
 		break;
 	case WAITING_LAYOUT:
@@ -168,6 +168,9 @@ void FULLNode::cycle() {
 					if (servers.back()->getState() == LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
 						JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
 						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, WAS LAYOUT YAY!!" << endl;
+						for (int i = 0; i < neighbourhood.size(); i++) {
+							cout << "Node " << ownData.getID() << "'s new neighbour is Node " << neighbourhood[i].getID() << endl;
+						}
 						nodeState = NETWORK_CREATED;								//And now we work as usual
 						for (int i = 0; i < clients.size(); i++) {
 							delete clients[i];								//Destroy client
@@ -243,9 +246,10 @@ errorType FULLNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& giv
 }
 errorType FULLNode::makeBlock() {
 	errorType ret;
-	Block block;
+	Block block = blockChain.back();
 	//DO SOMETHING TO BLOCK
 	block.setHeight(blockChain.size() + 1);
+	block.setBlockId((blockChain.back().getBlockID()) + "A");
 	//END OF BLOCK CONFIG
 	blockChain.push_back(block);
 	for (int i = 0; i < neighbourhood.size(); i++)
@@ -371,6 +375,8 @@ void FULLNode::keepListening() {
 			break;
 		}
 	}
+	if (!deleteThis.empty())
+		notifyAllObservers(this);
 	i = servers.begin();
 	for (; i != servers.end() - 1; i++) {
 		if ((*i)->getDoneSending())
@@ -380,45 +386,18 @@ void FULLNode::keepListening() {
 	for (; k != deleteThis.end(); k++) {
 		servers.erase(*k);
 	}
-	if (!deleteThis.empty())
-		notifyAllObservers(this);
 }
 
 void FULLNode::keepSending() {
-	if (clients.empty())
-		return;
-	vector<vector<Client*>::iterator> deleteThis;
-	vector<Client*> doneClients;
-
-	auto i = clients.begin();
-	for (; i != clients.end(); i++) {
-		if ((*i)->getRunning() == 0) {
-			cout << "Client did it's job!" << endl;
-			doneClients.push_back(*i);
-			deleteThis.push_back(i);
+	for (int i = 0; i < clients.size(); i++) {
+		clients[i]->sendRequest();
+		if (clients[i]->getRunning() == 0) {
+			//FULLNODES DONT EXPECT ANSWER TO POSTS IN NETWORK_READY STATE (?)
+			delete clients[i];								//Destroy client
+			clients.erase(clients.begin() + i);				//Remove client from list
+			notifyAllObservers(this);
 		}
-		else
-			(*i)->sendRequest();
 	}
-	//Handle finished clients
-	auto j = doneClients.begin();
-	for (; j != doneClients.end(); j++) {
-		/*//Parse their msgs
-		if ((*j)->getClientType() == POSTClient) {
-
-		}
-		else if ((*j)->getClientType() == GETClient) {
-			saveMerkleBlock((*j)->getResponse());
-		}*/														//FULLNODES DONT EXPECT ANSWER TO POSTS IN NETWORK_READY STATE (?)
-		//And delete them
-		delete* j;
-	}
-	auto k = deleteThis.begin();
-	for (; k != deleteThis.end(); k++) {
-		clients.erase(*k);
-	}
-	if (!deleteThis.empty())
-		notifyAllObservers(this);
 }
 
 /***********************************************************************************
