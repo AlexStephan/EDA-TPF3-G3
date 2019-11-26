@@ -365,12 +365,15 @@ void FULLNode::keepListening() {
 			JSONHandler.saveTx((*j)->getMessage(), txs);
 			found = false;
 			for (int i = 0; i < txs.size() - 1; i++) {
-				if (txs.back().txId == txs[i].txId)
+				if ((txs.size() != 1) && (txs.back().txId == txs[i].txId))
 					found = true;
 			}
 			if(found)														
-				blockChain.pop_back();										//Remove tx if repeated
-			floodTx(txs.back(), (*j)->getSender());							//And flood the tx
+				txs.pop_back();										//Remove tx if repeated
+			else{
+				if(!txs.empty())
+					floodTx(txs.back(), (*j)->getSender());							//And flood the tx
+			}
 			break;
 		case MERKLE:														//FULL NODES DONT CARE ABOUT RECEIVING MERKLE BLOCKS
 			break;
