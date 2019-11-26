@@ -24,9 +24,14 @@ using json = nlohmann::json;
 ***********************************************************************************/
 void jsonHandler::saveBlockChain(BlockChain& blockchain, string path)
 {
-	std::ifstream i(path.c_str()); //Se puede cambiar, no se como recibo el JSON;
 	json j;
-	i >> j;
+	std::ifstream i(path.c_str()); //Se puede cambiar, no se como recibo el JSON;
+
+	if (i.is_open())
+		i >> j;
+
+	else 
+		j = json::parse(path);
 
 	for (auto& blocks : j)
 	{
