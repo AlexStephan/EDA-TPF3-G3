@@ -16,9 +16,9 @@ public:
 	void attach(Observer& o) { observers.push_back(&o); };
 	void detach(vector<Observer*>::iterator pos) { observers.erase(pos); };
 protected:
-	void notifyAllObservers(void) {
+	void notifyAllObservers(void* esta) {
 		for (int i=0;i<observers.size();i++)
-			observers[i]->update(this);
+			observers[i]->update(esta);
 	}
 	vector<Observer*> observers;
 };

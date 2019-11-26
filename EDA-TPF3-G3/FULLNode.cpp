@@ -288,12 +288,12 @@ fullNodeStates FULLNode::getState()
 ***********************************************************************************/
 void FULLNode::addBlock(Block block) {
 	blockChain.push_back(block);
-	notifyAllObservers();
+	notifyAllObservers(this);
 }
 
 void FULLNode::addTx(string trans) {
 	JSONHandler.saveTx(trans, txs);
-	notifyAllObservers();
+	notifyAllObservers(this);
 }
 //void FULLNode::saveMerkleBlock(string merkleBlock) {}
 
@@ -378,7 +378,7 @@ void FULLNode::keepListening() {
 		servers.erase(*k);
 	}
 	if (!deleteThis.empty())
-		notifyAllObservers();
+		notifyAllObservers(this);
 }
 
 void FULLNode::keepSending() {
@@ -415,7 +415,7 @@ void FULLNode::keepSending() {
 		clients.erase(*k);
 	}
 	if (!deleteThis.empty())
-		notifyAllObservers();
+		notifyAllObservers(this);
 }
 
 /***********************************************************************************
@@ -429,7 +429,7 @@ errorType FULLNode::postTransaction(unsigned int neighbourPos, Transaction tx)
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 
@@ -450,7 +450,7 @@ errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 
@@ -462,7 +462,7 @@ errorType FULLNode::postMerkleBlock(Block blck, Transaction tx, unsigned int nei
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 
@@ -474,7 +474,7 @@ errorType FULLNode::postMerkleBlock(Block blck, Transaction tx, NodeData data)
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 
@@ -486,7 +486,7 @@ errorType FULLNode::postLayout(NodeData sock)
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 
@@ -499,7 +499,7 @@ errorType FULLNode::postPing(NodeData sock)
 	errorType err = client->sendRequest();
 	clients.push_back(client);
 
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return err;
 }
 

@@ -34,7 +34,7 @@ errorType EDAcoinsNet::createFULLNode(NodeData newNode)
 		creationState.error = true;
 		creationState.datos = "Failed to create FULL Node:\nSpecified socket or ID is already used";
 	}
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return creationState;
 }
 errorType EDAcoinsNet::createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode)
@@ -51,7 +51,7 @@ errorType EDAcoinsNet::createSPVNode(NodeData newNode, NodeData FilterNode, Node
 		creationState.error = true;
 		creationState.datos = "Failed to create SPV Node:\nSpecified socket or ID is already used";
 	}
-	notifyAllObservers();
+	notifyAllObservers(this);
 	return creationState;
 }
 const vector<NodeData>& EDAcoinsNet::getKnownFULLdata()
