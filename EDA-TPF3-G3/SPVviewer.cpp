@@ -1,5 +1,6 @@
 #include "SPVviewer.h"
 #include "imgui.h"
+#include "printTXroutine.h"
 
 #define NOT_DATA	"NO DATA",0,0,0,0,0
 
@@ -22,6 +23,8 @@ void SPVviewer::update(void* n)
 
 void SPVviewer::cycle() {
 	ImGui::Begin(windowName.c_str());
+	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + CCHILD_W, ImGui::GetCursorPosY() - CHILD_H));
+	ImGui::BeginChild("SPV VIEW", ImVec2(CHILD_W, CHILD_H));
 
 	ImGui::Text("SPV Node ID: %s", nodedata.getID());
 	ImGui::Text("SPV Node Port: %d", nodedata.getSocket().getPort());
@@ -38,5 +41,6 @@ void SPVviewer::cycle() {
 		ImGui::Text("Header Node IP: %s", headernodedata.getSocket().getIPString());
 	}
 
+	ImGui::EndChild();
 	ImGui::End();
 }

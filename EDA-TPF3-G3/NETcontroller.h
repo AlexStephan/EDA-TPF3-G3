@@ -34,7 +34,7 @@ private:
 	NETviewer netviewer;
 	bool running;
 	int type;
-	char IDbuf[50];
+	string IDname;
 	int nodePort;
 	int IParr[4];
 	int currFilter;

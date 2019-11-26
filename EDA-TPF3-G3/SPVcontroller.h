@@ -13,7 +13,7 @@ public:
 	SPVcontroller(SPVNode* model) : snode(model), windowID(model->getData().getID()),
 		warningHandler(model->getData().getID()) {
 		cstate = SPV_MENU;
-		currTX = 0;
+		currTX = 1;
 	}
 	virtual void update(void*);
 	void cycle();
@@ -21,7 +21,7 @@ public:
 private:
 	void drawWindow(); 
 	void drawMTX();
-	bool drawV(Vin&, Vout&);
+	bool drawV(Vin&, Vout&, int);
 	void drawPFilter();
 	void drawChangeFN();
 	void drawChangeHN();
@@ -39,7 +39,7 @@ private:
 	*/
 	int cstate;
 	int currTX;
-	string auxstr;
+	vector<string> auxstr;
 	vector<Vin> txVin;
 	vector<Vout> txVout;
 	string newID;
