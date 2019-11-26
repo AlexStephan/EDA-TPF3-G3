@@ -165,6 +165,10 @@ void NETcontroller::makeFirstFULL()
 	for (size_t i = FIRST; i <= LAST; i++) {
 		netmodel->createFULLNode(genesisNodes[i]);
 	}
+
+	for (size_t i = 0; i < genesisNodes.size(); i++) {
+		netmodel->insertKnownFULLdata(genesisNodes[i]);
+	}
 }
 
 void NETcontroller::checkIfDoneConnecting()
