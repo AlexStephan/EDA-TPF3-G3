@@ -18,13 +18,17 @@ typedef std::string newIDstr;
 typedef unsigned long int longN;
 typedef vector<newIDstr> MerkleTree;
 
-
+//       \\\\\           \\\\\           \\\\\           \\\\\    
+//      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o
+//______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_
 /********
  * VIN	*
 ********/
 struct Vin {
 	string blockId;
 	string txId;
+	int nutxo;
+	string signature;
 };
 
 /********
