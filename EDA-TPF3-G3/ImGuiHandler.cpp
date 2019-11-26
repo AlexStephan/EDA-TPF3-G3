@@ -9,6 +9,7 @@ ImGuiHandler::ImGuiHandler(ImVec4 bColor) : backColor(bColor)
 	al_install_keyboard();
 	al_install_mouse();
 	al_init_primitives_addon();
+	al_init_image_addon();
 	al_set_new_display_flags(ALLEGRO_RESIZABLE);
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
 	al_set_window_title(display, "TP FINAL PARTE 3");

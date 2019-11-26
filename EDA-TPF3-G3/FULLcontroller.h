@@ -23,7 +23,7 @@ private:
 	void drawMBlock();
 	void drawMTX();
 	void drawAddNode();
-	bool drawV(Vin&, Vout&);
+	bool drawV(Vin&, Vout&, int);
 	void newPortSelect();
 	void newIpSelect();
 	void returnButton();
@@ -44,7 +44,7 @@ private:
 	string newID;
 	int cstate;
 	int currTX;
-	string auxstr;
+	vector<string> auxstr;
 	//int currNeighbour;
 	vector<Vout> txVout;
 	vector<Vin> txVin;

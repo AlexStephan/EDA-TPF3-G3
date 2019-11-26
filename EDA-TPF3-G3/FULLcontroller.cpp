@@ -4,7 +4,8 @@
 
 #define CHILD_W	220
 #define CHILD_H	330
-#define BUTTON_S	100
+#define BUTTON_S		100
+#define BUTTONS_PER_ROW	2
 
 void FULLcontroller::cycle()
 {
@@ -35,16 +36,24 @@ void FULLcontroller::drawWindow()
 	const char* BUTTON_TEXT[3] = {
 		"MAKE\nTX",
 		"MAKE\nBLOCK",
-		"ADD\nNEIGHBOUR"
+		"ADD NEIGHBOUR"
 	};
 
 	for (int i = 0; i < 3; i++) {
+		if ((i % BUTTONS_PER_ROW) != 0)
+			ImGui::SameLine();
 		ImGui::PushID(i);
 		ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 0.8f, 0.8f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 0.9f, 0.9f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(i / 12.0f + 0.5f, 1.0f, 1.0f));
-		if (ImGui::Button(BUTTON_TEXT[i], ImVec2(BUTTON_S, BUTTON_S)))
-			cstate = FULLcontrolState(FULL_MTX + i);
+		if (i < 2) {
+			if (ImGui::Button(BUTTON_TEXT[i], ImVec2(BUTTON_S, BUTTON_S)))
+				cstate = FULLcontrolState(FULL_MTX + i);
+		}
+		else {
+			if (ImGui::Button(BUTTON_TEXT[i], ImVec2(2 * BUTTON_S + 8, BUTTON_S)))
+				cstate = FULLcontrolState(FULL_MTX + i);
+		}
 		ImGui::PopStyleColor(3);
 		ImGui::PopID();
 	}
@@ -67,22 +76,35 @@ void FULLcontroller::drawMTX() {
 	ImGui::Text("\nMAKE A TRANSACTION\n\n");
 
 	for (int i = 0; i < currTX; i++) {
-		if (drawV(txVin[i], txVout[i])) {
+		if (txVin.size() == 0 || txVout.size() == 0) {
+			Vin VinAux;
+			txVin.push_back(VinAux);
+			Vout VoutAux;
+			txVout.push_back(VoutAux);
+			string aux;
+			auxstr.push_back(aux);
+		}
+		if (drawV(txVin[i], txVout[i], i) && (txVin.size() != 1 && txVout.size() != 1)) {
 			currTX--;
 			for (int j = i; j < currTX; j++) {
 				txVin[j] = txVin[j + 1];
 				txVout[j] = txVout[j + 1];
+				auxstr[j] = auxstr[j + 1];
 			}
+			txVin.resize(txVin.size() - 1);
 			txVout.resize(txVout.size() - 1);
+			auxstr.resize(auxstr.size() - 1);
 		}
 	}
 	
-	if (txVout[currTX - 1].publicId.size() && txVout[currTX - 1].publicId.size()) {
+	if (txVin[currTX - 1].blockId.size() && txVout[currTX - 1].publicId.size()) {
 		Vin vin;
 		Vout vout;
+		string aux;
 		currTX++;
 		txVin.push_back(vin);
 		txVout.push_back(vout);
+		auxstr.push_back(aux);
 	}
 
 	ImGui::Text("Amount of Vins and Vouts: %d", currTX - 1);
@@ -95,21 +117,24 @@ void FULLcontroller::drawMTX() {
 
 }
 
-bool FULLcontroller::drawV(Vin& vin, Vout& vout){
+bool FULLcontroller::drawV(Vin& vin, Vout& vout, int i){
 	bool r = false;
 	
 	ImGui::Text("Vin");
-	ImGui::InputText("Block ID", &vin.blockId);
-	ImGui::InputText("Transaction ID", &vin.txId);
+
+	ImGui::InputText(("Block ID##" + to_string(i)).c_str(), &vin.blockId);
+	ImGui::InputText(("Transaction ID##" + to_string(i)).c_str(), &vin.txId);
 
 	ImGui::Text("Vout");
-	ImGui::InputText("Public ID", &vout.publicId);
+	ImGui::InputText(("Public ID##" + to_string(i)).c_str(), &vout.publicId);
 	ImGui::SetNextItemWidth(50);
-	ImGui::InputText("Monto", &auxstr);
-	vout.amount = _atoi64(auxstr.c_str());
+	ImGui::InputText(("Monto##" + to_string(i)).c_str(), &auxstr[i]);
+	vout.amount = _atoi64(auxstr[i].c_str());
 	
-	if (ImGui::Button("Delete##"))
+	if (ImGui::Button(("Delete##" + to_string(i)).c_str()))
 		r = true;
+
+	ImGui::NewLine();
 
 	return r;
 }
