@@ -132,6 +132,7 @@ void NETcontroller::drawControlWindow() {
 			warningHandler.check(netmodel->createFULLNode(NodeData(IDbuf, nodePort, IParr[0], IParr[1], IParr[2], IParr[3])));
 	}
 	else {
+		findFullNames();
 		ImGui::Combo("Seleccione el nodo FULL vecino al que se le postearan los filters", &currFilter, FullNames.c_str());
 		ImGui::Combo("Seleccione el nodo FULL vecino al que se le pediran los merkle blocks", &currHeader, FullNames.c_str());
 		if (ImGui::Button("Create SPV Node")) {
@@ -144,9 +145,9 @@ void NETcontroller::drawControlWindow() {
 
 	ImGui::End();
 }
-	
-void NETcontroller::findFullNames() {
 
+void NETcontroller::findFullNames() {
+	FullNames.clear();
 	for (int i = 0; i < netmodel->getFULLamount(); i++) {
 		FullNames += netmodel->getFULLnode(i)->getData().getID();
 		FullNames += '\0';
