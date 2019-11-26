@@ -112,6 +112,10 @@ void FULLcontroller::drawMTX() {
 		txVin.pop_back();
 		txVout.pop_back();
 		warningHandler.check(fnode->makeTX(txVout, txVin));
+		txVin.clear();
+		txVout.clear();
+		auxstr.clear();
+		currTX = 1;
 		cstate = FULL_MENU;
 	}
 
