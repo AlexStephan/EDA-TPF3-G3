@@ -29,6 +29,7 @@ errorType EDAcoinsNet::createFULLNode(NodeData newNode)
 	if (existAlready(newNode) == false) {
 		FULLNode* node = new FULLNode(newNode);
 		FULLvector.emplace_back(node);
+		FULLdata.emplace_back(node->getData());
 	}
 	else {
 		creationState.error = true;
@@ -46,6 +47,7 @@ errorType EDAcoinsNet::createSPVNode(NodeData newNode, NodeData FilterNode, Node
 	if (existAlready(newNode) == false) {
 		SPVNode* node = new SPVNode(newNode, FilterNode, HeaderNode);
 		SPVvector.emplace_back(node);
+		SPVdata.emplace_back(node->getData());
 	}
 	else {
 		creationState.error = true;
