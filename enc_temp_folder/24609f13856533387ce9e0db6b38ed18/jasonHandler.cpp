@@ -166,7 +166,7 @@ Filter jsonHandler::saveFilter(string filter)
 	Filter aux;
 	json filt = json::parse(filter);
 	aux.publicID = filt["Id"].get<string>();
-	aux.ip = crackIp(filt["ip"].get<string>());
+	aux.ip = crackIp(filt['ip'].get<string>());
 	aux.port = filt["port"];
 
 	return aux;
