@@ -342,7 +342,7 @@ void SPVNode::verifyMerkleBlock(Block head) {
 errorType SPVNode::postFilter()
 {
 	Client* client = new Client(filterNode);
-	string id = JSONHandler.createJsonFilter(filterNode);
+	string id = JSONHandler.createJsonFilter(ownData);
 	client->POST("/eda_coin/send_filter", id);
 	errorType err = client->sendRequest();
 	clients.push_back(client);
