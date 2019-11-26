@@ -5,6 +5,8 @@
 #define FIRST	0
 #define LAST	2
 
+typedef enum errSPVStates{NONE, SAME_NODE, NO_ID};
+
 #define WINDOW_NAME "EDA Coins Net"
 
 #define CLEAN(vector)	for(int i=0;i<(vector).size();i++) delete (vector)[i]
@@ -137,15 +139,21 @@ void NETcontroller::drawControlWindow() {
 		ImGui::Combo("Seleccione el nodo FULL vecino al que se le postearan los filters", &currFilter, FullNames.c_str());
 		ImGui::Combo("Seleccione el nodo FULL vecino al que se le pediran los merkle blocks", &currHeader, FullNames.c_str());
 		if (ImGui::Button("Create SPV Node")) {
+			errSPV = NONE;
 			if (IDname.size() != 0) {
 				if (currFilter != currHeader)
 					warningHandler.check(netmodel->createSPVNode(NodeData(IDname, nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
 				else
-					ImGui::Text("No puede elegir el mismo nodo para ambos campos");
+					errSPV = SAME_NODE;
 			}
 			else
-				ImGui::Text("Por favor complete el campo Node ID");
+				errSPV = NO_ID;
 		}
+		if(errSPV == SAME_NODE)
+			ImGui::Text("No puede elegir el mismo nodo para ambos campos");
+		else if(errSPV == NO_ID)
+			ImGui::Text("Por favor complete el campo Node ID");
+
 	}
 
 	ImGui::End();
