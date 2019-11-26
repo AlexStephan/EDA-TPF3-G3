@@ -3,11 +3,17 @@
  ******************************************************************************/
 #include "FULLNode.h"
 #include "layoutGeneratorHandler.h"
+#include "json.hpp"
 
  /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 #define CRLF "\x0D\x0A"
+
+/*******************************************************************************
+ * NAMESPACES
+ ******************************************************************************/
+using json = nlohmann::json;
 
 /*******************************************************************************
 	CONSTRUCTOR
@@ -115,9 +121,7 @@ void FULLNode::cycle() {
 			if (clients[i]->getRunning() == 0 && nodesInManifest.size() != neighbourhood.size()) {
 				if (clients[i]->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
 					nodeState = SENDING_LAYOUT;
-					////////////////////////
-					//TRANSFORMAR LOS MENSAJES RECIBIDOS POR LA NETWORK CREADA (INTERPRETAR LAYOUT Y REEMPLAZAR MI BLOCKCHAIN POR LA MAS RECIENTE)
-					////////////////////////
+					manageNetworkReady(clients[i]->getResponse());
 					gotReady = i;
 					break;
 				}
@@ -798,4 +802,13 @@ void FULLNode::floodTx(Transaction tx, NodeData sender) {
 		if (sender.getID() != neighbourhood[i].getID())					//If neighbour is not the one who sent the tx
 			postTransaction(i, tx);										//Send neighbour the tx
 	}
+}
+
+
+void FULLNode::manageNetworkReady(string rta)
+{
+	json rt = json::parse(rta);
+	string blckchain = rt["blockchain"].dump();
+	JSONHandler.saveBlockChain(blockChain, blckchain);
+
 }

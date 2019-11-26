@@ -65,6 +65,7 @@ void jsonHandler::saveBlockChain(BlockChain& blockchain, string path)
 	}
 }
 
+
 void jsonHandler::saveTx(string _trans, vector<Transaction>& txs)
 {
 	json trans;
