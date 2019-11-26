@@ -164,6 +164,7 @@ void SPVNode::keepSending() {
 			//AND COMPARE TO LATEST MERKLE BLOCK RECEIVED IN mBlocks
 			verifyMerkleBlock(JSONHandler.saveBlockHeader((*j)->getResponse()));
 			//POP BACK LATEST MERKLE BLOCK IN LIST
+			mBlocks.pop_back();
 		}
 		//And delete completed client
 		delete* j;
@@ -334,7 +335,6 @@ void SPVNode::verifyMerkleBlock(Block head) {
 		error.error = false;
 		error.datos = "Merkle Block and Block Header match!";
 	}
-	mBlocks.pop_back();
 	blockVerification.push_back(error);
 	notifyAllObservers(this);
 }

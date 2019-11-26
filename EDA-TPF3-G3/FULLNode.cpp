@@ -379,6 +379,13 @@ void FULLNode::keepListening() {
 			break;
 		case FILTER:
 			filters.push_back(JSONHandler.saveFilter((*j)->getMessage()));
+			found = false;
+			for (int i = 0; i < neighbourhood.size(); i++) {
+				if (neighbourhood[i] == (*j)->getSender())
+					found = true;
+			}
+			if (!found)
+				neighbourhood.push_back((*j)->getSender());					//If Filter sender is not a neighbour, we add it
 			askedForFilter.push_back((*j)->getSender());
 			break;
 		}
