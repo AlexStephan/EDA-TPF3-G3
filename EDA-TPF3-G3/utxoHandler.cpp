@@ -42,6 +42,75 @@ longN utxoHandler::balance(string publicKey)
 	return money;
 }
 
+bool utxoHandler::createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx)
+{
+	bool validez = true;
+
+	tx.vOut = receivers;
+	tx.nTxOut = receivers.size();
+
+	//Dinero que se destina a los vouts
+	longN neededMoney = 0;
+	for (size_t i = 0; i < tx.nTxOut; i++)
+		neededMoney += tx.vOut[i].amount;
+
+	//Dinero disponible
+	longN availableMoney = balance(myPublicKey);
+
+	if (availableMoney < neededMoney) {
+		validez = false;
+	}
+
+	//busco los indices de todas las utxo que tengo disponibles
+	vector<size_t> myUtxoIndex = {};
+	for (size_t i = 0; i < utxoList.size(); i++) {
+		if (utxoList[i].ownerID == myPublicKey) {
+			myUtxoIndex.push_back(i);
+		}
+	}
+
+	//coloco los vins necesarios para llegar al monto
+	if (validez == true) {
+		longN insertedMoney = 0;
+
+		while (insertedMoney < neededMoney && myUtxoIndex.size()>0) {
+			tx.vIn.emplace_back(utxo2vin(myUtxoIndex.back()));
+			insertedMoney += utxoList[myUtxoIndex.back()].amount;
+			myUtxoIndex.pop_back();
+		}//NOTA!!! Si exploto aca el programa, avisarle a Alex
+
+		if (insertedMoney < neededMoney) {
+			validez = false;
+			std::cout << endl << endl
+				<< "***********************************************" << endl
+				<< "*          PROBLEMAS:                         *" << endl
+				<< "*                                             *" << endl
+				<< "* Aunque dije que si, la cantidad de utxo que *" << endl
+				<< "* estan disponibles para esta ID NO ALCANZA   *" << endl
+				<< "* para pagar a los destinatarios. Lo siento.  *" << endl
+				<< "* FAVOR DE DESPERTAR A ALEX                   *" << endl
+				<< "***********************************************" << endl
+				<< endl << endl;
+		}
+		else if (insertedMoney > neededMoney) {
+			Vout diferencia;
+			diferencia.publicId = myPublicKey;
+			diferencia.amount = insertedMoney - neededMoney;
+			tx.vOut.emplace_back(diferencia);
+		}
+
+
+	}
+	else {
+		while (myUtxoIndex.size() > 0) {
+			tx.vIn.emplace_back(utxo2vin(myUtxoIndex.back()));
+			myUtxoIndex.pop_back();
+		}
+	}
+
+	return validez;
+}
+
 //se fija en el txid
 bool utxoHandler::TxExistAlready(Transaction& tx)
 {
@@ -312,4 +381,28 @@ void utxoHandler::eraseUtxo(Vin& vin)
 			<<"***********************************************" << endl
 			<< endl << endl;
 	}
+}
+
+Vin utxoHandler::utxo2vin(size_t index)
+{
+	Vin vin;
+	if (index >= utxoList.size()) {
+		std::cout << endl << endl
+			<< "***********************************************" << endl
+			<< "*          PROBLEMAS:                         *" << endl
+			<< "*                                             *" << endl
+			<< "* Se intento transformar un utxo con un indice*" << endl
+			<< "* que excede el tamaño de la lista. Woops     *" << endl
+			<< "* Comunicarse con Alex, aunque sean las 5 AM  *" << endl
+			<< "***********************************************" << endl
+			<< endl << endl;
+	}
+	else {
+		utxo& currUtxo = utxoList[index];
+		vin.blockId = currUtxo.blockID;
+		vin.txId = currUtxo.txID;
+		vin.nutxo = currUtxo.nutxo;
+	}
+
+	return vin;
 }

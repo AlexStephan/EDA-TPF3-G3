@@ -31,6 +31,7 @@ public:
 		METHODS USED BY CONTROLLER
 	***********************************************************************************/
 	errorType makeTX(const vector<Vout>& receivers, const vector<Vin>& givers);
+
 	errorType makeBlock(); //"MINAR"
 	errorType addNeighbour(NodeData neighbour); //agrega fulls
 
@@ -102,6 +103,11 @@ protected:
 	cryptoHandler cryptohandler;
 	utxoHandler utxohandler;
 
+	//recibe: lista de destinatarios (ID + monto)
+	//devuelve: bool: indica si es valido o no la tx (si se hizo una falsa a proposito o no), true = valido, false = falsa
+	//			tx: modifica la tx ingresada (se supone vacia) confeccionandola, para poder floodearla
+	//NOTA: si es falsa, floodearla, mandar un mensaje de warning del tipo "hehe, dia de los inocentes" (errorType), pero NO INGRESARLA, no ser tarados
+	bool makeSmartTX(const vector<Vout>& receivers, Transaction& tx);
 	
 	void checkForFilter(Block blck);
 	bool checkForId(string id);

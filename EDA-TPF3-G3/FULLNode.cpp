@@ -755,6 +755,19 @@ void FULLNode::createDates(char* c1, char* c2)
 	strftime(c2, 100, "Expires: %a, %d %b %G %X GMT", nextTime);
 }
 
+bool FULLNode::makeSmartTX(const vector<Vout>& receivers, Transaction& tx)
+{
+	tx.txId.clear();
+	tx.nTxIn = 0;
+	tx.nTxOut = 0;
+	tx.vIn.clear();
+	tx.vOut.clear();
+
+	bool validez = utxohandler.createTX(ownData.getID(), receivers, tx);
+	//SIGN TX!!!
+	return validez;
+}
+
 /***********************************************************************************
 		FLOODING / VERIFICATION
 ***********************************************************************************/

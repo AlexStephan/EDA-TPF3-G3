@@ -12,6 +12,9 @@ public:
 
 	longN balance(string publicKey);
 
+	//FALTA FIRMARLAS!!!
+	bool createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx);
+
 	bool TxExistAlready(Transaction& tx);
 	errorType validateTX(Transaction& tx); //ANTES COMPROBAR HASH Y FIRMA
 	errorType insertTX(Transaction& tx);
@@ -35,5 +38,6 @@ private:
 
 	void addUtxo(Block& block, Transaction& tx,size_t voutIndex);
 	void eraseUtxo(Vin& vin);
+	Vin utxo2vin(size_t index);
 };
 
