@@ -7,7 +7,10 @@ class utxoHandler
 {
 public:
 	utxoHandler(BlockChain* blockChain, vector<Transaction>* txs);
+
+	//WIP:
 	void initializeUtxo(); //ASUMO Q LA BLOCKCHAIN ES VALIDA
+
 	longN balance(string publicKey);
 
 	bool TxExistAlready(Transaction& tx);
