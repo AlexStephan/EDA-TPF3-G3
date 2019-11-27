@@ -16,12 +16,13 @@ class Node :
 	public Subject
 {
 public:
-	Node(NodeData data) : ownData(data) {}
+	Node(NodeData data) : ownData(data), :myMoney(0) {}
 	NodeData getData() { return ownData; } //ID, IP y Puerto
-
+	longN getMyMoney() { return myMoney; }
 	virtual void cycle() = 0;
 
 protected:
 	NodeData ownData;
+	longN myMoney;
 };
 

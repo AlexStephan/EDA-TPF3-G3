@@ -54,6 +54,7 @@ protected:
 	vector<MerkleBlock> merkleBlocks;								//List of merkleBlocks (?)
 	void addBlock(Block block);										//Add a block to blockChain
 	void addTx(string trans);										//Save received transaction, add to tx list
+	void updateMyMoney();
 	/***********************************************************************************
 		NEIGHBOURHOOD AND NODES
 	***********************************************************************************/

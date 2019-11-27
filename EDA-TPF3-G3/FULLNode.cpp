@@ -321,6 +321,11 @@ void FULLNode::addTx(string trans) {
 	JSONHandler.saveTx(trans, txs);
 	notifyAllObservers(this);
 }
+void FULLNode::updateMyMoney() //llamar UNA VEZ Q SE HAYA MODIFICADO MI DINERO (ingrese una tx, bloque, etc)
+{
+	myMoney = utxohandler.balance(ownData.getID());
+	notifyAllObservers(this);
+}
 //void FULLNode::saveMerkleBlock(string merkleBlock) {}
 
 /***********************************************************************************
