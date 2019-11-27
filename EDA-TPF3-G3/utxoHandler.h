@@ -13,7 +13,7 @@ public:
 	longN balance(string publicKey);
 
 	//FALTA FIRMARLAS!!!
-	bool createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx);
+	bool createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx, longN fee);
 
 	bool TxExistAlready(Transaction& tx);
 	errorType validateTX(Transaction& tx); //ANTES COMPROBAR HASH Y FIRMA

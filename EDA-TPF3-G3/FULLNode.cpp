@@ -755,7 +755,7 @@ void FULLNode::createDates(char* c1, char* c2)
 	strftime(c2, 100, "Expires: %a, %d %b %G %X GMT", nextTime);
 }
 
-bool FULLNode::makeSmartTX(const vector<Vout>& receivers, Transaction& tx)
+bool FULLNode::makeSmartTX(longN fee,const vector<Vout>& receivers, Transaction& tx)
 {
 	tx.txId.clear();
 	tx.nTxIn = 0;
@@ -763,7 +763,7 @@ bool FULLNode::makeSmartTX(const vector<Vout>& receivers, Transaction& tx)
 	tx.vIn.clear();
 	tx.vOut.clear();
 
-	bool validez = utxohandler.createTX(ownData.getID(), receivers, tx);
+	bool validez = utxohandler.createTX(ownData.getID(), receivers, tx,fee);
 	cryptohandler.signAllVinsInTx(tx);
 	cryptohandler.hashTx(tx);
 	return validez;

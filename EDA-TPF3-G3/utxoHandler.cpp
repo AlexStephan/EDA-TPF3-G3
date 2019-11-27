@@ -42,7 +42,7 @@ longN utxoHandler::balance(string publicKey)
 	return money;
 }
 
-bool utxoHandler::createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx)
+bool utxoHandler::createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx, longN fee)
 {
 	bool validez = true;
 
@@ -53,6 +53,7 @@ bool utxoHandler::createTX(string myPublicKey, const vector<Vout>& receivers, Tr
 	longN neededMoney = 0;
 	for (size_t i = 0; i < tx.nTxOut; i++)
 		neededMoney += tx.vOut[i].amount;
+	neededMoney += fee;
 
 	//Dinero disponible
 	longN availableMoney = balance(myPublicKey);
