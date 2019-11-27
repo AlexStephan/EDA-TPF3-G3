@@ -64,6 +64,7 @@ private:
 	string Msg;
 	string bodyMsg;
 	string flterId;
+	string myResponse;
 	char buf[MAX_LENGTH];
 
 	/***********************************************************************************
@@ -91,6 +92,8 @@ private:
 	/***********************************************************************************
 		CALLBACKS/HANDLERS
 	***********************************************************************************/
-	void messaggeHandler(const boost::system::error_code err, std::size_t bytes);
+	void receiveHandler(const boost::system::error_code err, std::size_t bytes);
 	void connectionHandler(const boost::system::error_code& err);
+	void sendHandler(const boost::system::error_code err, std::size_t bytes);
+
 };
