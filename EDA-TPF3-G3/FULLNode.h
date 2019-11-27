@@ -1,3 +1,9 @@
+//       \\\\\           \\\\\           \\\\\           \\\\\    
+//      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o
+//______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_
+//private->protected
+
+
 #pragma once
 /*******************************************************************************
  * INCLUDE HEADER FILES
@@ -41,7 +47,7 @@ public:
 	const Layout* getLayout();
 	fullNodeStates getState();
 
-private:
+protected:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
 	***********************************************************************************/
@@ -55,6 +61,7 @@ private:
 		NEIGHBOURHOOD AND NODES
 	***********************************************************************************/
 	vector<NodeData> neighbourhood;									//List of neighbour nodes
+	vector<NodeData> network;
 	vector<NodeData> askedForFilter;
 	Layout layout;													//Layout in vector<connection> form
 	string layoutMsg;												//Layout in JSON form
@@ -90,7 +97,6 @@ private:
 	string createServerNotReadyRsp();
 	void createDates(char* c1, char* c2);
 	jsonHandler JSONHandler;
-	void manageNetworkReady(string rta);
 
 	/***********************************************************************************
 		FLOODING / VERIFICATION
