@@ -123,23 +123,31 @@ void cryptoHandler::setMiningBlock(Block* miningBlock)
 	this->miningBlock = miningBlock;
 }
 
-bool cryptoHandler::tryToMine()
+void cryptoHandler::tryNewNonce()
 {
-	if (tipo != NODO_MINERO) {
-		cout << "ILEGAL: un nodo no minero no puede minar"<<endl;
-		return false;
-	}
-	bool lo_logro = false;
+	if (checkMiner() == false)
+		return;
 
-
-
-
-	return lo_logro;
+	miningBlock->setNonce
 }
 
 void cryptoHandler::hashBlock(Block& block)
 {
 	block.setBlockId( makeHashFromBlock(block) );
+}
+
+bool cryptoHandler::checkMiner()
+{
+	if (tipo != NODO_MINERO) {
+		cout << "ILEGAL: un nodo no minero no puede minar" << endl;
+		return false;
+	}
+	if (miningBlock == nullptr) {
+		cout << "ILEGAL: se trato de minar, pero aun no se enlazo con el mining block" << endl;
+		return false;
+	}
+
+	return true;
 }
 
 string cryptoHandler::makeHashFromTx(Transaction& tx)
@@ -188,6 +196,6 @@ string cryptoHandler::makeHashFromBlock(Block& block)
 	message += block.getPreviousBlockID();
 	message += to_string(block.getHeight());
 	message += block.getMerkleRoot();
-	message += block.getNonce();
+	message += to_string(block.getNonce());
 	return hashMessage(message);
 }

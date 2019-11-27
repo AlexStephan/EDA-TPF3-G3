@@ -19,7 +19,7 @@
 
 #include "utxoHandler.h"
 
-enum tipo_de_nodo{NODO_MINERO,NODO_FULL};
+#include "typeEnums.h"
 
 using namespace std;
 
@@ -46,7 +46,7 @@ public:
 
 	//SOLO MINERO
 	void setMiningBlock(Block* miningBlock);
-	bool tryToMine();
+	void tryNewNonce();
 	
 private:
 	tipo_de_nodo tipo;
@@ -55,6 +55,7 @@ private:
 	void makeNewBlock();
 	void hashBlock(Block& block);
 
+	bool checkMiner();
 
 
 	string makeHashFromTx(Transaction& tx);

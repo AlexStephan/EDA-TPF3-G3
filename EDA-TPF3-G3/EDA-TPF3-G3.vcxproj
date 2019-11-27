@@ -62,6 +62,7 @@
     <ClInclude Include="subject.h" />
     <ClInclude Include="TreeWindow.h" />
     <ClInclude Include="TreeWindowHandler.h" />
+    <ClInclude Include="typeEnums.h" />
     <ClInclude Include="utxo.h" />
     <ClInclude Include="utxoHandler.h" />
     <ClInclude Include="WarningWindow.h" />
