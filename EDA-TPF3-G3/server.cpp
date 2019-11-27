@@ -17,6 +17,7 @@ Server::Server(unsigned int port)
 	doneDownloading = false;
 	doneListening = false;
 	doneSending = false;
+	myResponse.clear();
 	bodyMsg.clear();
 	Msg.clear();
 	state = ERR;
@@ -65,11 +66,11 @@ void Server::listening()
 void Server::receiveMessage()
 {
 	IO_handler->poll();
-	socket->async_read_some(boost::asio::buffer(buf), boost::bind(&Server::messaggeHandler, this,
+	socket->async_read_some(boost::asio::buffer(buf), boost::bind(&Server::receiveHandler, this,
 		boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 }
 
-void Server::sendMessage(const string& message) //ES BLOQUEANTE POR AHORA
+void Server::sendMessage(const string& message)
 {
 	size_t len;
 	len = socket->write_some(boost::asio::buffer(message, strlen(message.c_str())), error);
@@ -108,7 +109,7 @@ void Server::connectionHandler(const boost::system::error_code& err)
 	}
 }
 
-void Server::messaggeHandler(const boost::system::error_code err, std::size_t bytes)
+void Server::receiveHandler(const boost::system::error_code err, std::size_t bytes)
 {
 	string aux = buf;
 	Msg += buf;
@@ -128,6 +129,17 @@ void Server::messaggeHandler(const boost::system::error_code err, std::size_t by
 	else
 	{
 		cout << "Error while receiving" << endl;
+	}
+
+}
+
+void Server::sendHandler(const boost::system::error_code err, std::size_t bytes)
+{
+	static size_t totalBytes;
+	totalBytes += bytes;
+	if (totalBytes < myResponse.size())
+	{
+
 	}
 
 }
