@@ -15,20 +15,24 @@ public:
 
 	bool TxExistAlready(Transaction& tx);
 	errorType validateTX(Transaction& tx); //ANTES COMPROBAR HASH Y FIRMA
-	void insertTX(Transaction& tx);
+	errorType insertTX(Transaction& tx);
 
-	bool BLockExistAlready(Block& block);
+	bool BlockExistAlready(Block& block);
 	errorType validateBlock(Block& block); //ANTES COMPROBAR HASH, CHALLENGE Y PREVIOUS_ID
 	void insertBlock(Block& block);
 
 private:
 	vector<utxo> utxoList;
+	vector<utxo> processingTxList;
 
 	BlockChain* blockChain;
 	vector<Transaction>* txs;
 
-
-	bool findUtxo(const string& id, size_t indexInList);
+	bool vinRefersToUtxo(Vin& vin,size_t index);
+	bool findUtxo(const string& id,int nutxo, size_t indexInList);
+	
+	bool vinRefersToProcessing(Vin& vin, size_t index);
+	bool findProcessing(const string& id, int nutxo, size_t indexInList);
 		
 };
 
