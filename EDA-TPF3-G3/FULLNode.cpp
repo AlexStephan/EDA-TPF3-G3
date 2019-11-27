@@ -18,7 +18,13 @@ using json = nlohmann::json;
 /*******************************************************************************
 	CONSTRUCTOR
  ******************************************************************************/
-FULLNode::FULLNode(NodeData _ownData) : Node(_ownData) {
+FULLNode::FULLNode(Socket _socket) : Node(NO_NODE_DATA),
+	cryptohandler(), utxohandler(&blockChain,&txs)
+{
+	ownData.setID(cryptohandler.getMyPublicKey());
+	ownData.setSocket(_socket);
+
+
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
 	JSONHandler.getNodesInLayout("manifest.json", ownData, nodesInManifest);

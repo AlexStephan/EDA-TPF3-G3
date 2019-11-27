@@ -1,5 +1,7 @@
 #pragma once
 
+#define NO_NODE_DATA NodeData("NO DATA",0,0,0,0,0)
+
 #include "Socket.h"
 class NodeData
 {

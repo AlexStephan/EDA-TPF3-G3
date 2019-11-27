@@ -10,6 +10,9 @@
 #include "layout.h"
 #include"jsonHandler.h"
 
+#include "cryptoHandler.h"
+#include "utxoHandler.h"
+
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  *****************************************************************************/
@@ -20,7 +23,7 @@ class FULLNode :
 	public Node
 {
 public:
-	FULLNode(NodeData ownData);
+	FULLNode(Socket _socket); //ID SURGE DE MANERA ALEATORIA
 	~FULLNode();
 	virtual void cycle();
 
@@ -95,6 +98,10 @@ protected:
 	/***********************************************************************************
 		FLOODING / VERIFICATION
 	***********************************************************************************/
+	cryptoHandler cryptohandler;
+	utxoHandler utxohandler;
+
+	
 	void checkForFilter(Block blck);
 	bool checkForId(string id);
 	void floodBlock(Block blck, NodeData sender);
