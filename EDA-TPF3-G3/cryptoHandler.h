@@ -46,16 +46,14 @@ public:
 
 	//SOLO MINERO
 	void setMiningBlock(Block* miningBlock);
-	void tryNewNonce();
+	void tryNewNonce(); //probar una vez por cycle. Fijarse si cumple challenge con otra funcion
 	
 private:
 	tipo_de_nodo tipo;
-
 	Block* miningBlock;
-	void makeNewBlock();
-	void hashBlock(Block& block);
-
 	bool checkMiner();
+
+	void hashBlock(Block& block);
 
 
 	string makeHashFromTx(Transaction& tx);

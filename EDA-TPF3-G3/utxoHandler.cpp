@@ -4,8 +4,8 @@
 
 #define BONUS 50 //cuanto gana el minero por minar (ademas del resto de cada tx)
 
-utxoHandler::utxoHandler(BlockChain* blockChain, vector<Transaction>* txs)
-	: blockChain(blockChain), txs(txs), utxoList()
+utxoHandler::utxoHandler(tipo_de_nodo tipo,BlockChain* blockChain, vector<Transaction>* txs)
+	: blockChain(blockChain), txs(txs), utxoList(), tipo(tipo), miningBlock(nullptr)
 {
 }
 
@@ -331,6 +331,25 @@ string utxoHandler::getOwner(Vin& vin)
 		owner = original.publicId;
 	}
 	return owner;
+}
+
+void utxoHandler::setMiningBlock(Block* miningBlock)
+{
+	this->miningBlock = miningBlock;
+}
+
+bool utxoHandler::checkMiner()
+{
+	if (tipo != NODO_MINERO) {
+		cout << "ILEGAL: un nodo no minero no puede minar" << endl;
+		return false;
+	}
+	if (miningBlock == nullptr) {
+		cout << "ILEGAL: se trato de minar, pero aun no se enlazo con el mining block" << endl;
+		return false;
+	}
+
+	return true;
 }
 
 bool utxoHandler::vinRefersToUtxo(Vin& vin,size_t index)

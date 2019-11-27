@@ -3,10 +3,16 @@
 
 #include <cstring>
 #include <iostream>
+
+#include <cstdlib>
+#include <ctime>
+
 using namespace std;
 
 cryptoHandler::cryptoHandler(tipo_de_nodo tipo) : tipo(tipo), miningBlock(nullptr)
 {
+	srand(time(NULL));
+
 	myprivateKey = generatePrivKey();
 	myprivateKey.MakePublicKey(mypublicKey);
 
@@ -128,7 +134,12 @@ void cryptoHandler::tryNewNonce()
 	if (checkMiner() == false)
 		return;
 
-	miningBlock->setNonce
+	uint32_t random = 0;
+	for (int i = 0; i < 4; i++)
+		random += ((rand() % 256) << (8 * i));
+
+	miningBlock->setNonce(random);
+	hashBlock(*miningBlock);
 }
 
 void cryptoHandler::hashBlock(Block& block)
