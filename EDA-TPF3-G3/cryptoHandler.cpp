@@ -30,13 +30,7 @@ string cryptoHandler::getMyPublicKey()
 
 void cryptoHandler::signAllVinsInTx(Transaction& tx)
 {
-	string lastPartOfMessage = "";
-	for (size_t i = 0; i < tx.vOut.size(); i++) {
-		lastPartOfMessage += tx.vOut[i].publicId;
-	}
-	for (size_t i = 0; i < tx.vOut.size(); i++) {
-		lastPartOfMessage += to_string(tx.vOut[i].amount);
-	}
+	string lastPartOfMessage = concatenateVout(tx);
 
 	for (size_t i = 0; i < tx.vIn.size(); i++) {
 		Vin& currVin = tx.vIn[i];
@@ -53,6 +47,59 @@ void cryptoHandler::signAllVinsInTx(Transaction& tx)
 }
 
 void cryptoHandler::hashTx(Transaction& tx)
+{	
+	tx.txId = makeHashFromTx(tx);
+}
+
+bool cryptoHandler::verifyTXHash(Transaction& tx)
+{
+	return (tx.txId == makeHashFromTx(tx));
+}
+
+bool cryptoHandler::verifyTXSign(Transaction& tx)
+{
+	bool rta = true;
+
+	string lastPartOfMessage = concatenateVout(tx);
+
+	for (size_t i = 0; rta == true && i < tx.vIn.size(); i++) {
+		Vin& currVin = tx.vIn[i];
+		string message = "";
+		message += currVin.blockId;
+		message += currVin.txId;
+		message += to_string(currVin.nutxo);
+		message += lastPartOfMessage;
+
+		string signature = signMessage(message);
+
+		rta = (currVin.signature == signature);
+	}
+
+	return rta;
+}
+
+string cryptoHandler::signMessage(string& message)
+{
+	vector<byte> b = getSignature(myprivateKey,message);
+	return byteToString(b);
+}
+
+bool cryptoHandler::isSignValid(string& message, string& pubKey, string& sign)
+{
+	return verifySignatureString(header,pubKey,message,sign);
+}
+
+string cryptoHandler::hashMessage(string& message)
+{
+	return hashMessage(message);
+}
+
+bool cryptoHandler::isHashValid(string& message, string& hash)
+{
+	return (hash == hashMessage(message));
+}
+
+string cryptoHandler::makeHashFromTx(Transaction& tx)
 {
 	string message = "";
 
@@ -76,28 +123,18 @@ void cryptoHandler::hashTx(Transaction& tx)
 	for (size_t i = 0; i < tx.vOut.size(); i++)
 		message += to_string(tx.vOut[i].amount);
 
-	string hash = hashMessage(message);
-	
-	tx.txId = hash;
-}
-
-string cryptoHandler::signMessage(string& message)
-{
-	vector<byte> b = getSignature(myprivateKey,message);
-	return byteToString(b);
-}
-
-bool cryptoHandler::isSignValid(string& message, string& pubKey, string& sign)
-{
-	return verifySignatureString(header,pubKey,message,sign);
-}
-
-string cryptoHandler::hashMessage(string& message)
-{
 	return hashMessage(message);
 }
 
-bool cryptoHandler::isHashValid(string& message, string& hash)
+string cryptoHandler::concatenateVout(Transaction& tx)
 {
-	return (hash == hashMessage(message));
+	string rta = "";
+
+	for (size_t i = 0; i < tx.vOut.size(); i++) {
+		rta += tx.vOut[i].publicId;
+	}
+	for (size_t i = 0; i < tx.vOut.size(); i++) {
+		rta += to_string(tx.vOut[i].amount);
+	}
+	return rta;
 }

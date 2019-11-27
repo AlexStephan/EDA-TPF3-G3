@@ -29,7 +29,6 @@ public:
 	void signAllVinsInTx(Transaction& tx);
 	void hashTx(Transaction& tx);
 	
-
 	bool verifyTXHash(Transaction& tx);
 	bool verifyTXSign(Transaction& tx);
 
@@ -38,6 +37,9 @@ public:
 	string hashMessage(string& message);
 	bool isHashValid(string& message, string& hash);
 private:
+
+	string makeHashFromTx(Transaction& tx);
+	string concatenateVout(Transaction& tx);
 
 	byte header[24];
 	ECDSA<ECP, SHA256>::PrivateKey myprivateKey;
