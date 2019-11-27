@@ -25,6 +25,8 @@ typedef vector<newIDstr> MerkleTree;
 struct Vin {
 	string blockId;
 	string txId;
+	int nutxo;
+	string signature;
 };
 
 /********

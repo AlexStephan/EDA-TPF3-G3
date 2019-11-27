@@ -22,6 +22,8 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="blockChain.h" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="cryptoFunctions.h" />
+    <ClInclude Include="cryptoHandler.h" />
     <ClInclude Include="jsonHandler.h" />
     <ClInclude Include="imgui_stdlib.h" />
     <ClInclude Include="layout.h" />
@@ -44,6 +46,7 @@
     <ClInclude Include="layoutNumericConection.h" />
     <ClInclude Include="layoutWindowHandler.h" />
     <ClInclude Include="manifestHandler.h" />
+    <ClInclude Include="MINERNode.h" />
     <ClInclude Include="NETcontroller.h" />
     <ClInclude Include="NETviewer.h" />
     <ClInclude Include="Node.h" />
@@ -59,6 +62,8 @@
     <ClInclude Include="subject.h" />
     <ClInclude Include="TreeWindow.h" />
     <ClInclude Include="TreeWindowHandler.h" />
+    <ClInclude Include="utxo.h" />
+    <ClInclude Include="utxoHandler.h" />
     <ClInclude Include="WarningWindow.h" />
     <ClInclude Include="WarningWindowHandler.h" />
   </ItemGroup>
@@ -68,6 +73,8 @@
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="client.cpp" />
+    <ClCompile Include="cryptoFunctions.cpp" />
+    <ClCompile Include="cryptoHandler.cpp" />
     <ClCompile Include="EDAcoinsNet.cpp" />
     <ClCompile Include="FULLcontroller.cpp" />
     <ClCompile Include="FULLNode.cpp" />
@@ -86,6 +93,7 @@
     <ClCompile Include="layoutWindowHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manifestHandler.cpp" />
+    <ClCompile Include="MINERNode.cpp" />
     <ClCompile Include="NETcontroller.cpp" />
     <ClCompile Include="NETviewer.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -98,6 +106,7 @@
     <ClCompile Include="SPVviewer.cpp" />
     <ClCompile Include="TreeWindow.cpp" />
     <ClCompile Include="TreeWindowHandler.cpp" />
+    <ClCompile Include="utxoHandler.cpp" />
     <ClCompile Include="WarningWindow.cpp" />
     <ClCompile Include="WarningWindowHandler.cpp" />
   </ItemGroup>

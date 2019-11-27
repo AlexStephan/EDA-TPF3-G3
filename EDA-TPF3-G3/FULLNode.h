@@ -41,7 +41,7 @@ public:
 	const Layout* getLayout();
 	fullNodeStates getState();
 
-private:
+protected:
 	/***********************************************************************************
 		INNER EDACoin VARIABLES
 	***********************************************************************************/

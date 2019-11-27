@@ -52,6 +52,30 @@
     <Filter Include="Source Files\Bitcoins">
       <UniqueIdentifier>{9df6882b-f68a-43e0-8022-17f4b8b87988}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Node Handlers\layout">
+      <UniqueIdentifier>{86b88498-4175-41db-adc7-89c543364fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Node Handlers\server-client">
+      <UniqueIdentifier>{ea08f8e7-b21b-4d20-8931-ab46a6d0a005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Node Handlers\crypto">
+      <UniqueIdentifier>{d1f4f2e0-8ade-4d04-8269-0787e8a80f06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Node Handlers\nodeData">
+      <UniqueIdentifier>{b0ce87f9-4d21-4e44-86d3-0fe72642640f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Node handlers\layout">
+      <UniqueIdentifier>{7d215afd-defa-4098-9bc2-7bfc1afc5e2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Node handlers\crypto">
+      <UniqueIdentifier>{7c23d913-98b4-4707-be50-b38b4c483581}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Node handlers\server-client">
+      <UniqueIdentifier>{0e6b7201-3f1d-4ede-a622-bef1afea7ff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Node handlers\nodeData">
+      <UniqueIdentifier>{0acbf330-9f28-40e5-aebd-9838dbc2c5a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="observer.h">
@@ -59,12 +83,6 @@
     </ClInclude>
     <ClInclude Include="subject.h">
       <Filter>Header Files\MVC related</Filter>
-    </ClInclude>
-    <ClInclude Include="client.h">
-      <Filter>Header Files\Node handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="server.h">
-      <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
     <ClInclude Include="manifestHandler.h">
       <Filter>Header Files\Node handlers</Filter>
@@ -77,12 +95,6 @@
     </ClInclude>
     <ClInclude Include="WarningWindowHandler.h">
       <Filter>Header Files\Gui handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket.h">
-      <Filter>Header Files\Node handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="NodeData.h">
-      <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
@@ -153,9 +165,6 @@
     <ClInclude Include="blockChain.h">
       <Filter>Header Files\Bitcoins</Filter>
     </ClInclude>
-    <ClInclude Include="layout.h">
-      <Filter>Header Files\Node handlers</Filter>
-    </ClInclude>
     <ClInclude Include="TreeWindow.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
@@ -165,12 +174,6 @@
     <ClInclude Include="printTXroutine.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
-    <ClInclude Include="layoutGeneratorHandler.h">
-      <Filter>Header Files\Node handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="layoutNumericConection.h">
-      <Filter>Header Files\Node handlers</Filter>
-    </ClInclude>
     <ClInclude Include="jsonHandler.h">
       <Filter>Header Files\Node handlers</Filter>
     </ClInclude>
@@ -179,6 +182,42 @@
     </ClInclude>
     <ClInclude Include="layoutWindowHandler.h">
       <Filter>Header Files\Gui handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="MINERNode.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
+    <ClInclude Include="utxo.h">
+      <Filter>Header Files\Bitcoins</Filter>
+    </ClInclude>
+    <ClInclude Include="utxoHandler.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="layout.h">
+      <Filter>Header Files\Node handlers\layout</Filter>
+    </ClInclude>
+    <ClInclude Include="layoutGeneratorHandler.h">
+      <Filter>Header Files\Node handlers\layout</Filter>
+    </ClInclude>
+    <ClInclude Include="layoutNumericConection.h">
+      <Filter>Header Files\Node handlers\layout</Filter>
+    </ClInclude>
+    <ClInclude Include="cryptoFunctions.h">
+      <Filter>Header Files\Node handlers\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="cryptoHandler.h">
+      <Filter>Header Files\Node handlers\crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="server.h">
+      <Filter>Header Files\Node handlers\server-client</Filter>
+    </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>Header Files\Node handlers\server-client</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket.h">
+      <Filter>Header Files\Node handlers\nodeData</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeData.h">
+      <Filter>Header Files\Node handlers\nodeData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -193,19 +232,7 @@
     <ClCompile Include="WarningWindowHandler.cpp">
       <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
-    <ClCompile Include="client.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="server.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="NodeData.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
-    </ClCompile>
     <ClCompile Include="manifestHandler.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket.cpp">
       <Filter>Source Files\Node Handlers</Filter>
     </ClCompile>
     <ClCompile Include="EDAcoinsNet.cpp">
@@ -268,12 +295,6 @@
     <ClCompile Include="imgui_stdlib.cpp">
       <Filter>Source Files\LIBS %28ImGui, Json, etc%29</Filter>
     </ClCompile>
-    <ClCompile Include="layoutGeneratorHandler.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
-    </ClCompile>
-    <ClCompile Include="layoutNumericConection.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
-    </ClCompile>
     <ClCompile Include="TreeWindow.cpp">
       <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
@@ -283,11 +304,41 @@
     <ClCompile Include="printTXroutine.cpp">
       <Filter>Source Files\Gui handlers</Filter>
     </ClCompile>
-    <ClCompile Include="layout.cpp">
-      <Filter>Source Files\Node Handlers</Filter>
-    </ClCompile>
     <ClCompile Include="layoutWindowHandler.cpp">
       <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="MINERNode.cpp">
+      <Filter>Source Files\_NODES</Filter>
+    </ClCompile>
+    <ClCompile Include="utxoHandler.cpp">
+      <Filter>Source Files\Node Handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="layout.cpp">
+      <Filter>Source Files\Node Handlers\layout</Filter>
+    </ClCompile>
+    <ClCompile Include="layoutGeneratorHandler.cpp">
+      <Filter>Source Files\Node Handlers\layout</Filter>
+    </ClCompile>
+    <ClCompile Include="layoutNumericConection.cpp">
+      <Filter>Source Files\Node Handlers\layout</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source Files\Node Handlers\server-client</Filter>
+    </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Source Files\Node Handlers\server-client</Filter>
+    </ClCompile>
+    <ClCompile Include="cryptoHandler.cpp">
+      <Filter>Source Files\Node Handlers\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="cryptoFunctions.cpp">
+      <Filter>Source Files\Node Handlers\crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="NodeData.cpp">
+      <Filter>Source Files\Node Handlers\nodeData</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Source Files\Node Handlers\nodeData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
