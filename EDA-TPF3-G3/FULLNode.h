@@ -104,6 +104,7 @@ protected:
 	utxoHandler utxohandler;
 
 	//recibe: lista de destinatarios (ID + monto)
+	//			fee: dinero que se quedara el minero
 	//devuelve: bool: indica si es valido o no la tx (si se hizo una falsa a proposito o no), true = valido, false = falsa
 	//			tx: modifica la tx ingresada (se supone vacia) confeccionandola, para poder floodearla
 	//NOTA: si es falsa, floodearla, mandar un mensaje de warning del tipo "hehe, dia de los inocentes" (errorType), pero NO INGRESARLA, no ser tarados
