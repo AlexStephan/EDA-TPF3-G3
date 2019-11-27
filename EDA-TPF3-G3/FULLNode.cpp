@@ -385,15 +385,6 @@ void FULLNode::keepListening() {
 			break;
 		case MERKLE:														//FULL NODES DONT CARE ABOUT RECEIVING MERKLE BLOCKS
 			break;
-		case PING:
-			found = false;
-			for (int i = 0; i < neighbourhood.size(); i++) {
-				if ((*j)->getSender() == neighbourhood[i])
-					found = true;
-			}
-			if (!found)														//If ping sender is not already a neighbour, add it
-				neighbourhood.push_back((*j)->getSender());
-			break;
 		case FILTER:
 			filters.push_back(JSONHandler.saveFilter((*j)->getMessage()));
 			found = false;
