@@ -28,6 +28,30 @@ string cryptoHandler::getMyPublicKey()
 	return byteToString(b);
 }
 
+void cryptoHandler::signAllVinsInTx(Transaction& tx)
+{
+	string lastPartOfMessage = "";
+	for (size_t i = 0; i < tx.vOut.size(); i++) {
+		lastPartOfMessage += tx.vOut[i].publicId;
+	}
+	for (size_t i = 0; i < tx.vOut.size(); i++) {
+		lastPartOfMessage += to_string(tx.vOut[i].amount);
+	}
+
+	for (size_t i = 0; i < tx.vIn.size(); i++) {
+		Vin& currVin = tx.vIn[i];
+		string message = "";
+		message += currVin.blockId;
+		message += currVin.txId;
+		message += to_string(currVin.nutxo);
+		message += lastPartOfMessage;
+
+		string signature = signMessage(message);
+
+		currVin.signature = signature;
+	}
+}
+
 string cryptoHandler::signMessage(string& message)
 {
 	vector<byte> b = getSignature(myprivateKey,message);

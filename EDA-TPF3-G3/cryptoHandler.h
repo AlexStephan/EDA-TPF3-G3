@@ -15,6 +15,8 @@
 #include "sha3.h"
 #include <string>
 
+#include "blockChain.h"
+
 using namespace std;
 
 class cryptoHandler
@@ -23,6 +25,8 @@ public:
 	cryptoHandler(); //genera private y public keys
 	string getMyPrivateKey();
 	string getMyPublicKey();
+
+	void signAllVinsInTx(Transaction& tx);
 
 	string signMessage(string& message);
 	bool isSignValid(string& message, string& pubKey, string& sign);
