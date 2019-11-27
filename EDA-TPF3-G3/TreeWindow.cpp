@@ -50,7 +50,7 @@ void TreeWindow::draw()
 		ImGui::Text("PREVIOUS BLOCK ID: %s", block.getPreviousBlockID().c_str());
 		ImGui::Text("AMOUNT OF TX: %lu", block.getNTx());
 		ImGui::Text("NONCE: %lu", block.getNonce());
-		ImGui::Text("MERKLE ROOT: %s", block.getMerkleRoot());
+		ImGui::Text("MERKLE ROOT: %s", block.getMerkleRoot().c_str());
 		ImGui::TreePop();
 	}
 
