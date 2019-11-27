@@ -13,7 +13,7 @@ public:
 	longN balance(string publicKey);
 
 	//FALTA FIRMARLAS!!!
-	bool createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx);
+	bool createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx, longN fee);
 
 	bool TxExistAlready(Transaction& tx);
 	errorType validateTX(Transaction& tx); //ANTES COMPROBAR HASH Y FIRMA
@@ -22,6 +22,9 @@ public:
 	bool BlockExistAlready(Block& block);
 	errorType validateBlock(Block& block); //ANTES COMPROBAR HASH, CHALLENGE Y PREVIOUS_ID
 	errorType insertBlock(Block& block);
+
+
+	string getOwner(Vin& vin);
 
 private:
 	vector<utxo> utxoList;
@@ -39,5 +42,8 @@ private:
 	void addUtxo(Block& block, Transaction& tx,size_t voutIndex);
 	void eraseUtxo(Vin& vin);
 	Vin utxo2vin(size_t index);
+
+
+	bool foundInBlockChain(Vin& vin,Vout& answer);
 };
 

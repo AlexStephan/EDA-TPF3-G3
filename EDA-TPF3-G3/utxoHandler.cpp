@@ -42,7 +42,7 @@ longN utxoHandler::balance(string publicKey)
 	return money;
 }
 
-bool utxoHandler::createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx)
+bool utxoHandler::createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx, longN fee)
 {
 	bool validez = true;
 
@@ -53,6 +53,7 @@ bool utxoHandler::createTX(string myPublicKey, const vector<Vout>& receivers, Tr
 	longN neededMoney = 0;
 	for (size_t i = 0; i < tx.nTxOut; i++)
 		neededMoney += tx.vOut[i].amount;
+	neededMoney += fee;
 
 	//Dinero disponible
 	longN availableMoney = balance(myPublicKey);
@@ -320,6 +321,18 @@ errorType utxoHandler::insertBlock(Block& block)
 	return err;
 }
 
+string utxoHandler::getOwner(Vin& vin)
+{
+	string owner;
+	size_t aux = 0;
+
+	Vout original;
+	if (foundInBlockChain(vin, original)) {
+		owner = original.publicId;
+	}
+	return owner;
+}
+
 bool utxoHandler::vinRefersToUtxo(Vin& vin,size_t index)
 {
 	return findUtxo(vin.txId, vin.nutxo, index);
@@ -405,4 +418,32 @@ Vin utxoHandler::utxo2vin(size_t index)
 	}
 
 	return vin;
+}
+
+bool utxoHandler::foundInBlockChain(Vin& vin, Vout& answer)
+{
+	bool rta = false;
+	for (int i = blockChain->size() - 1;rta == false && i >= 0; i--) {//por cada bloque
+		if (vin.blockId == (*blockChain)[i].getBlockID) {
+			Block& block = (*blockChain)[i];
+			for (int j = 0; rta == false && j < block.getNTx(); j++) {//por cada tx
+				if (vin.txId == block.getTx(j).txId) {
+					Transaction tx = block.getTx(j);
+					if (vin.nutxo > tx.vOut.size()) {
+						cout << "ERROR: busque el vout que dio origen a esta vin, encontre el bloque y la tx, pero esta ultima no tiene tantos miembros como exige el nutxo" << endl;
+						break;
+					}
+					else {
+						rta = true;
+						answer = tx.vOut[vin.nutxo - 1];
+					}
+				}
+			}
+			if (rta == false) {
+				cout << "ERROR: busque el vout que dio origen a esta vin, encontre el bloque pero no la tx" << endl;
+				break; //encontro el bloque, pero no existia esa tx
+			}
+		}
+	}
+	return rta;
 }
