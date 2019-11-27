@@ -423,6 +423,27 @@ Vin utxoHandler::utxo2vin(size_t index)
 bool utxoHandler::foundInBlockChain(Vin& vin, Vout& answer)
 {
 	bool rta = false;
-	for()
-	return false;
+	for (int i = blockChain->size() - 1;rta == false && i >= 0; i--) {//por cada bloque
+		if (vin.blockId == (*blockChain)[i].getBlockID) {
+			Block& block = (*blockChain)[i];
+			for (int j = 0; rta == false && j < block.getNTx(); j++) {//por cada tx
+				if (vin.txId == block.getTx(j).txId) {
+					Transaction tx = block.getTx(j);
+					if (vin.nutxo > tx.vOut.size()) {
+						cout << "ERROR: busque el vout que dio origen a esta vin, encontre el bloque y la tx, pero esta ultima no tiene tantos miembros como exige el nutxo" << endl;
+						break;
+					}
+					else {
+						rta = true;
+						answer = tx.vOut[vin.nutxo - 1];
+					}
+				}
+			}
+			if (rta == false) {
+				cout << "ERROR: busque el vout que dio origen a esta vin, encontre el bloque pero no la tx" << endl;
+				break; //encontro el bloque, pero no existia esa tx
+			}
+		}
+	}
+	return rta;
 }
