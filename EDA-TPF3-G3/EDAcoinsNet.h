@@ -22,8 +22,8 @@ public:
 	void cycle();
 
 	//Accedidos por NETcontroller
-	errorType createFULLNode(NodeData newNode);
-	errorType createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode);
+	errorType createFULLNode(Socket _socket);
+	errorType createSPVNode(Socket _socket, NodeData FilterNode, NodeData HeaderNode);
 	
 	//Accedidos por NETviewer
 	const vector<NodeData>& getKnownFULLdata();
