@@ -68,6 +68,8 @@ bool Block::validateBlock(string blck)
 						{
 							elsi.at("blockid");
 							elsi.at("txid");
+							elsi.at("signature");
+							elsi.at("nutxo");
 						}
 
 						for (auto& elso : vOut)
@@ -136,6 +138,12 @@ void Block::saveBlock(string blck)
 
 			auto tTxId = elsi["txid"];
 			auxVin.txId = tTxId.get<string>();
+
+			auto sign = elsi["signature"];
+			auxVin.signature = sign.get<string>();
+
+			auto nut = elsi["nutxo"];
+			auxVin.nutxo = nut;
 
 			auxTrans.vIn.push_back(auxVin);
 		}
