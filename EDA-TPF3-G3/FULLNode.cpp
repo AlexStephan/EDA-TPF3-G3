@@ -249,20 +249,24 @@ void FULLNode::cycle() {
 /***********************************************************************************
 		METHODS USED BY CONTROLLER
 ***********************************************************************************/
-errorType FULLNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers){
-	Transaction tx;
-	Block aux;
-	//BUILD TX
-	tx.vIn = givers;
-	tx.nTxIn = givers.size();
-	tx.vOut = receivers;
-	tx.nTxOut = receivers.size();
-	tx.txId = aux.getTxId(tx);
-	for (int i = 0; i < neighbourhood.size(); i++)
-		postTransaction(i, tx);												//Post Tx to all neighbours
+errorType FULLNode::makeTX(const vector<Vout>& receivers, longN fee){
 	errorType ret;
+	Transaction newTx;
+	if (makeSmartTX(fee, receivers, newTx)) {
+		ret.error = false;
+		ret.datos = "Valid transaction. Have a nice day, beach";
+		txs.push_back(newTx);
+	}
+	else {
+		ret.error = true;
+		ret.datos = "INVALID TRANSACTION DETECTED, NICE TRY BEACH";
+	}
+	for (int i = 0; i < neighbourhood.size(); i++)
+		postTransaction(i, newTx);
+	notifyAllObservers(this);
 	return ret;
 }
+
 errorType FULLNode::makeBlock() {
 	errorType ret;
 	Block block = blockChain.back();
