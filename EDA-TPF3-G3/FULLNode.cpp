@@ -321,6 +321,11 @@ void FULLNode::addTx(string trans) {
 	JSONHandler.saveTx(trans, txs);
 	notifyAllObservers(this);
 }
+void FULLNode::updateMyMoney() //llamar UNA VEZ Q SE HAYA MODIFICADO MI DINERO (ingrese una tx, bloque, etc)
+{
+	myMoney = utxohandler.balance(ownData.getID());
+	notifyAllObservers(this);
+}
 //void FULLNode::saveMerkleBlock(string merkleBlock) {}
 
 /***********************************************************************************
@@ -748,6 +753,19 @@ void FULLNode::createDates(char* c1, char* c2)
 	}
 	nextTime->tm_sec = ((nextTime->tm_sec) + 30) % 60;
 	strftime(c2, 100, "Expires: %a, %d %b %G %X GMT", nextTime);
+}
+
+bool FULLNode::makeSmartTX(const vector<Vout>& receivers, Transaction& tx)
+{
+	tx.txId.clear();
+	tx.nTxIn = 0;
+	tx.nTxOut = 0;
+	tx.vIn.clear();
+	tx.vOut.clear();
+
+	bool validez = utxohandler.createTX(ownData.getID(), receivers, tx);
+	//SIGN TX!!!
+	return validez;
 }
 
 /***********************************************************************************

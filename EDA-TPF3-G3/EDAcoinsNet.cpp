@@ -20,14 +20,14 @@ void EDAcoinsNet::cycle()
 	for (size_t i = 0; i < SPVvector.size(); i++)
 		SPVvector[i]->cycle();
 }
-errorType EDAcoinsNet::createFULLNode(NodeData newNode)
+errorType EDAcoinsNet::createFULLNode(Socket _socket)
 {
 	errorType creationState;
 	creationState.error = false;
 	creationState.datos = "";
 
-	if (existAlready(newNode) == false) {
-		FULLNode* node = new FULLNode(newNode);
+	if (existAlready(_socket) == false) {
+		FULLNode* node = new FULLNode(_socket);
 		FULLvector.emplace_back(node);
 		FULLdata.emplace_back(node->getData());
 	}
@@ -38,14 +38,14 @@ errorType EDAcoinsNet::createFULLNode(NodeData newNode)
 	notifyAllObservers(this);
 	return creationState;
 }
-errorType EDAcoinsNet::createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode)
+errorType EDAcoinsNet::createSPVNode(Socket _socket, NodeData FilterNode, NodeData HeaderNode)
 {
 	errorType creationState;
 	creationState.error = false;
 	creationState.datos = "";
 
-	if (existAlready(newNode) == false) {
-		SPVNode* node = new SPVNode(newNode, FilterNode, HeaderNode);
+	if (existAlready(_socket) == false) {
+		SPVNode* node = new SPVNode(_socket, FilterNode, HeaderNode);
 		SPVvector.emplace_back(node);
 		SPVdata.emplace_back(node->getData());
 	}
