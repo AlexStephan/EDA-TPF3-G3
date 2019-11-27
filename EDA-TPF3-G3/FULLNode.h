@@ -97,6 +97,7 @@ protected:
 	string createServerNotReadyRsp();
 	void createDates(char* c1, char* c2);
 	jsonHandler JSONHandler;
+	void manageNetworkReady(string rta);
 
 	/***********************************************************************************
 		FLOODING / VERIFICATION
