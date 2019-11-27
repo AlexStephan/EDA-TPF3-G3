@@ -34,6 +34,9 @@ public:
 	bool verifyTXHash(Transaction& tx);
 	bool verifyTXSign(Transaction& tx, utxoHandler* handler);
 
+	bool verifyBlockHash(Block& block);
+	bool verifyBlockSign(Block& block, utxoHandler* handler);
+
 	string signMessage(string& message);
 	bool isSignValid(string& message, string& pubKey, string& sign);
 	string hashMessage(string& message);

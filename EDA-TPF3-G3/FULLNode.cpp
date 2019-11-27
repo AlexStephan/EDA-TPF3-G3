@@ -9,6 +9,7 @@
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 #define CRLF "\x0D\x0A"
+#define INIT_CHALLENGE 3
 
 /*******************************************************************************
  * NAMESPACES
@@ -42,6 +43,7 @@ FULLNode::FULLNode(Socket _socket) : Node(NO_NODE_DATA),
 	Server* genesisServer = new Server(ownData.getSocket().getPort());
 	genesisServer->startConnection();			//Preguntar si esto funcaria
 	servers.push_back(genesisServer);
+	challenge = INIT_CHALLENGE;
 }
 
 /*******************************************************************************
@@ -373,7 +375,8 @@ void FULLNode::keepListening() {
 		switch ((*j)->getState()) {
 		case BLOCK:			//Done
 			blck.saveBlock((*j)->getMessage());
-			found = false;
+			handleReceivedBlock(blck);
+			/*found = false;
 			for (int i = 0; i < blockChain.size(); i++) {
 				if (blck.getBlockID() == blockChain[i].getBlockID())			//If received block is already in chain, it gets ignored
 					found = true;
@@ -382,7 +385,7 @@ void FULLNode::keepListening() {
 				blockChain.push_back(blck);										//Save block into blockchain
 				checkForFilter(blck);											//Inform possible suscripted SPVNodes
 				floodBlock(blck, (*j)->getSender());							//And flood the block
-			}
+			}*/
 			break;
 		case TX:			//Done
 			handleReceivedTx((*j)->getMessage());
@@ -850,4 +853,6 @@ void FULLNode::handleReceivedTx(string txString) {
 		utxohandler.insertTX(newTx);
 		floodTx(newTx, ownData);
 	}
+}void FULLNode::handleReceivedBlock(Block& block) {
+	if(verifyChallenge(block) && verifyPrevID(block) && !utxohandler.BlockExistAlready(block) && utxohandler.validateBlock(block) && cryptohandler.verifyBlockHash(block) && cryptohandler.verifyBlockSign(block, &utxohandler))
 }
