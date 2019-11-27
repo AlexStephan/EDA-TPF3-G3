@@ -72,8 +72,6 @@ struct Filter{
 	}
 
 };
-//DUMMY TX
-//const Transaction dummyTX = { "DUMMY",2,{{"A","B"},{"C","D"}},3,{{"ALE",20},{"GIAN",30},{"OLI",40}} };
 
 
 

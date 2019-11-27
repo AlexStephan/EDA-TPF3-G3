@@ -87,6 +87,10 @@ void jsonHandler::saveTx(string _trans, vector<Transaction>& txs)
 		auxVin.blockId = tBlockId.get<string>();
 		auto tTxId = elsi["txid"];
 		auxVin.txId = tTxId.get<string>();
+		auto sign = elsi["signature"];
+		auxVin.signature = sign.get<string>();
+		auto nut = elsi["nutxo"];
+		auxVin.nutxo = nut;
 		tx.vIn.push_back(auxVin);
 	}
 	auto nTxOut = trans["nTxout"];
@@ -133,10 +137,12 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 
 		auto tBlockId = elsi["blockid"];
 		auxVin.blockId = tBlockId.get<string>();
-
 		auto tTxId = elsi["txid"];
 		auxVin.txId = tTxId.get<string>();
-
+		auto sign = elsi["signature"];
+		auxVin.signature = sign.get<string>();
+		auto nut = elsi["nutxo"];
+		auxVin.nutxo = nut;
 		auxTrans.vIn.push_back(auxVin);
 	}
 
@@ -150,10 +156,8 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 
 		auto publicId = elso["publicid"];
 		auxVout.publicId = publicId.get<string>();
-
 		auto amount = elso["amount"];
 		auxVout.amount = amount;
-
 		auxTrans.vOut.push_back(auxVout);
 	}
 
@@ -260,7 +264,8 @@ string jsonHandler::createJsonTx(Transaction trans)
 	auto vin = json::array();
 	for (auto i = 0; i < trans.nTxIn; i++)
 	{
-		vin.push_back(json::object({ {"txid",trans.vIn[i].txId}, {"blockid", trans.vIn[i].blockId} }));
+		vin.push_back(json::object({ {"txid",trans.vIn[i].txId}, {"blockid", trans.vIn[i].blockId},
+			{"signature",trans.vIn[i].signature}, {"nutxo", trans.vIn[i].nutxo} }));
 	}
 	tx["vin"] = vin;
 
@@ -420,6 +425,8 @@ errorType jsonHandler::validateTx(string tx)
 				{
 					elsi.at("blockid");
 					elsi.at("txid");
+					elsi.at("signature");
+					elsi.at("nutxo");
 				}
 
 				for (auto& elso : vOut)
