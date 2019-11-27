@@ -52,6 +52,35 @@ void cryptoHandler::signAllVinsInTx(Transaction& tx)
 	}
 }
 
+void cryptoHandler::hashTx(Transaction& tx)
+{
+	string message = "";
+
+	message += to_string(tx.nTxIn);
+
+	for (size_t i = 0; i < tx.vIn.size(); i++)
+		message += tx.vIn[i].blockId;
+
+	for (size_t i = 0; i < tx.vIn.size(); i++)
+		message += tx.vIn[i].txId;
+
+	for (size_t i = 0; i < tx.vIn.size(); i++)
+		message += to_string(tx.vIn[i].nutxo);
+
+	for (size_t i = 0; i < tx.vIn.size(); i++)
+		message += tx.vIn[i].signature;
+
+	for (size_t i = 0; i < tx.vOut.size(); i++)
+		message += tx.vOut[i].publicId;
+
+	for (size_t i = 0; i < tx.vOut.size(); i++)
+		message += to_string(tx.vOut[i].amount);
+
+	string hash = hashMessage(message);
+	
+	tx.txId = hash;
+}
+
 string cryptoHandler::signMessage(string& message)
 {
 	vector<byte> b = getSignature(myprivateKey,message);

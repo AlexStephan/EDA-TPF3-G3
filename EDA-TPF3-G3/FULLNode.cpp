@@ -765,6 +765,7 @@ bool FULLNode::makeSmartTX(const vector<Vout>& receivers, Transaction& tx)
 
 	bool validez = utxohandler.createTX(ownData.getID(), receivers, tx);
 	cryptohandler.signAllVinsInTx(tx);
+	cryptohandler.hashTx(tx);
 	return validez;
 }
 

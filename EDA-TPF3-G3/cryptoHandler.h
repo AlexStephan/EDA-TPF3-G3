@@ -27,7 +27,8 @@ public:
 	string getMyPublicKey();
 
 	void signAllVinsInTx(Transaction& tx);
-
+	void hashTx(Transaction& tx);
+	
 	string signMessage(string& message);
 	bool isSignValid(string& message, string& pubKey, string& sign);
 
