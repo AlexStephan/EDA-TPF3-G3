@@ -63,10 +63,6 @@ void Client::POST(string path, string json)
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)(json.size()) + 1);
 		curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, json.c_str());
 
-
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
-
 		curl_multi_add_handle(curlm, curl);
 	}
 }
