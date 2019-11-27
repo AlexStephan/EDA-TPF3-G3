@@ -1,7 +1,6 @@
 #include "cryptoFunctions.h"
+#include <cstring>
 
-#define PRIVATE_KEY_CHARS 32
-#define PUBLIC_KEY_CHARS 64
 
 ECDSA<ECP, SHA256>::PrivateKey generatePrivKey()
 {
@@ -33,6 +32,24 @@ bool verifySignature(ECDSA<ECP, SHA256>::PublicKey& pubKey, string& data, vector
 {
 	ECDSA<ECP, SHA256>::Verifier verifier(pubKey);
 	return  verifier.VerifyMessage((const byte*)data.data(), data.size(), (const byte*)signature.data(), signature.size());
+}
+
+bool verifySignatureString(byte header[HEADER_CHARS], string& pubKey, string& data, string& signature)
+{
+	byte pubKeyBuf[HEADER_CHARS + PUBLIC_KEY_CHARS];
+	memcpy(header,pubKeyBuf,HEADER_CHARS);
+	stringToByte(pubKey, pubKeyBuf + HEADER_CHARS, PUBLIC_KEY_CHARS);
+
+	ArraySource source(pubKeyBuf,HEADER_CHARS+PUBLIC_KEY_CHARS,true);
+
+	ECDSA<ECP, SHA256>::PublicKey pubKeyString;
+	pubKeyString.Load(source);
+	ECDSA<ECP, SHA256>::Verifier verifier(pubKeyString);
+
+	byte signatureBuf[PUBLIC_KEY_CHARS];
+	stringToByte(signature, signatureBuf, PUBLIC_KEY_CHARS);
+
+	return verifier.VerifyMessage((const byte*)data.data(), data.size(), signatureBuf, PUBLIC_KEY_CHARS);
 }
 
 vector<byte> privateKeyToByte(ECDSA<ECP, SHA256>::PrivateKey& privKey)
@@ -67,6 +84,16 @@ string byteToString(vector<byte>& dataToPrint)
 	encoder.MessageEnd();
 
 	return output;
+}
+
+void stringToByte(string& dataToPrint, byte output[], int size)
+{
+	CryptoPP::HexDecoder decoder;
+
+	decoder.Attach(new CryptoPP::ArraySink(output,size));
+	decoder.Put((const byte*)dataToPrint.data(), 2 * size);
+	decoder.MessageEnd();
+	return;
 }
 
 void copyPublicKeys(ECDSA<ECP, SHA256>::PublicKey& original, ECDSA<ECP, SHA256>::PublicKey& copy)

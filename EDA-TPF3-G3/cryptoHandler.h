@@ -25,11 +25,13 @@ public:
 	string getMyPublicKey();
 
 	string signMessage(string& message);
-	bool isSignValid(string& message, string& pubKey, string& sign);	//WIP!!!
+	bool isSignValid(string& message, string& pubKey, string& sign);
 
 	string hashMessage(string& message);
 	bool isHashValid(string& message, string& hash);
 private:
+
+	byte header[24];
 	ECDSA<ECP, SHA256>::PrivateKey myprivateKey;
 	ECDSA<ECP, SHA256>::PublicKey mypublicKey;
 };

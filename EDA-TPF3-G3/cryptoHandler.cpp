@@ -1,10 +1,19 @@
 #include "cryptoHandler.h"
 #include "cryptoFunctions.h"
 
+#include <cstring>
+
 cryptoHandler::cryptoHandler()
 {
 	myprivateKey = generatePrivKey();
 	myprivateKey.MakePublicKey(mypublicKey);
+
+	byte auxBuf[HEADER_CHARS + PUBLIC_KEY_CHARS];
+	ArraySink sink(auxBuf, HEADER_CHARS + PUBLIC_KEY_CHARS);
+	mypublicKey.Save(sink);
+
+	memcpy(header, auxBuf, HEADER_CHARS);
+	
 }
 
 string cryptoHandler::getMyPrivateKey()
@@ -27,9 +36,7 @@ string cryptoHandler::signMessage(string& message)
 
 bool cryptoHandler::isSignValid(string& message, string& pubKey, string& sign)
 {
-	//WIP
-	//validateSignatureString(pubKey,message,sign);
-	return true;
+	return verifySignatureString(header,pubKey,message,sign);
 }
 
 string cryptoHandler::hashMessage(string& message)
