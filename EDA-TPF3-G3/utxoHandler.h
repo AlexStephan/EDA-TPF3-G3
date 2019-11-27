@@ -8,7 +8,6 @@ class utxoHandler
 public:
 	utxoHandler(BlockChain* blockChain, vector<Transaction>* txs);
 
-	//WIP:
 	void initializeUtxo(); //ASUMO Q LA BLOCKCHAIN ES VALIDA
 
 	longN balance(string publicKey);
@@ -33,6 +32,8 @@ private:
 	
 	bool vinRefersToProcessing(Vin& vin, size_t index);
 	bool findProcessing(const string& id, int nutxo, size_t indexInList);
-		
+
+	void addUtxo(Block& block, Transaction& tx,size_t voutIndex);
+	void eraseUtxo(Vin& vin);
 };
 

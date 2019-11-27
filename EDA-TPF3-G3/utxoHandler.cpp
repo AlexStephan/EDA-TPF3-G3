@@ -1,5 +1,7 @@
 #include "utxoHandler.h"
 
+#include <iostream>
+
 #define BONUS 50 //cuanto gana el minero por minar (ademas del resto de cada tx)
 
 utxoHandler::utxoHandler(BlockChain* blockChain, vector<Transaction>* txs)
@@ -9,7 +11,22 @@ utxoHandler::utxoHandler(BlockChain* blockChain, vector<Transaction>* txs)
 
 void utxoHandler::initializeUtxo()
 {
-	for (size_t i = 0; i < blockChain->size(); i++) {
+	for (size_t blockIndex = 0; blockIndex < blockChain->size(); blockIndex++) { //por cada bloque
+
+		Block& currBlock = (*blockChain)[blockIndex];
+
+		for (size_t txIndex = 0; txIndex < currBlock.getNTx(); txIndex++) { //Por cada TX
+
+			Transaction currTx = currBlock.getTx(txIndex);
+
+			for (size_t vinIndex = 0; vinIndex < currTx.nTxIn; vinIndex++) { //por cada Vin ...
+				eraseUtxo(currTx.vIn[vinIndex]);								//... elimina un utxo
+			}
+			for (size_t voutIndex = 0; voutIndex < currTx.nTxOut; voutIndex++) { //y por cada Vout...
+				addUtxo(currBlock, currTx, voutIndex);								//... agrega un utxo
+			}
+
+		}
 
 	}
 }
@@ -223,16 +240,8 @@ errorType utxoHandler::insertBlock(Block& block)
 		for (size_t voutIndex = 0;
 			voutIndex < currTx.nTxOut;
 			voutIndex++){
-
-			utxo newUtxo;
-			newUtxo.blockID = block.getBlockID();
-			newUtxo.blockHeight = block.getHeight();
-			newUtxo.txID = currTx.txId;
-			newUtxo.nutxo = voutIndex + 1;
-			newUtxo.ownerID = currTx.vOut[voutIndex].publicId;
-			newUtxo.amount = currTx.vOut[voutIndex].amount;
-
-			utxoList.emplace_back(newUtxo);
+			
+			addUtxo(block, currTx, voutIndex);
 		}
 	}
 
@@ -272,4 +281,35 @@ bool utxoHandler::findProcessing(const string& id, int nutxo, size_t indexInList
 		}
 	}
 	return false;
+}
+
+void utxoHandler::addUtxo(Block& block, Transaction& tx,size_t voutIndex)
+{
+	utxo newUtxo;
+	newUtxo.blockID = block.getBlockID();
+	newUtxo.blockHeight = block.getHeight();
+	newUtxo.txID = tx.txId;
+	newUtxo.nutxo = voutIndex + 1;
+	newUtxo.ownerID = tx.vOut[voutIndex].publicId;
+	newUtxo.amount = tx.vOut[voutIndex].amount;
+
+	utxoList.emplace_back(newUtxo);
+}
+
+void utxoHandler::eraseUtxo(Vin& vin)
+{
+	size_t index;
+	if (vinRefersToUtxo(vin, index)) {
+		utxoList.erase(utxoList.begin() + index);
+	}
+	else {
+		std::cout << endl<<endl
+			<<"***********************************************" <<endl
+			<<"*          PROBLEMAS:                         *" <<endl
+			<<"*                                             *" << endl
+			<<"* El nodo recibio un blockChain no valido     *" << endl
+			<<"* (los Vins no corresponden con utxos)        *" << endl
+			<<"***********************************************" << endl
+			<< endl << endl;
+	}
 }
