@@ -19,12 +19,14 @@
 
 #include "utxoHandler.h"
 
+#include "typeEnums.h"
+
 using namespace std;
 
 class cryptoHandler
 {
 public:
-	cryptoHandler(); //genera private y public keys
+	cryptoHandler(tipo_de_nodo tipo); //genera private y public keys
 	string getMyPrivateKey();
 	string getMyPublicKey();
 
@@ -41,10 +43,25 @@ public:
 	bool isSignValid(string& message, string& pubKey, string& sign);
 	string hashMessage(string& message);
 	bool isHashValid(string& message, string& hash);
+
+	//SOLO MINERO
+	void setMiningBlock(Block* miningBlock);
+	void tryNewNonce();
+	
 private:
+	tipo_de_nodo tipo;
+
+	Block* miningBlock;
+	void makeNewBlock();
+	void hashBlock(Block& block);
+
+	bool checkMiner();
+
 
 	string makeHashFromTx(Transaction& tx);
 	string concatenateVout(Transaction& tx);
+
+	string makeHashFromBlock(Block& b);
 
 	byte header[24];
 	ECDSA<ECP, SHA256>::PrivateKey myprivateKey;

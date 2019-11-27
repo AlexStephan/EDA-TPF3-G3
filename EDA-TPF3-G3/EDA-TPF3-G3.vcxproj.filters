@@ -219,6 +219,9 @@
     <ClInclude Include="NodeData.h">
       <Filter>Header Files\Node handlers\nodeData</Filter>
     </ClInclude>
+    <ClInclude Include="typeEnums.h">
+      <Filter>Header Files\Node handlers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">

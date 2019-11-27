@@ -20,7 +20,7 @@ using json = nlohmann::json;
 	CONSTRUCTOR
  ******************************************************************************/
 FULLNode::FULLNode(Socket _socket) : Node(NO_NODE_DATA),
-	cryptohandler(), utxohandler(&blockChain,&txs)
+	cryptohandler(NODO_FULL), utxohandler(&blockChain,&txs)
 {
 	ownData.setID(cryptohandler.getMyPublicKey());
 	ownData.setSocket(_socket);
@@ -849,10 +849,32 @@ void FULLNode::handleReceivedTx(string txString) {
 		if(!txs.empty())
 			floodTx(txs.back(), (*j)->getSender());							//And flood the tx
 	}*/
-	if (!utxohandler.TxExistAlready(newTx) && cryptohandler.verifyTXHash(newTx) && cryptohandler.verifyTXSign(newTx, &utxohandler) && utxohandler.validateTX(newTx)) {
+	if (!utxohandler.TxExistAlready(newTx) && cryptohandler.verifyTXHash(newTx) && cryptohandler.verifyTXSign(newTx, &utxohandler) && utxohandler.validateTX(newTx).error) {
 		utxohandler.insertTX(newTx);
 		floodTx(newTx, ownData);
+		notifyAllObservers(this);
 	}
 }void FULLNode::handleReceivedBlock(Block& block) {
-	if(verifyChallenge(block) && verifyPrevID(block) && !utxohandler.BlockExistAlready(block) && utxohandler.validateBlock(block) && cryptohandler.verifyBlockHash(block) && cryptohandler.verifyBlockSign(block, &utxohandler))
+	if (verifyChallenge(block) && verifyPrevID(block) && !utxohandler.BlockExistAlready(block) && utxohandler.validateBlock(block).error && cryptohandler.verifyBlockHash(block) && cryptohandler.verifyBlockSign(block, &utxohandler)) {
+		blockChain.push_back(block);
+		floodBlock(block, ownData);
+		notifyAllObservers(this);
+	}
+
+}
+
+bool FULLNode::verifyChallenge(Block& block) {
+	bool ret = false;
+
+
+
+
+	return ret;
+}
+
+bool FULLNode::verifyPrevID(Block& block) {
+	bool ret = false;
+	if (block.getPreviousBlockID() == blockChain.back().getBlockID())
+		ret = true;
+	return ret;
 }
