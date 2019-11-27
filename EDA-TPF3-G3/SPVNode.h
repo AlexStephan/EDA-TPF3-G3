@@ -6,11 +6,13 @@
 #include "blockChain.h"
 #include "jsonHandler.h"
 
+#include "cryptoHandler.h"
+
 class SPVNode :
 	public Node
 {
 public:
-	SPVNode(NodeData ownData, NodeData FilterNode, NodeData HeaderNode);
+	SPVNode(Socket _socket, NodeData FilterNode, NodeData HeaderNode);
 	~SPVNode();
 	virtual void cycle();
 
@@ -39,6 +41,10 @@ private:
 	vector<MerkleBlock> mBlocks;
 	jsonHandler JSONHandler;
 	vector<errorType> blockVerification;
+
+
+
+	cryptoHandler cryptohandler;
 
 	/***********************************************************************************
 		NETWORKING SH*T
