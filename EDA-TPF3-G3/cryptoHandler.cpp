@@ -2,8 +2,10 @@
 #include "cryptoFunctions.h"
 
 #include <cstring>
+#include <iostream>
+using namespace std;
 
-cryptoHandler::cryptoHandler()
+cryptoHandler::cryptoHandler(tipo_de_nodo tipo) : tipo(tipo), miningBlock(nullptr)
 {
 	myprivateKey = generatePrivKey();
 	myprivateKey.MakePublicKey(mypublicKey);
@@ -114,6 +116,30 @@ string cryptoHandler::hashMessage(string& message)
 bool cryptoHandler::isHashValid(string& message, string& hash)
 {
 	return (hash == hashMessage(message));
+}
+
+void cryptoHandler::setMiningBlock(Block* miningBlock)
+{
+	this->miningBlock = miningBlock;
+}
+
+bool cryptoHandler::tryToMine()
+{
+	if (tipo != NODO_MINERO) {
+		cout << "ILEGAL: un nodo no minero no puede minar"<<endl;
+		return false;
+	}
+	bool lo_logro = false;
+
+
+
+
+	return lo_logro;
+}
+
+void cryptoHandler::hashBlock(Block& block)
+{
+	block.setBlockId( makeHashFromBlock(block) );
 }
 
 string cryptoHandler::makeHashFromTx(Transaction& tx)

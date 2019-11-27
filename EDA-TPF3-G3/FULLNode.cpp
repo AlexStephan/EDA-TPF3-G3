@@ -20,7 +20,7 @@ using json = nlohmann::json;
 	CONSTRUCTOR
  ******************************************************************************/
 FULLNode::FULLNode(Socket _socket) : Node(NO_NODE_DATA),
-	cryptohandler(), utxohandler(&blockChain,&txs)
+	cryptohandler(NODO_FULL), utxohandler(&blockChain,&txs)
 {
 	ownData.setID(cryptohandler.getMyPublicKey());
 	ownData.setSocket(_socket);
