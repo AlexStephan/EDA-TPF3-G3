@@ -385,18 +385,7 @@ void FULLNode::keepListening() {
 			}
 			break;
 		case TX:			//Done
-			JSONHandler.saveTx((*j)->getMessage(), txs);
-			found = false;
-			for (int i = 0; i < txs.size() - 1; i++) {
-				if ((txs.size() != 1) && (txs.back().txId == txs[i].txId))
-					found = true;
-			}
-			if(found)														
-				txs.pop_back();										//Remove tx if repeated
-			else{
-				if(!txs.empty())
-					floodTx(txs.back(), (*j)->getSender());							//And flood the tx
-			}
+			handleReceivedTx((*j)->getMessage());
 			break;
 		case MERKLE:														//FULL NODES DONT CARE ABOUT RECEIVING MERKLE BLOCKS
 			break;
@@ -840,4 +829,25 @@ void FULLNode::manageNetworkReady(string rta)
 	string blckchain = rt["blockchain"].dump();
 	JSONHandler.saveBlockChain(blockChain, blckchain);
 
+}
+
+void FULLNode::handleReceivedTx(string txString) {
+	JSONHandler.saveTx((*j)->getMessage(), txs);
+	Transaction newTx = txs.back();
+	txs.pop_back();
+	/*found = false;
+	for (int i = 0; i < txs.size() - 1; i++) {
+		if ((txs.size() != 1) && (txs.back().txId == txs[i].txId))
+			found = true;
+	}
+	if(found)
+		txs.pop_back();										//Remove tx if repeated
+	else{
+		if(!txs.empty())
+			floodTx(txs.back(), (*j)->getSender());							//And flood the tx
+	}*/
+	if (!utxohandler.TxExistAlready(newTx) && cryptohandler.verifyTXHash(newTx) && cryptohandler.verifyTXSign(newTx, &utxohandler) && utxohandler.validateTX(newTx)) {
+		utxohandler.insertTX(newTx);
+		floodTx(newTx, ownData);
+	}
 }

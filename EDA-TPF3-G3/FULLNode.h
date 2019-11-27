@@ -103,6 +103,8 @@ protected:
 	cryptoHandler cryptohandler;
 	utxoHandler utxohandler;
 
+	void handleReceivedTx(string txString);
+
 	//recibe: lista de destinatarios (ID + monto)
 	//			fee: dinero que se quedara el minero
 	//devuelve: bool: indica si es valido o no la tx (si se hizo una falsa a proposito o no), true = valido, false = falsa
