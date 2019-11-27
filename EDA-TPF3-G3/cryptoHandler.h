@@ -30,7 +30,7 @@ public:
 	void hashTx(Transaction& tx);
 	
 	bool verifyTXHash(Transaction& tx);
-	bool verifyTXSign(Transaction& tx);
+	bool verifyTXSign(Transaction& tx,string ownerID);
 
 	string signMessage(string& message);
 	bool isSignValid(string& message, string& pubKey, string& sign);

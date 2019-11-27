@@ -56,7 +56,7 @@ bool cryptoHandler::verifyTXHash(Transaction& tx)
 	return (tx.txId == makeHashFromTx(tx));
 }
 
-bool cryptoHandler::verifyTXSign(Transaction& tx)
+bool cryptoHandler::verifyTXSign(Transaction& tx,string ownerID)
 {
 	bool rta = true;
 
@@ -70,9 +70,7 @@ bool cryptoHandler::verifyTXSign(Transaction& tx)
 		message += to_string(currVin.nutxo);
 		message += lastPartOfMessage;
 
-		string signature = signMessage(message);
-
-		rta = (currVin.signature == signature);
+		rta = isSignValid(message, ownerID, currVin.signature);
 	}
 
 	return rta;
