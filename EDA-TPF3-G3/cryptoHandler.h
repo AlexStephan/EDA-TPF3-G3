@@ -46,6 +46,8 @@ private:
 	string makeHashFromTx(Transaction& tx);
 	string concatenateVout(Transaction& tx);
 
+	string makeHashFromBlock(Block& b);
+
 	byte header[24];
 	ECDSA<ECP, SHA256>::PrivateKey myprivateKey;
 	ECDSA<ECP, SHA256>::PublicKey mypublicKey;

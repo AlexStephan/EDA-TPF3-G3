@@ -78,6 +78,23 @@ bool cryptoHandler::verifyTXSign(Transaction& tx,utxoHandler* handler)
 	return rta;
 }
 
+bool cryptoHandler::verifyBlockHash(Block& block)
+{
+	return (block.getBlockID() == makeHashFromBlock(block);
+}
+
+bool cryptoHandler::verifyBlockSign(Block& block, utxoHandler* handler)
+{
+	bool rta = true;
+
+	for (int i = 0; rta == true && i < block.getNTx(); i++) {
+		Transaction tx = block.getTx(i);
+		rta = verifyTXSign(tx, handler);
+	}
+
+	return rta;
+}
+
 string cryptoHandler::signMessage(string& message)
 {
 	vector<byte> b = getSignature(myprivateKey,message);
@@ -137,4 +154,14 @@ string cryptoHandler::concatenateVout(Transaction& tx)
 		rta += to_string(tx.vOut[i].amount);
 	}
 	return rta;
+}
+
+string cryptoHandler::makeHashFromBlock(Block& block)
+{
+	string message = "";
+	message += block.getPreviousBlockID();
+	message += to_string(block.getHeight());
+	message += block.getMerkleRoot();
+	message += block.getNonce();
+	return hashMessage(message);
 }
