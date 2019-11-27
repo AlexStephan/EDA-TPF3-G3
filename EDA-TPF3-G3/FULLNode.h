@@ -30,7 +30,7 @@ public:
 	/***********************************************************************************
 		METHODS USED BY CONTROLLER
 	***********************************************************************************/
-	errorType makeTX(const vector<Vout>& receivers, const vector<Vin>& givers);
+	errorType makeTX(const vector<Vout>& receivers, longN fee);
 
 	errorType makeBlock(); //"MINAR"
 	errorType addNeighbour(NodeData neighbour); //agrega fulls
