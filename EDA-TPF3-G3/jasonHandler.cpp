@@ -581,3 +581,12 @@ ip_t jsonHandler::crackIp(string ip)
 
 	return _ip;
 }
+
+
+string jsonHandler::decipherId(string code)
+{
+	json _code = json::parse(code);
+	auto encryptedId = _code["Id"];
+	string decryptedId = encryptedId.get<string>();
+	return decryptedId;
+}

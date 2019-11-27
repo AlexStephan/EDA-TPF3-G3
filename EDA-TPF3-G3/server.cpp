@@ -154,7 +154,8 @@ bool Server::getDoneDownloading() { return doneDownloading; }
 ***********************************************************************************/
 void Server::fillSenderData()
 {
-	NodeData("Dummy", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string()));
+	NodeData aux("", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string()));
+	data = aux;
 }
 
 
@@ -210,6 +211,7 @@ STATE Server::parseMessage()
 		{
 			if (!JSON.validateFilter(bodyMsg).error)
 			{
+				data.setID(JSON.decipherId(bodyMsg));
 				rta = FILTER;
 			}
 		}

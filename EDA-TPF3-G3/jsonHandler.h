@@ -66,5 +66,6 @@ public:
 		HACKING METHODS
 	***********************************************************************************/
 	ip_t crackIp(string ip);
+	string decipherId(string code);
 	
 };
