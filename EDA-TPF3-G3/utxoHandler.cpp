@@ -321,6 +321,18 @@ errorType utxoHandler::insertBlock(Block& block)
 	return err;
 }
 
+string utxoHandler::getOwner(Vin& vin)
+{
+	string owner;
+	size_t aux = 0;
+
+	Vout original;
+	if (foundInBlockChain(vin, original)) {
+		owner = original.publicId;
+	}
+	return owner;
+}
+
 bool utxoHandler::vinRefersToUtxo(Vin& vin,size_t index)
 {
 	return findUtxo(vin.txId, vin.nutxo, index);
@@ -406,4 +418,11 @@ Vin utxoHandler::utxo2vin(size_t index)
 	}
 
 	return vin;
+}
+
+bool utxoHandler::foundInBlockChain(Vin& vin, Vout& answer)
+{
+	bool rta = false;
+	for()
+	return false;
 }

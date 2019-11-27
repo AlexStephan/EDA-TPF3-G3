@@ -17,6 +17,8 @@
 
 #include "blockChain.h"
 
+#include "utxoHandler.h"
+
 using namespace std;
 
 class cryptoHandler
@@ -29,12 +31,17 @@ public:
 	void signAllVinsInTx(Transaction& tx);
 	void hashTx(Transaction& tx);
 	
+	bool verifyTXHash(Transaction& tx);
+	bool verifyTXSign(Transaction& tx, utxoHandler* handler);
+
 	string signMessage(string& message);
 	bool isSignValid(string& message, string& pubKey, string& sign);
-
 	string hashMessage(string& message);
 	bool isHashValid(string& message, string& hash);
 private:
+
+	string makeHashFromTx(Transaction& tx);
+	string concatenateVout(Transaction& tx);
 
 	byte header[24];
 	ECDSA<ECP, SHA256>::PrivateKey myprivateKey;
