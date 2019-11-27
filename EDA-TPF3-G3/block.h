@@ -129,12 +129,12 @@ private:
 	/***********************************************************************************
 		BLOCK STRUCTURE
 	***********************************************************************************/
-	vector<Transaction> tx;
-	unsigned long int height;
-	uint32_t nonce;
-	string blockId;
-	string previousBlockId;
-	string merkleRoot;
-	vector<string> merkleTree;
-	unsigned long int nTx;
+	vector<Transaction> tx;			//utxo-
+	unsigned long int height;		//utxo-
+	uint32_t nonce;					//crypto-
+	string blockId;					//crypto-
+	string previousBlockId;			//utxo-
+	string merkleRoot;				//?
+	vector<string> merkleTree;		//?
+	unsigned long int nTx;			//utxo-
 };

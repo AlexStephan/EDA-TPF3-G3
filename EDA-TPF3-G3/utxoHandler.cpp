@@ -338,6 +338,19 @@ void utxoHandler::setMiningBlock(Block* miningBlock)
 	this->miningBlock = miningBlock;
 }
 
+void utxoHandler::startNewMiningBlock()
+{
+	if (checkMiner() == false)
+		return;
+
+	//ORDENAR LAS TX Y METERLAS
+	miningBlock->setTransactions(*txs);
+	miningBlock->setHeight(blockChain->size() + 1);
+	miningBlock->setNTx(txs->size());
+	miningBlock->setPrevBlockId((*blockChain).back().getBlockID());
+
+}
+
 bool utxoHandler::checkMiner()
 {
 	if (tipo != NODO_MINERO) {

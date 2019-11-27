@@ -30,6 +30,7 @@ public:
 
 	//MINERO
 	void setMiningBlock(Block* miningBlock);
+	void startNewMiningBlock();
 
 private:
 	tipo_de_nodo tipo;
