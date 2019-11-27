@@ -29,9 +29,12 @@ public:
 	void signAllVinsInTx(Transaction& tx);
 	void hashTx(Transaction& tx);
 	
+
+	bool verifyTXHash(Transaction& tx);
+	bool verifyTXSign(Transaction& tx);
+
 	string signMessage(string& message);
 	bool isSignValid(string& message, string& pubKey, string& sign);
-
 	string hashMessage(string& message);
 	bool isHashValid(string& message, string& hash);
 private:
