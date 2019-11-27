@@ -23,6 +23,9 @@ public:
 	errorType validateBlock(Block& block); //ANTES COMPROBAR HASH, CHALLENGE Y PREVIOUS_ID
 	errorType insertBlock(Block& block);
 
+
+	string getOwner(Vin& vin);
+
 private:
 	vector<utxo> utxoList;
 	vector<utxo> processingTxList;
@@ -39,5 +42,8 @@ private:
 	void addUtxo(Block& block, Transaction& tx,size_t voutIndex);
 	void eraseUtxo(Vin& vin);
 	Vin utxo2vin(size_t index);
+
+
+	bool foundInBlockChain(Vin& vin,Vout& answer);
 };
 
