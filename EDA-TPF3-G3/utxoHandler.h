@@ -19,7 +19,7 @@ public:
 
 	bool BlockExistAlready(Block& block);
 	errorType validateBlock(Block& block); //ANTES COMPROBAR HASH, CHALLENGE Y PREVIOUS_ID
-	void insertBlock(Block& block);
+	errorType insertBlock(Block& block);
 
 private:
 	vector<utxo> utxoList;

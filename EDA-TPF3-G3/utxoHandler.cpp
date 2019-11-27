@@ -129,6 +129,13 @@ errorType utxoHandler::validateBlock(Block& block)
 	vector<size_t> utxoIndex = {};
 	vector<size_t> procIndex = {};
 
+
+	//verifica el height adecuado
+	if (block.getHeight() != 1 + blockChain->size()) {
+		err.error = true;
+		err.datos = "Bloque invalido:\nEl height del bloque no corresponde con el esperado";
+	}
+
 	//Verifica q en cada TX, los Vins refieran a UTXOs o a PROCESSINGTX
 	for (size_t txIndex = 0; err.error == false && txIndex < block.getNTx(); txIndex++) {
 		Transaction currTx = block.getTx[txIndex];
@@ -141,7 +148,7 @@ errorType utxoHandler::validateBlock(Block& block)
 			}
 			else {
 				err.error = true;
-				err.datos = "Bloque invalido:\tUn miembro de Vin refiere a una TX no presente en la lista de UTXO ni en la lista de Processing TX";
+				err.datos = "Bloque invalido:\nUn miembro de Vin refiere a una TX no presente en la lista de UTXO ni en la lista de Processing TX";
 			}
 		}
 	}
@@ -162,22 +169,76 @@ errorType utxoHandler::validateBlock(Block& block)
 		for (size_t txIndex = 0; txIndex < block.getNTx(); txIndex++) {
 			Transaction currTx = block.getTx(txIndex);
 			for (size_t voutIndex = 0; voutIndex < currTx.nTxOut; voutIndex++) {
-				outcome = currTx.vOut[voutIndex].amount;
+				outcome += currTx.vOut[voutIndex].amount;
 			}
 		}
 
-
-
+		if (income + BONUS != outcome) {
+			err.error = true;
+			err.datos = "Bloque invalido:\nEl dinero proveniente de los Vins (+ 50) no coincide con el destinado a los Vouts";
+		}
 	}
 
-	/*
+	return err;
+}
 
-	for (size_t txIndex = 0; txIndex < block.getNTx(); txIndex++) {
+errorType utxoHandler::insertBlock(Block& block)
+{
+	errorType err;
+	err.error = false;
+	err.datos = "";
+
+	size_t aux = 0;
+
+	for (size_t txIndex = 0;
+		err.error==false && txIndex < block.getNTx();
+		txIndex++) {
+
 		Transaction currTx = block.getTx(txIndex);
 
+		for (size_t vinIndex = 0;
+			err.error == false && vinIndex < currTx.nTxIn;
+			vinIndex++) {
 
+			if (vinRefersToProcessing(currTx.vIn[vinIndex], aux)) {
+				processingTxList.erase(processingTxList.begin() + aux);
+			}
+			else if (vinRefersToUtxo(currTx.vIn[vinIndex], aux)) {
+				utxoList.erase(utxoList.begin() + aux);
+			}
+			else {
+				err.error = true;
+				err.datos = "FATAL ERROR:\nSe intento ingresar un Bloque con un TX sin respaldo en utxo o processing tx\nSon las 2:30 AM de la mañana, y mi computadora parece tener mas ganas de dormir que yo";
+			}
+
+		}
 	}
-	*/
+
+	for (size_t txIndex = 0;
+		err.error == false && txIndex < block.getNTx();
+		txIndex++) {
+
+		Transaction currTx = block.getTx(txIndex);
+
+		for (size_t voutIndex = 0;
+			voutIndex < currTx.nTxOut;
+			voutIndex++){
+
+			utxo newUtxo;
+			newUtxo.blockID = block.getBlockID();
+			newUtxo.blockHeight = block.getHeight();
+			newUtxo.txID = currTx.txId;
+			newUtxo.nutxo = voutIndex + 1;
+			newUtxo.ownerID = currTx.vOut[voutIndex].publicId;
+			newUtxo.amount = currTx.vOut[voutIndex].amount;
+
+			utxoList.emplace_back(newUtxo);
+		}
+	}
+
+	if (err.error == false)
+		blockChain->emplace_back(block);
+
 	return err;
 }
 
