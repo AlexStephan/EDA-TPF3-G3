@@ -818,6 +818,8 @@ void FULLNode::manageNetworkReady(string rta)
 {
 	json rt = json::parse(rta);
 	string blckchain = rt["blockchain"].dump();
-	JSONHandler.saveBlockChain(blockChain, blckchain);
+	BlockChain laNewBlckChain;
+	JSONHandler.saveBlockChain(laNewBlckChain, blckchain);
+	blockChain = laNewBlckChain;
 
 }

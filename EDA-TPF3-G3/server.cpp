@@ -86,7 +86,7 @@ void Server::connectionHandler(const boost::system::error_code& err)
 	if (!err)
 	{
 		doneListening = true;
-		fillSenderData();
+		//fillSenderData();
 		cout << "Connected" << endl;
 	}
 
@@ -116,6 +116,7 @@ void Server::receiveHandler(const boost::system::error_code err, std::size_t byt
 	else if (!err)
 	{
 		doneDownloading = true;
+		fillSenderData();
 		cout << "Done receviving" << endl;
 		state = parseMessage();
 	}
