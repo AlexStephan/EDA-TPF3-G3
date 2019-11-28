@@ -227,7 +227,7 @@ errorType utxoHandler::validateBlock(Block& block)
 
 	//Verifica q en cada TX, los Vins refieran a UTXOs o a PROCESSINGTX
 	for (size_t txIndex = 0; err.error == false && txIndex < block.getNTx(); txIndex++) {
-		Transaction currTx = block.getTx[txIndex];
+		Transaction currTx = block.getTx(txIndex);
 		for (size_t vinIndex = 0; err.error == false && vinIndex < currTx.nTxIn; vinIndex++) {
 			if (vinRefersToProcessing(currTx.vIn[vinIndex], aux)) {
 				procIndex.push_back(aux);
@@ -522,7 +522,7 @@ bool utxoHandler::foundInBlockChain(Vin& vin, Vout& answer)
 {
 	bool rta = false;
 	for (int i = blockChain->size() - 1;rta == false && i >= 0; i--) {//por cada bloque
-		if (vin.blockId == (*blockChain)[i].getBlockID) {
+		if (vin.blockId == (*blockChain)[i].getBlockID()) {
 			Block& block = (*blockChain)[i];
 			for (int j = 0; rta == false && j < block.getNTx(); j++) {//por cada tx
 				if (vin.txId == block.getTx(j).txId) {
