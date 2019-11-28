@@ -29,5 +29,13 @@ void MINERNode::miningActions()
 	cryptohandler.tryNewNonce();
 	if (miningBlockVerifyChallente()) {
 
+		//METERSE EL BLOQUE EN LA BLOCKCHAIN
+		//FLODEAR EL BLOQUE
+		errorType mensaje;
+		mensaje.error = true;
+		mensaje.datos = "ENHORABUENA!!!\nEste minero logro minar";
+		mensajesDeVentana.emplace_back(mensaje);
+		utxohandler.startNewMiningBlock();
+
 	}
 }
