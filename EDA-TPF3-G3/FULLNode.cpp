@@ -329,13 +329,12 @@ void FULLNode::keepListening() {
 	vector<vector<Server*>::iterator> deleteThis;
 	vector<Server*> doneServers;
 	servers.back()->listening();
-
-	if ((*(servers.end() - 1))->getDoneListening()) {
-		//cout << "Latest Server picked up something!" << endl;
+	while (servers.back()->getDoneListening())
+	{
 		Server* newServer = new Server(port);
 		newServer->startConnection();
 		servers.push_back(newServer);
-		//cout << "New Server created and pushed!" << endl;
+		servers.back()->listening();
 	}
 	auto i = servers.begin();
 	for (; i != servers.end() - 1; i++) {

@@ -20,6 +20,7 @@ Server::Server(unsigned int port)
 	myResponse.clear();
 	bodyMsg.clear();
 	Msg.clear();
+	totalBytes = 0;
 	state = ERR;
 	*buf = {};
 
@@ -130,10 +131,22 @@ void Server::receiveHandler(const boost::system::error_code err, std::size_t byt
 
 void Server::sendHandler(const boost::system::error_code err, std::size_t bytes)
 {
-	if (!err)
+	totalBytes += bytes;
+	if (!err && myResponse.size() <= totalBytes)
 	{
 		doneSending = true;
+		totalBytes = 0;
 		cout << myResponse << endl;
+	}
+
+	else if (!err && myResponse.size() > totalBytes)
+	{
+		doneSending = false;
+	}
+
+	else
+	{
+		cout << "Error while sending" << endl;
 	}
 }
 
