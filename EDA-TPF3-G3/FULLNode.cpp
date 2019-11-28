@@ -396,14 +396,15 @@ void FULLNode::keepListening() {
 			break;
 		case FILTER:
 			filters.push_back(JSONHandler.saveFilter((*j)->getMessage()));
+			NodeData aux(filters[0].publicID, filters[0].port, filters[0].ip);
 			found = false;
 			for (int i = 0; i < neighbourhood.size(); i++) {
-				if (neighbourhood[i] == (*j)->getSender())
+				if (neighbourhood[i] == aux)
 					found = true;
 			}
 			if (!found)
-				neighbourhood.push_back((*j)->getSender());					//If Filter sender is not a neighbour, we add it
-			askedForFilter.push_back((*j)->getSender());
+				neighbourhood.push_back(aux);					//If Filter sender is not a neighbour, we add it
+			askedForFilter.push_back(aux);
 			break;
 		}
 	}

@@ -15,7 +15,8 @@ void SPVviewer::update(void* n)
 	SPVNode* node = (SPVNode*)n;
 
 	nodedata = node->getData();
-	headernodedata = node->getHeaderNodeData();
+	headernodedata = node->
+		NodeData();
 	filternodedata = node->getFilterNodeData();
 
 	windowName = nodedata.getID();

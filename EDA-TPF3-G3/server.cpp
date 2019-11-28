@@ -65,16 +65,21 @@ void Server::listening()
 void Server::receiveMessage()
 {
 	IO_handler->poll();
-	socket->async_read_some(boost::asio::buffer(buf), boost::bind(&Server::receiveHandler, this,
+	socket->async_read_some(boost::asio::buffer(buf), boost::bind(&Server::messaggeHandler, this,
 		boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 }
 
-void Server::sendMessage(const string& message)
+void Server::sendMessage(const string& message) //ES BLOQUEANTE POR AHORA
 {
-	myResponse = message;
-	IO_handler->poll();
-	socket->async_write_some(boost::asio::buffer(myResponse,myResponse.size()), boost::bind(&Server::sendHandler, this,
-		boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+	size_t len;
+	len = socket->write_some(boost::asio::buffer(message, strlen(message.c_str())), error);
+
+	if (error.value() != WSAEWOULDBLOCK)
+	{
+		doneSending = true;
+		cout << "Done sending" << endl;
+		cout << message << endl;
+	}
 
 }
 
@@ -86,7 +91,7 @@ void Server::connectionHandler(const boost::system::error_code& err)
 	if (!err)
 	{
 		doneListening = true;
-		//fillSenderData();
+		fillSenderData();
 		cout << "Connected" << endl;
 	}
 
@@ -103,7 +108,7 @@ void Server::connectionHandler(const boost::system::error_code& err)
 	}
 }
 
-void Server::receiveHandler(const boost::system::error_code err, std::size_t bytes)
+void Server::messaggeHandler(const boost::system::error_code err, std::size_t bytes)
 {
 	string aux = buf;
 	Msg += buf;
@@ -116,7 +121,6 @@ void Server::receiveHandler(const boost::system::error_code err, std::size_t byt
 	else if (!err)
 	{
 		doneDownloading = true;
-		fillSenderData();
 		cout << "Done receviving" << endl;
 		state = parseMessage();
 	}
@@ -127,17 +131,6 @@ void Server::receiveHandler(const boost::system::error_code err, std::size_t byt
 	}
 
 }
-
-
-void Server::sendHandler(const boost::system::error_code err, std::size_t bytes)
-{
-	if (!err)
-	{
-		doneSending = true;
-	}
-}
-
-
 /***********************************************************************************
 	 GETTERS
 ***********************************************************************************/
@@ -155,9 +148,9 @@ bool Server::getDoneDownloading() { return doneDownloading; }
 ***********************************************************************************/
 void Server::fillSenderData()
 {
-	NodeData aux("", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string()));
-	data = aux;
+	NodeData("Dummy", socket->remote_endpoint().port(),JSON.crackIp(socket->remote_endpoint().address().to_string()));
 }
+
 
 
 
@@ -212,7 +205,6 @@ STATE Server::parseMessage()
 		{
 			if (!JSON.validateFilter(bodyMsg).error)
 			{
-				data.setID(JSON.decipherId(bodyMsg));
 				rta = FILTER;
 			}
 		}
