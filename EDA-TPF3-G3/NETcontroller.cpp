@@ -18,6 +18,7 @@ NETcontroller::NETcontroller(EDAcoinsNet* model) :
 	guiHandler(), warningHandler(WINDOW_NAME),
 	FcontrolList(), FviewList(),
 	ScontrolList(), SviewList(),
+	McontrolList(), MviewList(),
 	network_created(false)
 {
 	netmodel->attach(netviewer);
@@ -36,6 +37,8 @@ NETcontroller::~NETcontroller(){
 	CLEAN(FviewList);
 	CLEAN(ScontrolList);
 	CLEAN(SviewList);
+	CLEAN(McontrolList);
+	CLEAN(MviewList);
 }
 
 void NETcontroller::update(void*)
@@ -71,6 +74,22 @@ void NETcontroller::update(void*)
 
 		newViewer->update(newNode);
 	}
+
+	index = McontrolList.size();
+	if (netmodel->getMINERamount() > index) {
+		MINERNode* newNode = netmodel->getMINERnode(index);
+
+		FULLcontroller* newController = new FULLcontroller(newNode);
+		FULLviewer* newViewer = new FULLviewer();
+
+		newNode->attach(*newController);
+		newNode->attach(*newViewer);
+
+		McontrolList.emplace_back(newController);
+		MviewList.emplace_back(newViewer);
+
+		newViewer->update(newNode);
+	}
 }
 
 
@@ -100,6 +119,8 @@ void NETcontroller::cycle()
 		CYCLE(FviewList);
 		CYCLE(ScontrolList);
 		CYCLE(SviewList);
+		CYCLE(McontrolList);
+		CYCLE(MviewList);
 
 		warningHandler.draw();
 	}
@@ -107,6 +128,7 @@ void NETcontroller::cycle()
 	guiHandler.end_frame();
 }
 
+//Actualizate Oli, ponte a la onda!!!
 void NETcontroller::drawControlWindow() {
 	ImGui::Begin(myWindowName.c_str());
 	ImGui::Text("Elija el tipo de nodo que desee crear");

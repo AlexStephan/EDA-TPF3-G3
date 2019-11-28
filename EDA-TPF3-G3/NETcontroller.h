@@ -6,6 +6,7 @@
 #include "NETviewer.h"		//VIEWER
 
 //Includes por la jerarquia secundaria (Nodes)
+#include "MINERNode.h"		//MODEL
 #include "FULLNode.h"		//MODEL
 #include "FULLcontroller.h"	//CONTROLLER
 #include "FULLviewer.h"		//VIEWER
@@ -54,6 +55,8 @@ private:
 	vector<FULLviewer*> FviewList;
 	vector<SPVcontroller*> ScontrolList;
 	vector<SPVviewer*> SviewList;
+	vector<FULLcontroller*> McontrolList;
+	vector<FULLviewer*> MviewList;
 
 	string myWindowName;
 
