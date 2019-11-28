@@ -7,6 +7,15 @@
 #define BUTTON_S		100
 #define BUTTONS_PER_ROW	2
 
+void FULLcontroller::update(void*) {
+	errorType newMessage;
+	if (fnode->getNodeType() == NODO_MINERO) {
+		while ((newMessage = ((MINERNode*)fnode)->getWindowMessage()).error == true) {
+			warningHandler.check(newMessage);
+		}
+	}
+}
+
 void FULLcontroller::cycle()
 {
 	ImGui::Begin(windowID.c_str());
