@@ -16,6 +16,7 @@ public:
 	errorType getWindowMessage();
 
 private:
+	virtual void handleReceivedBlock(Block& block);
 	void miningActions();
 
 	Block miningBlock;

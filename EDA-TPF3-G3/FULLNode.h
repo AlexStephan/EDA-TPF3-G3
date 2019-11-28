@@ -107,7 +107,7 @@ protected:
 	utxoHandler utxohandler;
 
 	void handleReceivedTx(string txString);
-	void handleReceivedBlock(Block& block);
+	virtual void handleReceivedBlock(Block& block);
 	void handleChallengeRating();
 
 	bool verifyChallenge(Block& block);
