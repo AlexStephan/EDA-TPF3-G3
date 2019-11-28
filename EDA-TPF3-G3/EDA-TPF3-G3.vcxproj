@@ -52,6 +52,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="drawTXHandler.h" />
     <ClInclude Include="NodeData.h" />
+    <ClInclude Include="NODEviewer.h" />
     <ClInclude Include="observer.h" />
     <ClInclude Include="printTXroutine.h" />
     <ClInclude Include="resource.h" />
@@ -101,6 +102,7 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="drawTXHandler.cpp" />
     <ClCompile Include="NodeData.cpp" />
+    <ClCompile Include="NODEviewer.cpp" />
     <ClCompile Include="printTXroutine.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="Socket.cpp" />

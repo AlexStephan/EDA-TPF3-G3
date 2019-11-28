@@ -225,6 +225,9 @@
     <ClInclude Include="drawTXHandler.h">
       <Filter>Header Files\Gui handlers</Filter>
     </ClInclude>
+    <ClInclude Include="NODEviewer.h">
+      <Filter>Header Files\_NODES</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EDA-TPF3-G3.rc">
@@ -348,6 +351,9 @@
     </ClCompile>
     <ClCompile Include="drawTXHandler.cpp">
       <Filter>Source Files\Gui handlers</Filter>
+    </ClCompile>
+    <ClCompile Include="NODEviewer.cpp">
+      <Filter>Source Files\_NODES</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

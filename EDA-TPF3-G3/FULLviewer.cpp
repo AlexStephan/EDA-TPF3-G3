@@ -1,12 +1,12 @@
+
 #include "FULLviewer.h"
 #include "imgui.h"
 #include "printTXroutine.h"
 
 #define NO_DATA "NO DATA",0,0,0,0,0
 
-FULLviewer::FULLviewer() :
-	nodedata(NO_DATA), neighbours(), pendingTX(),
-	windowName("NO_DATA"), treeHandler(),
+FULLviewer::FULLviewer() : NODEviewer(),
+	neighbours(), pendingTX(), treeHandler(),
 	blockchain(), layoutHandler()
 {
 	//ImGuiIO& io = ImGui::GetIO();
@@ -61,31 +61,6 @@ void FULLviewer::drawWindow() {
 	ImGui::End();
 }
 
-void FULLviewer::showNodeType() {
-	switch (type) {
-	case NODO_UNKNOWN: default:
-		ImGui::Text("Node Type: UNKNOWN");
-		break;
-	case NODO_MINERO:
-		ImGui::Text("Node Type: MINER");
-		break;
-	case NODO_FULL:
-		ImGui::Text("Node Type: FULL");
-		break;
-	case NODO_SPV:
-		ImGui::Text("Node Type: SPV");
-		break;
-	}
-}
-
-void FULLviewer::printNodeData()
-{
-	if (ImGui::CollapsingHeader("Data")) {
-		ImGui::Text("ID: %s", nodedata.getID().c_str());
-		ImGui::Text("Port: %s", nodedata.getSocket().getPortString().c_str());
-		ImGui::Text("IP: %s", nodedata.getSocket().getIPString().c_str());
-	}
-}
 
 void FULLviewer::printNeighbours()
 {
@@ -113,10 +88,6 @@ void FULLviewer::printPendingTX()
 				//
 				if(ImGui::CollapsingHeader("TX %d", i))
 					printTx((*pendingTX)[i],i);
-
-
-
-
 
 				/* //DO NOT ERASE (YET)
 				string subWindowName = (*pendingTX)[i].txId + "##" + to_string(i);

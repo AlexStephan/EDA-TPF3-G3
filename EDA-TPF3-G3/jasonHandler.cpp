@@ -485,7 +485,7 @@ errorType jsonHandler::validateMerkle(string merkle)
 			mrkl.at("tx");
 			auto path = mrkl["merklePath"];
 
-			if (!validateTx(mrkl["tx"]).error)
+			if (!validateTx(mrkl["tx"].dump()).error)
 			{
 				err = { false, "OK Merkle Block" };
 			}
@@ -587,4 +587,12 @@ ip_t jsonHandler::crackIp(string ip)
 	_ip.b4 = atoi(ip.substr(pos3 + 1).c_str());
 
 	return _ip;
+}
+
+string jsonHandler::decipherId(string code)
+{
+	json _code = json::parse(code);
+	auto encryptedId = _code["Id"];
+	string decryptedId = encryptedId.get<string>();
+	return decryptedId;
 }

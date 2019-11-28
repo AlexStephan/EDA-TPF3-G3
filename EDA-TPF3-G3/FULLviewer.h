@@ -1,6 +1,6 @@
 #pragma once
 #include "observer.h"
-
+#include "NODEviewer.h"
 #include "FULLNode.h"
 #include "TreeWindowHandler.h"
 #include "layoutWindowHandler.h"
@@ -8,8 +8,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
-class FULLviewer :
-	public Observer
+class FULLviewer :	public NODEviewer
 {
 public:
 	FULLviewer();
@@ -18,23 +17,23 @@ public:
 	~FULLviewer();
 
 private:
-	NodeData nodedata;
-	string windowName;
-	tipo_de_nodo type;
-	unsigned long int money;
+	//NodeData nodedata;
+	//string windowName;
+	//tipo_de_nodo type;
+	//unsigned long int money;
 	const vector<NodeData>* neighbours;
 	const Layout* layout;
 	const vector<Transaction>* pendingTX;
 	const BlockChain* blockchain; //fijarse si no volo todo aca...
 	TreeWindowHandler treeHandler;
 	layoutWindowHandler layoutHandler;
-	ImFont* numberFont;
+	//ImFont* numberFont;
 	ALLEGRO_BITMAP* nbutton;
 	ALLEGRO_BITMAP* pbutton;
 	bool redButton;
 
 	void drawWindow();
-	void showNodeType();
+	//void showNodeType();
 
 						
 	/*
@@ -91,15 +90,11 @@ private:
 
 	*/
 
-	void printNodeData();
+	//void printNodeData();
 	void printNeighbours();
-	void printPendingTX();	//OLI!! Fijarse en la funcion printTx para cambiar el comportamiento de esa parte
-
-	void printBlockList(); //OLI
-
-	void drawBigRedButton(); //OLI
-
-
+	void printPendingTX();	
+	void printBlockList(); 
+	void drawBigRedButton(); 
 
 //	void printVin(int i);	//DO NOT ERASE (YET)
 //	void printVout(int i);

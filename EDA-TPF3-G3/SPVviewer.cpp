@@ -2,13 +2,9 @@
 #include "imgui.h"
 #include "printTXroutine.h"
 
-#define NOT_DATA	"NO DATA",0,0,0,0,0
-
-SPVviewer::SPVviewer() :
-	nodedata(NOT_DATA), headernodedata(NOT_DATA),
-	filternodedata(NOT_DATA), windowName("NO_DATA")
-{
-}
+SPVviewer::SPVviewer() : NODEviewer(),
+	headernodedata(NOT_DATA), filternodedata(NOT_DATA)
+{}
 
 void SPVviewer::update(void* n)
 {
@@ -30,10 +26,7 @@ void SPVviewer::cycle() {
 
 	showNodeType();
 	ImGui::Text("My EdaCoins: %d", money);
-
-	ImGui::Text("ID: %s", nodedata.getID().c_str());
-	ImGui::Text("Port: %d", nodedata.getSocket().getPort());
-	ImGui::Text("IP: %s", nodedata.getSocket().getIPString().c_str());
+	printNodeData();
 	ImGui::NewLine();
 	if (ImGui::CollapsingHeader("Filter Node")) {
 		ImGui::Text("Filter Node ID: %s", filternodedata.getID().c_str());
@@ -48,21 +41,4 @@ void SPVviewer::cycle() {
 
 	ImGui::EndChild();
 	ImGui::End();
-}
-
-void SPVviewer::showNodeType() {
-	switch (type) {
-	case NODO_UNKNOWN: default:
-		ImGui::Text("Node Type: UNKNOWN");
-		break;
-	case NODO_MINERO:
-		ImGui::Text("Node Type: MINER");
-		break;
-	case NODO_FULL:
-		ImGui::Text("Node Type: FULL");
-		break;
-	case NODO_SPV:
-		ImGui::Text("Node Type: SPV");
-		break;
-	}
 }
