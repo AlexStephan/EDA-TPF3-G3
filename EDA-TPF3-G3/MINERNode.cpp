@@ -206,6 +206,7 @@ void MINERNode::handleReceivedBlock(Block& block) {
 	}
 }
 
+
 errorType MINERNode::getWindowMessage()
 {
 	errorType mensaje;
@@ -223,10 +224,11 @@ errorType MINERNode::getWindowMessage()
 void MINERNode::miningActions()
 {
 	cryptohandler.tryNewNonce();
-	if (miningBlockVerifyChallente()) {
-
+	if (verifyChallenge(miningBlock)) {
 		//METERSE EL BLOQUE EN LA BLOCKCHAIN
+		blockChain.push_back(miningBlock);
 		//FLODEAR EL BLOQUE
+		floodBlock(miningBlock, ownData);
 		errorType mensaje;
 		mensaje.error = true;
 		mensaje.datos = "ENHORABUENA!!!\nEste minero logro minar";

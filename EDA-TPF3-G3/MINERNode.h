@@ -21,8 +21,5 @@ private:
 
 	Block miningBlock;
 	vector<errorType> mensajesDeVentana;
-
-	//TAREA PARA ALEJO
-	bool miningBlockVerifyChallente();
 };
 
