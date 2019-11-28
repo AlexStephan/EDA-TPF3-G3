@@ -45,6 +45,11 @@ private:
 
 
 
+	bool makeSmartTX(longN fee, const vector<Vout>& receivers, Transaction& tx);
+
+
+
+
 	cryptoHandler cryptohandler;
 	utxoHandler utxohandler;
 	/***********************************************************************************

@@ -290,6 +290,20 @@ void SPVNode::createDates(char* c1, char* c2)
 }
 
 
+bool SPVNode::makeSmartTX(longN fee, const vector<Vout>& receivers, Transaction& tx)
+{
+	tx.txId.clear();
+	tx.nTxIn = 0;
+	tx.nTxOut = 0;
+	tx.vIn.clear();
+	tx.vOut.clear();
+
+	bool validez = utxohandler.createTX(ownData.getID(), receivers, tx, fee);
+	cryptohandler.signAllVinsInTx(tx);
+	cryptohandler.hashTx(tx);
+	return validez;
+}
+
 /***********************************************************************************
 	POSTING / GETTING METHODS
 ***********************************************************************************/
@@ -315,6 +329,8 @@ errorType SPVNode::postTransaction(Transaction tx)
 	notifyAllObservers(this);
 	return err;
 }
+
+
 
 void SPVNode::verify
 

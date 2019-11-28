@@ -19,6 +19,8 @@ public:
 
 	bool TxExistAlready(Transaction& tx);
 	errorType validateTX(Transaction& tx); //ANTES COMPROBAR HASH Y FIRMA
+
+	//TAMBIEN PARA SPV: (INSTERT TX)
 	errorType insertTX(Transaction& tx);
 
 	bool BlockExistAlready(Block& block);
