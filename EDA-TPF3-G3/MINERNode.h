@@ -9,5 +9,12 @@
 class MINERNode :
 	public FULLNode
 {
+public:
+	MINERNode(Socket _socket);
+	~MINERNode();
+	virtual void cycle();
+
+	errorType getWindowMessage();
+
 };
 
