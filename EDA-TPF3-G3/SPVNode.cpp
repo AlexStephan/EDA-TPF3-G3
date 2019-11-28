@@ -12,7 +12,7 @@
 	CONSTRUTOR
  ******************************************************************************/
 SPVNode::SPVNode(Socket _socket, NodeData FilterNode, NodeData HeaderNode) : Node(NO_NODE_DATA), filterNode(FilterNode), headerNode(HeaderNode),
-	cryptohandler(NODO_SPV)
+	cryptohandler(NODO_SPV), utxohandler(NODO_SPV,nullptr,nullptr)
 {
 	
 	ownData.setID(cryptohandler.getMyPublicKey());

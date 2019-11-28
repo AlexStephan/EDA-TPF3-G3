@@ -10,12 +10,12 @@ class utxoHandler
 public:
 	utxoHandler(tipo_de_nodo tipo,BlockChain* blockChain, vector<Transaction>* txs);
 
+	longN balance(string publicKey);
+	bool createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx, longN fee);
+
+	//SOLO FULL Y MINERO
 	void initializeUtxo(); //ASUMO Q LA BLOCKCHAIN ES VALIDA
 
-	longN balance(string publicKey);
-
-	//FALTA FIRMARLAS!!!
-	bool createTX(string myPublicKey, const vector<Vout>& receivers, Transaction& tx, longN fee);
 
 	bool TxExistAlready(Transaction& tx);
 	errorType validateTX(Transaction& tx); //ANTES COMPROBAR HASH Y FIRMA
@@ -32,6 +32,10 @@ public:
 	//MINERO
 	void setMiningBlock(Block* miningBlock);
 	void startNewMiningBlock(string myPublicId, cryptoHandler& cryptohandler);
+
+	//SPV
+	void processHeader(MerkleBlock& merkle, unsigned long int height);
+	
 
 private:
 	tipo_de_nodo tipo;

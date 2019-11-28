@@ -5,29 +5,32 @@
 #define BONUS 50 //cuanto gana el minero por minar (ademas del resto de cada tx)
 
 utxoHandler::utxoHandler(tipo_de_nodo tipo,BlockChain* blockChain, vector<Transaction>* txs)
-	: blockChain(blockChain), txs(txs), utxoList(), tipo(tipo), miningBlock(nullptr)
+	: blockChain(blockChain), txs(txs), utxoList(), processingTxList(),
+	tipo(tipo), miningBlock(nullptr)
 {
 }
 
 void utxoHandler::initializeUtxo()
 {
-	for (size_t blockIndex = 0; blockIndex < blockChain->size(); blockIndex++) { //por cada bloque
+	if (tipo != NODO_SPV) {
+		for (size_t blockIndex = 0; blockIndex < blockChain->size(); blockIndex++) { //por cada bloque
 
-		Block& currBlock = (*blockChain)[blockIndex];
+			Block& currBlock = (*blockChain)[blockIndex];
 
-		for (size_t txIndex = 0; txIndex < currBlock.getNTx(); txIndex++) { //Por cada TX
+			for (size_t txIndex = 0; txIndex < currBlock.getNTx(); txIndex++) { //Por cada TX
 
-			Transaction currTx = currBlock.getTx(txIndex);
+				Transaction currTx = currBlock.getTx(txIndex);
 
-			for (size_t vinIndex = 0; vinIndex < currTx.nTxIn; vinIndex++) { //por cada Vin ...
-				eraseUtxo(currTx.vIn[vinIndex]);								//... elimina un utxo
-			}
-			for (size_t voutIndex = 0; voutIndex < currTx.nTxOut; voutIndex++) { //y por cada Vout...
-				addUtxo(currBlock, currTx, voutIndex);								//... agrega un utxo
+				for (size_t vinIndex = 0; vinIndex < currTx.nTxIn; vinIndex++) { //por cada Vin ...
+					eraseUtxo(currTx.vIn[vinIndex]);								//... elimina un utxo
+				}
+				for (size_t voutIndex = 0; voutIndex < currTx.nTxOut; voutIndex++) { //y por cada Vout...
+					addUtxo(currBlock, currTx, voutIndex);								//... agrega un utxo
+				}
+
 			}
 
 		}
-
 	}
 }
 
@@ -339,11 +342,13 @@ errorType utxoHandler::insertBlock(Block& block)
 string utxoHandler::getOwner(Vin& vin)
 {
 	string owner;
-	size_t aux = 0;
+	if (tipo != NODO_SPV) {
+		size_t aux = 0;
 
-	Vout original;
-	if (foundInBlockChain(vin, original)) {
-		owner = original.publicId;
+		Vout original;
+		if (foundInBlockChain(vin, original)) {
+			owner = original.publicId;
+		}
 	}
 	return owner;
 }
@@ -383,6 +388,18 @@ void utxoHandler::startNewMiningBlock(string myPublicId, cryptoHandler& cryptoha
 	miningBlock->setNTx(txs->size());
 	miningBlock->setPrevBlockId((*blockChain).back().getBlockID());
 
+}
+
+void utxoHandler::processHeader(MerkleBlock& merkle, unsigned long int height)
+{
+	if (tipo == NODO_SPV) {
+
+//WIP
+
+
+
+
+	}
 }
 
 bool utxoHandler::checkMiner()
