@@ -142,7 +142,7 @@ void NETcontroller::drawControlWindow() {
 			errSPV = NONE;
 			//if (IDname.size() != 0) {
 				if (currFilter != currHeader)
-					warningHandler.check(netmodel->createSPVNode(NodeData(IDname, nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
+					warningHandler.check(netmodel->createSPVNode(Socket(nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
 				else
 					errSPV = SAME_NODE;
 			//}
@@ -176,7 +176,7 @@ void NETcontroller::makeFirstFULL()
 	jsonhandler.getNodesInLayout("manifest.json", dummyNode, genesisNodes);
 
 	for (size_t i = FIRST; i <= LAST; i++) {
-		netmodel->createFULLNode(genesisNodes[i]);
+		netmodel->createFULLNode(genesisNodes[i].getSocket());
 	}
 
 	for (size_t i = 0; i < genesisNodes.size(); i++) {

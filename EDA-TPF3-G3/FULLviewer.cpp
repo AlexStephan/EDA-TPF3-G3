@@ -9,15 +9,17 @@ FULLviewer::FULLviewer() :
 	windowName("NO_DATA"), treeHandler(),
 	blockchain(), layoutHandler()
 {
+	//ImGuiIO& io = ImGui::GetIO();
+	//numberFont = io.Fonts->AddFontFromFileTTF("BebasNeue_Regular.ttf", 20.0f);
 	redButton = false;
 	nbutton = al_load_bitmap("Button_normal.png");
 	pbutton = al_load_bitmap("Button_pressed.png");
 }
 
-
 FULLviewer::~FULLviewer() {
 	al_destroy_bitmap(nbutton);
 	al_destroy_bitmap(pbutton);
+
 }
 
 void FULLviewer::update(void*n)
@@ -29,6 +31,7 @@ void FULLviewer::update(void*n)
 	pendingTX = node->getPendingTX();
 	blockchain = node->getBlockChain();
 	layout = node->getLayout();
+	money = node->getMyMoney();
 	windowName = nodedata.getID();
 	
 	treeHandler.setId(nodedata.getID());
@@ -46,6 +49,7 @@ void FULLviewer::drawWindow() {
 	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + CCHILD_W, ImGui::GetCursorPosY() - CHILD_H));
 	ImGui::BeginChild("FULL VIEW", ImVec2(CHILD_W, CHILD_H));
 
+	ImGui::Text("My EdaCoins: %d", money);
 	printNodeData();
 	printNeighbours();
 	printBlockList();

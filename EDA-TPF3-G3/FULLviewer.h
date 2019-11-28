@@ -19,12 +19,14 @@ public:
 private:
 	NodeData nodedata;
 	string windowName;
+	unsigned long int money;
 	const vector<NodeData>* neighbours;
 	const Layout* layout;
 	const vector<Transaction>* pendingTX;
 	const BlockChain* blockchain; //fijarse si no volo todo aca...
 	TreeWindowHandler treeHandler;
 	layoutWindowHandler layoutHandler;
+	ImFont* numberFont;
 	ALLEGRO_BITMAP* nbutton;
 	ALLEGRO_BITMAP* pbutton;
 	bool redButton;
