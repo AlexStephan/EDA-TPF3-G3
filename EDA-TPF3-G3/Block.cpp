@@ -5,6 +5,7 @@
 #include "Block.h"
 #include "json.hpp"
 #include <fstream>
+#include "cryptoFunctions.h"
 
 /*******************************************************************************
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
@@ -196,10 +197,8 @@ void Block::fillMerklePath(vector<newIDstr>* path, vector<newIDstr>* tree, int j
 
 	if (j % 2) {										//Si el txID ocupa una posicon impar
 		path->push_back((*tree)[j - 1]);				//Cargo primero el anterior
-		//path->push_back((*tree)[j]);					//Y luego el actual
 	}
 	else {												//Si el txID es par
-		//path->push_back((*tree)[j]);					//Cargo primero el actual
 		path->push_back((*tree)[j + 1]);				//Luego el siguiente
 	}
 
@@ -236,15 +235,15 @@ vector<newIDstr> Block::getMerkleTree() {
 	//Normalize floor of tree
 	//Not filling floor
 	for (int i = 0; i < transactions; i++) {
-		unsigned long int inTrans = tx[i].nTxIn;
+		/*unsigned long int inTrans = tx[i].nTxIn;
 		string concatenate;
 		concatenate.clear();
 		for (int j = 0; j < inTrans; j++)
 			concatenate += tx[i].vIn[j].txId;
 		char aux[9];
 		unsigned int ID = generateID(concatenate.c_str());
-		sprintf_s(&aux[0], 9, "%08X", ID);
-		newIDstr leafID(aux);
+		sprintf_s(&aux[0], 9, "%08X", ID);*/
+		newIDstr leafID(tx[i].txId);
 		tree.push_back(leafID);
 	}
 	int prevLvlAmount = transactions;
@@ -258,11 +257,11 @@ vector<newIDstr> Block::getMerkleTree() {
 		fillLevel(i, &prevLvlAmount, it, &tree);				//Rellena todos los arboles
 	}
 
-	newIDstr concatenate = *(tree.end() - 2) + *(tree.end() - 1);		//Concatena un par de elementos del nivel anterior
+	/*newIDstr concatenate = *(tree.end() - 2) + *(tree.end() - 1);		//Concatena un par de elementos del nivel anterior
 	char aux[9];
 	unsigned int ID = generateID(concatenate.c_str());
-	sprintf_s(&aux[0], 9, "%08X", ID);
-	newIDstr newID(aux);
+	sprintf_s(&aux[0], 9, "%08X", ID);*/
+	newIDstr newID(hash2nodes(*(tree.end() - 2), *(tree.end() - 1)));
 	tree.push_back(newID);
 
 	return tree;
@@ -274,11 +273,11 @@ void Block::fillLevel(int level, int* prevLvlAmount, vector<newIDstr>::iterator 
 	vector<newIDstr>::iterator newIt = it;						//it esta posicionado en el ultimo elemento del nivel anterior
 	newIt -= (*prevLvlAmount);								//newIt apunta al primer elemento del nivel anterior
 	for (int i = 0; i < *prevLvlAmount; i += 2) {
-		newIDstr concatenate = *(newIt + i) + *(newIt + i + 1);		//Concatena un par de elementos del nivel anterior
+		/*newIDstr concatenate = *(newIt + i) + *(newIt + i + 1);		//Concatena un par de elementos del nivel anterior
 		char aux[9];
 		unsigned int ID = generateID(concatenate.c_str());
-		sprintf_s(&aux[0], 9, "%08X", ID);
-		newIDstr newID(aux);
+		sprintf_s(&aux[0], 9, "%08X", ID);*/
+		newIDstr newID(hash2nodes (*(newIt + i), *(newIt + i + 1)));
 		lvl.push_back(newID);										//Se pushea la concatenacion al vector del nivel actual
 	}
 	*prevLvlAmount /= 2;											//Ahora el nivel actual tiene la mitad de elementos que el anterior
@@ -308,26 +307,26 @@ const long int Block::getBlockPos(vector<Block>* BlockChain) {
 }
 
 const string Block::getTxId(Transaction tx) {
-	string concatenate;
+	/*string concatenate;
 	concatenate.clear();
 	for (int j = 0; j < tx.nTxIn; j++)
 		concatenate += tx.vIn[j].txId;
 	char aux[9];
 	unsigned int ID = generateID(concatenate.c_str());
 	sprintf_s(&aux[0], 9, "%08X", ID);
-	newIDstr leafID(aux);
-	return leafID;
+	newIDstr leafID(aux);*/
+	return tx.txId;
 }
 newIDstr Block::getRootFromPath(vector<newIDstr> _path) {
 	newIDstr ret;
 	vector<newIDstr> path = _path;
 	if (path.size() == 1)
 		return path[0];
-	newIDstr concatenate = path[0] + path[1];		//Concatena un par de elementos del nivel anterior
-	char aux[9];
-	unsigned int ID = generateID(concatenate.c_str());
-	sprintf_s(&aux[0], 9, "%08X", ID);
-	newIDstr newID(aux);
+	//newIDstr concatenate = path[0] + path[1];		//Concatena un par de elementos del nivel anterior
+	//char aux[9];
+	//unsigned int ID = generateID(concatenate.c_str());
+	//sprintf_s(&aux[0], 9, "%08X", ID);
+	newIDstr newID(hash2nodes(path[0], path[1]));
 	if (path.size() == 2) {
 		return newID;
 	}
@@ -336,11 +335,11 @@ newIDstr Block::getRootFromPath(vector<newIDstr> _path) {
 		path.erase(path.begin() + 1);
 		path.insert(path.begin(), newID);					//Now path only needs to be concatenated by pairs
 		while(path.size() > 1) {
-			newIDstr concatenate = path[0] + path[1];		//Concatena un par de elementos del nivel anterior
-			char aux[9];
-			unsigned int ID = generateID(concatenate.c_str());
-			sprintf_s(&aux[0], 9, "%08X", ID);
-			newIDstr newID(aux);
+			//newIDstr concatenate = path[0] + path[1];		//Concatena un par de elementos del nivel anterior
+			//char aux[9];
+			//unsigned int ID = generateID(concatenate.c_str());
+			//sprintf_s(&aux[0], 9, "%08X", ID);
+			newIDstr newID(hash2nodes(path[0], path[1]));
 			path.erase(path.begin());
 			path.erase(path.begin() + 1);
 			path.insert(path.begin(), newID);				//Insert concatenated pair to begining of list
@@ -353,7 +352,7 @@ const vector<Transaction>& Block::getTransactions() { return tx; }
 const Transaction Block::getTx(vector<Transaction>::iterator it) { for (auto i = tx.begin(); i != tx.end(); i++) { if (i == it) return *i; } }
 const Transaction Block::getTx(unsigned int it) { if (it >= 0 && it < tx.size())	return tx[it]; }
 const unsigned long int Block::getHeight() const { return height; }
-const unsigned long int Block::getNonce() { return nonce; }
+uint32_t Block::getNonce() { return nonce; }
 const unsigned long int Block::getNTx() { return nTx; }
 const string Block::getBlockID() const { return blockId; }
 const string Block::getPreviousBlockID() { return previousBlockId; }
@@ -363,11 +362,11 @@ const string Block::getMerkleRoot() { return merkleRoot; }
  * FUNCTION DEFINITIONS WITH FILE LEVEL SCOPE
  ******************************************************************************/
 
-static unsigned int generateID(const char* str) {
-	unsigned int ID = 0;
-	int c;
-	while (c = *str++)
-		ID = c + (ID << 6) + (ID << 16) - ID;
-
-	return ID;
-}
+//static unsigned int generateID(const char* str) {
+//	unsigned int ID = 0;
+//	int c;
+//	while (c = *str++)
+//		ID = c + (ID << 6) + (ID << 16) - ID;
+//
+//	return ID;
+//}
