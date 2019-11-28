@@ -51,8 +51,8 @@ FULLNode::FULLNode(Socket _socket, tipo_de_nodo tipoNodo)
 	
 	challenge = INIT_CHALLENGE;
 	newBlocks = 0;
-	chrono::duration<int, milli> dur(0);
-	miningAverage = dur;
+	chrono::duration<int, milli> durr(0);
+	miningAverage = durr;
 }
 
 /*******************************************************************************
