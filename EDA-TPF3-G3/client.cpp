@@ -76,7 +76,7 @@ void Client::GET(string path, string json)
 	if (curl && curlm)
 	{
 		//Le decimos a cURL que imprima todos los mensajes que se envían entre cliente y servidor.
-		//curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
 		//Seteamos primero la pagina donde nos vamos a conectar.
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());

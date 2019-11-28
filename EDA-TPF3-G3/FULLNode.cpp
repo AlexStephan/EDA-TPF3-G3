@@ -28,7 +28,7 @@ FULLNode::FULLNode(NodeData _ownData) : Node(_ownData) {
 	clock = chrono::system_clock::now();
 	int timing = rand() % 1000 + 1;
 	timing *= 10;
-	cout << "Node " << ownData.getID() << " created with timing = " << timing << endl;
+	//cout << "Node " << ownData.getID() << " created with timing = " << timing << endl;
 	chrono::duration<int, milli> dur(timing);
 	timeout = dur;
 
@@ -69,10 +69,10 @@ void FULLNode::cycle() {
 		if (servers.back()->getDoneListening()) {
 			if (servers.back()->getDoneDownloading()){
 				if (servers.back()->getDoneSending()) {
-					cout << "Server done servering" << endl;
+					//cout << "Server done servering" << endl;
 					//HANDLE FINISHED SERVER
 					if (servers.back()->getState() == PING) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
-						cout << "Node " << ownData.getID() << " Just received PING! Entering WAITING LAYOUT state!"<< endl;
+						//cout << "Node " << ownData.getID() << " Just received PING! Entering WAITING LAYOUT state!"<< endl;
 						nodeState = WAITING_LAYOUT;
 					}
 					else {
@@ -82,30 +82,29 @@ void FULLNode::cycle() {
 					servers.pop_back();											//Remove useless server
 					Server* newServer = new Server(port);
 					newServer->startConnection();								//Create new server
-					cout << "Node" << ownData.getID() << " created server to RECEIVE LAYOUT "<< endl;
+					//cout << "Node" << ownData.getID() << " created server to RECEIVE LAYOUT "<< endl;
 					servers.push_back(newServer);
 				}
 				else {
 					gotSomething = true;
-					cout << "Node " << ownData.getID() << " Is RESPONING to a message" << endl;
+					//cout << "Node " << ownData.getID() << " Is RESPONING to a message" << endl;
 					servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
 				}
 			}	
 			else {
-				cout << "Node " << ownData.getID() << " Is RECEIVING a message" << endl;
+				//cout << "Node " << ownData.getID() << " Is RECEIVING a message" << endl;
 				servers.back()->receiveMessage();
 			}
 		}
 		else {
-			cout << "Node " << ownData.getID() << " Is listening to VOID" << endl;
+			//cout << "Node " << ownData.getID() << " Is listening to VOID" << endl;
 			servers.back()->listening();
 		}
 		//Pick random timeout
-		//if (nodeState == IDLE && !isLedaderNode && !gotSomething) {
 		if (nodeState == IDLE && !gotSomething) {
 			if (chrono::system_clock::now() > clock + timeout) {	//If timout ocurred
 				nodeState = COLLECTING_MEMBERS;						//We take care of the layout
-				cout << "Node " << ownData.getID() << " Just got charged with creating the NETWORK! Entering COLLECTING MEMBERS state!" << endl;
+				//cout << "Node " << ownData.getID() << " Just got charged with creating the NETWORK! Entering COLLECTING MEMBERS state!" << endl;
 				isLedaderNode = true;
 				for (int i = 0; i < nodesInManifest.size(); i++) {
 					if (!(ownData == nodesInManifest[i]))
@@ -116,7 +115,7 @@ void FULLNode::cycle() {
 		break;
 	case COLLECTING_MEMBERS:									//Look at me, I build the network now
 		for (int i = 0; i < clients.size(); i++) {
-			cout << "Node " << ownData.getID() << " Trying to PING PORT " << clients[i]->getReceiverData().getSocket().getPort() << endl;
+			//cout << "Node " << ownData.getID() << " Trying to PING PORT " << clients[i]->getReceiverData().getSocket().getPort() << endl;
 			clients[i]->sendRequest();
 			if (clients[i]->getRunning() == 0 && nodesInManifest.size() != neighbourhood.size()) {
 				if (clients[i]->getTranslatedResponse() == MSG_NETWORK_READY) {							//SPEAK WITH NETWORKING PPL
@@ -127,7 +126,7 @@ void FULLNode::cycle() {
 				}
 				else if (clients[i]->getTranslatedResponse() == MSG_NETWORK_NOT_READY) {				//SPEAK WITH NETWORKING PPL
 					neighbourhood.push_back(clients[i]->getReceiverData());
-					cout << "Node " << ownData.getID() << " ADDED " << clients[i]->getReceiverData().getSocket().getPort() << endl;
+					//cout << "Node " << ownData.getID() << " ADDED " << clients[i]->getReceiverData().getSocket().getPort() << endl;
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
@@ -172,12 +171,12 @@ void FULLNode::cycle() {
 		if (servers.back()->getDoneListening()) {
 			if (servers.back()->getDoneDownloading()) {
 				if (servers.back()->getDoneSending()) {
-					cout << "Server done servering" << endl;
+					//cout << "Server done servering" << endl;
 					if (servers.back()->getState() == LAYOUT) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
 						JSONHandler.readLayout(servers.back()->getMessage(), ownData, neighbourhood);		//Read layout, and add my neighbours
-						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, WAS LAYOUT YAY!!" << endl;
+						//cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, WAS LAYOUT YAY!!" << endl;
 						for (int i = 0; i < neighbourhood.size(); i++) {
-							cout << "Node " << ownData.getID() << "'s new neighbour is Node " << neighbourhood[i].getID() << endl;
+							//cout << "Node " << ownData.getID() << "'s new neighbour is Node " << neighbourhood[i].getID() << endl;
 							for (int j = 0; j < nodesInManifest.size(); j++) {
 								if (nodesInManifest[j].getID() == neighbourhood[i].getID())
 									neighbourhood[i].setSocket(nodesInManifest[j].getSocket());
@@ -191,7 +190,7 @@ void FULLNode::cycle() {
 						}
 					}
 					else {
-						cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, but SERVER STATE wasn't GOT_LAYOUT!" << endl;
+						//cout << "Node " << ownData.getID() << "Got message in WAITING LAYOUT, but SERVER STATE wasn't GOT_LAYOUT!" << endl;
 					}
 					delete servers.back();
 					servers.pop_back();											//Remove useless server
@@ -200,12 +199,12 @@ void FULLNode::cycle() {
 					servers.push_back(newServer);
 				}
 				else {
-					cout << "Node " << ownData.getID() << " Is RESPONDING to a message" << endl;
+					//cout << "Node " << ownData.getID() << " Is RESPONDING to a message" << endl;
 					servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
 				}
 			}
 			else {
-				cout << "Node " << ownData.getID() << " Is RECEIVING a message" << endl;
+				//cout << "Node " << ownData.getID() << " Is RECEIVING a message" << endl;
 				servers.back()->receiveMessage();
 			}
 		}
@@ -215,12 +214,12 @@ void FULLNode::cycle() {
 			clients[i]->sendRequest();
 			if (clients[i]->getRunning() == 0) {
 				if (clients[i]->getTranslatedResponse() == HTTP_OK) {					//SPEAK WITH NETWORKING PPL
-					cout << "Node " << ownData.getID() << " succesfully sent LAYOUT to Node " << clients[i]->getReceiverData().getID() << endl;
+					//cout << "Node " << ownData.getID() << " succesfully sent LAYOUT to Node " << clients[i]->getReceiverData().getID() << endl;
 					delete clients[i];								//Destroy client
 					clients.erase(clients.begin() + i);				//Remove client from list
 				}
 				else {
-					cout << "Node " << ownData.getID() << " tryied to send LAYOUT to Node " << clients[i]->getReceiverData().getID() << " but was refused!" << endl;
+					//cout << "Node " << ownData.getID() << " tryied to send LAYOUT to Node " << clients[i]->getReceiverData().getID() << " but was refused!" << endl;
 					postLayout(clients[i]->getReceiverData());			//Post layout again
 					delete clients[i];								//Destroy failed client
 					clients.erase(clients.begin() + i);				//Remove failed client from list
@@ -332,11 +331,11 @@ void FULLNode::keepListening() {
 	servers.back()->listening();
 
 	if ((*(servers.end() - 1))->getDoneListening()) {
-		cout << "Latest Server picked up something!" << endl;
+		//cout << "Latest Server picked up something!" << endl;
 		Server* newServer = new Server(port);
 		newServer->startConnection();
 		servers.push_back(newServer);
-		cout << "New Server created and pushed!" << endl;
+		//cout << "New Server created and pushed!" << endl;
 	}
 	auto i = servers.begin();
 	for (; i != servers.end() - 1; i++) {
@@ -345,7 +344,7 @@ void FULLNode::keepListening() {
 		else if (!(*i)->getDoneSending())
 			(*i)->sendMessage(serverResponse((*i)->getState(),(*i)->getMessage()));
 		if ((*i)->getDoneSending()) {
-			cout << "Server done servering" << endl;
+			//cout << "Server done servering" << endl;
 			doneServers.push_back(*i);
 			deleteThis.push_back(i);
 		}
@@ -764,17 +763,19 @@ void FULLNode::checkForFilter(Block blck)
 	{
 		for (int i = 0; i < blck.getTransactions().size(); i++)
 		{
+			bool found = false;
 			for (int k = 0; k < blck.getTransactions()[i].vIn.size(); k++)
 			{
 				if (blck.getTransactions()[i].vIn[k].blockId == filters[j].publicID)					//NOT ACTUALLY CORRECT
 				{																						//SHOULD ACTUALLY SEARCH FOR A BLOCK WITH THE SAME ID
 					NodeData d("Dummy", filters[j].port, filters[j].ip);								//AND FIND THE TX WITH THE SAME TXID, AND CHECK ((ITS)) VOUT FOR PUBLIC ID
 					postMerkleBlock(blck, blck.getTransactions()[i], d);								//MAPS PERHAPS?
+					found = true;
 					break;
 				}
 			}
 
-			for (int k = 0; k < blck.getTransactions()[i].vOut.size(); k++)
+			for (int k = 0; k < blck.getTransactions()[i].vOut.size() && !found; k++)
 			{
 				if (blck.getTransactions()[i].vOut[k].publicId == filters[j].publicID)
 				{

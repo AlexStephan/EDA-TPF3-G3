@@ -98,11 +98,11 @@ void SPVNode::keepListening() {
 	servers.back()->listening();
 
 	if ((*(servers.end() - 1))->getDoneListening()) {
-		cout << "Latest Server picked up something!" << endl;
+		//cout << "Latest Server picked up something!" << endl;
 		Server* newServer = new Server(ownData.getSocket().getPort());
 		newServer->startConnection();
 		servers.push_back(newServer);
-		cout << "New Server created and pushed!" << endl;
+		//cout << "New Server created and pushed!" << endl;
 	}
 	auto i = servers.begin();
 	for (; i != servers.end() - 1; i++) {
@@ -111,7 +111,7 @@ void SPVNode::keepListening() {
 		else if (!(*i)->getDoneSending())
 			(*i)->sendMessage(serverResponse((*i)->getState(),(*i)->getMessage()));
 		if ((*i)->getDoneSending()) {
-			cout << "Server done servering" << endl;
+			//cout << "Server done servering" << endl;
 			doneServers.push_back(*i);
 			deleteThis.push_back(i);
 		}
@@ -149,7 +149,7 @@ void SPVNode::keepSending() {
 	auto i = clients.begin();
 	for (; i != clients.end(); i++) {
 		if ((*i)->getRunning() == 0) {
-			cout << "Client did it's job!" << endl;
+			//cout << "Client did it's job!" << endl;
 			doneClients.push_back(*i);
 			deleteThis.push_back(i);
 		}

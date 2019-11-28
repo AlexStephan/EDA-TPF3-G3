@@ -478,7 +478,7 @@ errorType jsonHandler::validateMerkle(string merkle)
 			mrkl.at("tx");
 			auto path = mrkl["merklePath"];
 
-			if (!validateTx(mrkl["tx"]).error)
+			if (!validateTx(mrkl["tx"].dump()).error)
 			{
 				err = { false, "OK Merkle Block" };
 			}
