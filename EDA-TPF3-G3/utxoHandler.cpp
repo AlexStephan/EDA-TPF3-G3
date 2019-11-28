@@ -277,6 +277,7 @@ errorType utxoHandler::insertBlock(Block& block)
 
 	size_t aux = 0;
 
+	//ACTUALIZO MI LISTA INTERNA DE UTXO Y PROCESSING
 	for (size_t txIndex = 0;
 		err.error==false && txIndex < block.getNTx();
 		txIndex++) {
@@ -301,6 +302,7 @@ errorType utxoHandler::insertBlock(Block& block)
 		}
 	}
 
+	//AGREGO NUEVAS UTXO
 	for (size_t txIndex = 0;
 		err.error == false && txIndex < block.getNTx();
 		txIndex++) {
@@ -315,8 +317,21 @@ errorType utxoHandler::insertBlock(Block& block)
 		}
 	}
 
+	//ELIMINO TX QUE FUERON INGRESADAS DE LA LISTA TXS
+	if (err.error == false) {
+		size_t index = 0;
+		for (int i = 0; i < block.getNTx(); i++) {
+			Transaction currTx = block.getTx(i);
+			if (foundInTXs(currTx, index)) {
+				txs->erase(txs->begin() + index);
+			}
+		}
+	}
+
+
 	if (err.error == false)
 		blockChain->emplace_back(block);
+
 
 	return err;
 }
@@ -384,12 +399,12 @@ bool utxoHandler::checkMiner()
 	return true;
 }
 
-bool utxoHandler::vinRefersToUtxo(Vin& vin,size_t index)
+bool utxoHandler::vinRefersToUtxo(Vin& vin,size_t& index)
 {
 	return findUtxo(vin.txId, vin.nutxo, index);
 }
 
-bool utxoHandler::findUtxo(const string& id,int nutxo, size_t indexInList)
+bool utxoHandler::findUtxo(const string& id,int nutxo, size_t& indexInList)
 {
 	for (size_t i = 0; i < utxoList.size(); i++) {
 		if (utxoList[i].txID == id && utxoList[i].nutxo == nutxo) {
@@ -400,12 +415,12 @@ bool utxoHandler::findUtxo(const string& id,int nutxo, size_t indexInList)
 	return false;
 }
 
-bool utxoHandler::vinRefersToProcessing(Vin& vin, size_t index)
+bool utxoHandler::vinRefersToProcessing(Vin& vin, size_t& index)
 {
 	return findProcessing(vin.txId, vin.nutxo, index);
 }
 
-bool utxoHandler::findProcessing(const string& id, int nutxo, size_t indexInList)
+bool utxoHandler::findProcessing(const string& id, int nutxo, size_t& indexInList)
 {
 	for (size_t i = 0; i < processingTxList.size(); i++) {
 		if (processingTxList[i].txID == id && processingTxList[i].nutxo == nutxo) {
@@ -497,6 +512,19 @@ bool utxoHandler::foundInBlockChain(Vin& vin, Vout& answer)
 		}
 	}
 	return rta;
+}
+
+bool utxoHandler::foundInTXs(Transaction& tx, size_t& index)
+{
+	bool found = false;
+
+	for (int i = 0; found == false && i < txs->size(); i++) {
+		if (tx.txId == (*txs)[i].txId) {
+			found = true;
+			index = i;
+		}
+	}
+	return found;
 }
 
 longN utxoHandler::getMoneyFromVin(Vin& vin)
