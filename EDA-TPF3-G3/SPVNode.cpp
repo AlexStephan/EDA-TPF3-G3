@@ -55,21 +55,19 @@ void SPVNode::cycle() {
 ***********************************************************************************/
 errorType SPVNode::makeTX(const vector<Vout>& receivers, longN fee)
 {
-	//WIP!! ARREGLAR ESTA WEA, GIAN O ALE!!
-	/*
-	errorType err = { false,"" };
-	Transaction tx;
-	Block aux;
-	//BUILD TX
-	tx.vIn = givers;
-	tx.nTxIn = givers.size();
-	tx.vOut = receivers;
-	tx.nTxOut = receivers.size();
-	tx.txId = aux.getTxId(tx);
-	//POST TX TO A NEIGHBOUR, JUST ONE
-	postTransaction(tx);
-	*/
-	return err;
+	errorType ret;
+	Transaction newTx;
+	if (makeSmartTX(fee, receivers, newTx)) {
+		ret.error = false;
+		ret.datos = "Valid transaction. Have a nice day, beach";
+	}
+	else {
+		ret.error = true;
+		ret.datos = "INVALID TRANSACTION DETECTED, NICE TRY BEACH";
+	}
+	postTransaction(newTx);
+	notifyAllObservers(this);
+	return ret;
 }
 
 errorType SPVNode::changeFilterNode(NodeData FilterNode) { errorType err = { false,"" }; filterNode = FilterNode; notifyAllObservers(this);  return err; }
@@ -332,9 +330,7 @@ errorType SPVNode::postTransaction(Transaction tx)
 
 
 
-void SPVNode::verify
-
-(Block head) {
+void SPVNode::verifyMerkleBlock(Block head) {
 	errorType error;
 	newIDstr headRoot = head.getMerkleRoot();
 	if (headRoot != head.getRootFromPath(mBlocks.end()->merklePath)) {

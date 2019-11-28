@@ -67,6 +67,8 @@ bool drawTXHandler::drawTX() {
 
 	if (errfee)
 		ImGui::Text("Please enter a valid fee");
+
+	return r;
 }
 
 bool drawTXHandler::drawV(Vout& vout, int i) {
