@@ -61,7 +61,7 @@ FULLNode::~FULLNode() {
  ******************************************************************************/
 void FULLNode::cycle() {
 	int gotReady = -1;
-	cout << "Node" << ownData.getID()<< " Node state: " << nodeState << endl;
+	//cout << "Node" << ownData.getID()<< " Node state: " << nodeState << endl;
 	bool gotSomething = false;
 	switch (nodeState) {
 	case IDLE:
@@ -487,6 +487,7 @@ errorType FULLNode::postMerkleBlock(Block blck, Transaction tx, NodeData data)
 	string merkle = JSONHandler.createJsonMerkle(blck, tx);
 	client->POST("/eda_coin/send_merkle_block", merkle);
 	errorType err = client->sendRequest();
+	Sleep(20);
 	clients.push_back(client);
 
 	notifyAllObservers(this);
@@ -769,6 +770,7 @@ void FULLNode::checkForFilter(Block blck)
 				{																						//SHOULD ACTUALLY SEARCH FOR A BLOCK WITH THE SAME ID
 					NodeData d("Dummy", filters[j].port, filters[j].ip);								//AND FIND THE TX WITH THE SAME TXID, AND CHECK ((ITS)) VOUT FOR PUBLIC ID
 					postMerkleBlock(blck, blck.getTransactions()[i], d);								//MAPS PERHAPS?
+					break;
 				}
 			}
 
@@ -778,6 +780,7 @@ void FULLNode::checkForFilter(Block blck)
 				{
 					NodeData d("Dummy", filters[j].port, filters[j].ip);
 					postMerkleBlock(blck, blck.getTransactions()[i], d);
+					break;
 				}
 			}
 
