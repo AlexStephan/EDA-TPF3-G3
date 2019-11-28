@@ -12,12 +12,12 @@
 	CONSTRUTOR
  ******************************************************************************/
 SPVNode::SPVNode(Socket _socket, NodeData FilterNode, NodeData HeaderNode) : Node(NO_NODE_DATA), filterNode(FilterNode), headerNode(HeaderNode),
-	cryptohandler()
+	cryptohandler(NODO_SPV)
 {
 	
 	ownData.setID(cryptohandler.getMyPublicKey());
 	ownData.setSocket(_socket);
-
+	nodeType = NODO_SPV;
 	//Create Genesis Server
 	Server* genesisServer = new Server(ownData.getSocket().getPort());
 	genesisServer->startConnection();			//Preguntar si esto funcaria

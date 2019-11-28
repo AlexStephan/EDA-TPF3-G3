@@ -28,7 +28,7 @@ cryptohandler(NODO_FULL), utxohandler(NODO_FULL, &blockChain, &txs)
 {
 	ownData.setID(cryptohandler.getMyPublicKey());
 	ownData.setSocket(_socket);
-
+	nodeType = NODO_FULL;
 
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");

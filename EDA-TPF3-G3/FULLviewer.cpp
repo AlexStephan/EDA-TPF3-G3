@@ -32,6 +32,7 @@ void FULLviewer::update(void*n)
 	blockchain = node->getBlockChain();
 	layout = node->getLayout();
 	money = node->getMyMoney();
+	type = node->getNodeType();
 	windowName = nodedata.getID();
 	
 	treeHandler.setId(nodedata.getID());
@@ -49,6 +50,7 @@ void FULLviewer::drawWindow() {
 	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + CCHILD_W, ImGui::GetCursorPosY() - CHILD_H));
 	ImGui::BeginChild("FULL VIEW", ImVec2(CHILD_W, CHILD_H));
 
+	showNodeType();
 	ImGui::Text("My EdaCoins: %d", money);
 	printNodeData();
 	printNeighbours();
@@ -59,6 +61,22 @@ void FULLviewer::drawWindow() {
 	ImGui::End();
 }
 
+void FULLviewer::showNodeType() {
+	switch (type) {
+	case NODO_UNKNOWN: default:
+		ImGui::Text("Node Type: UNKNOWN");
+		break;
+	case NODO_MINERO:
+		ImGui::Text("Node Type: MINER");
+		break;
+	case NODO_FULL:
+		ImGui::Text("Node Type: FULL");
+		break;
+	case NODO_SPV:
+		ImGui::Text("Node Type: SPV");
+		break;
+	}
+}
 
 void FULLviewer::printNodeData()
 {

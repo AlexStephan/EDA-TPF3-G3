@@ -4,6 +4,7 @@
 #include "FULLNode.h"
 #include "TreeWindowHandler.h"
 #include "layoutWindowHandler.h"
+#include "typeEnums.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 
@@ -19,6 +20,7 @@ public:
 private:
 	NodeData nodedata;
 	string windowName;
+	tipo_de_nodo type;
 	unsigned long int money;
 	const vector<NodeData>* neighbours;
 	const Layout* layout;
@@ -31,7 +33,8 @@ private:
 	ALLEGRO_BITMAP* pbutton;
 	bool redButton;
 
-	void drawWindow();	//	OLI
+	void drawWindow();
+	void showNodeType();
 
 						
 	/*
