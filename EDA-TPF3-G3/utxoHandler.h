@@ -3,7 +3,9 @@
 #include "utxo.h"
 #include "errorType.h"
 #include "typeEnums.h"
-#include "cryptoHandler.h"
+//#include "cryptoHandler.h"
+
+class cryptoHandler;
 
 class utxoHandler
 {
