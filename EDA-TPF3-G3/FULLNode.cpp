@@ -23,7 +23,7 @@ using json = nlohmann::json;
 /*******************************************************************************
 	CONSTRUCTOR
  ******************************************************************************/
-FULLNode::FULLNode(Socket _socket, tipo_de_nodo tipoNodo = NODO_FULL) 
+FULLNode::FULLNode(Socket _socket, tipo_de_nodo tipoNodo) 
 	: Node(NO_NODE_DATA),
 	cryptohandler(tipoNodo), utxohandler(tipoNodo, &blockChain, &txs)
 {
