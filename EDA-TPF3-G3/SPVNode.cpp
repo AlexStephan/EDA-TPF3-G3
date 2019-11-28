@@ -128,8 +128,7 @@ void SPVNode::keepListening() {
 		case MERKLE:														//SPV NODES ONLY CARE ABOUT RECEIVING MERKLEBLOCKS ON SERVER
 			JSONHandler.saveMerkleBlock((*j)->getMessage(), mBlocks);
 			//REQUEST CONFIRMATION OF VALIDATION
-			get
-			(mBlocks.back().blockId);							//SUPER DUDOSO LO QUE ACABO DE HACER, PERO ONDA, SUPER DUDOSO
+			getBlockHeader(mBlocks.back().blockId);							//SUPER DUDOSO LO QUE ACABO DE HACER, PERO ONDA, SUPER DUDOSO
 			break;
 		}
 	}
@@ -191,24 +190,8 @@ string SPVNode::serverResponse(STATE rta, string msg)
 
 	switch (rta)
 	{
-	case TX:
-		message = createServerOkRsp("/eda_coin/send_tx");
-		break;
-
-	case BLOCK:
-		message = createServerOkRsp("/eda_coin/send_block");
-		break;
-
 	case MERKLE:
 		message = createServerOkRsp("/eda_coin/send_merkle_block");
-		break;
-
-	case FILTER:
-		message = createServerOkRsp("/eda_coin/send_filter");
-		break;
-
-	case LAYOUT:
-		message = createServerOkRsp("/eda_coin/send_filter");
 		break;
 
 	case ERR:

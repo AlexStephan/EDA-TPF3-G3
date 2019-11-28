@@ -22,8 +22,7 @@ public:
 	***********************************************************************************/
 	void saveBlockChain(BlockChain& blockchain, string path);
 	void saveTx(string trans, vector<Transaction>& txs);
-	void save
-	(string merkleBlock,vector <MerkleBlock>& mrkl);
+	void saveMerkleBlock(string merkleBlock,vector <MerkleBlock>& mrkl);
 	Filter saveFilter(string filter);
 	Block saveBlockHeader(string header);
 	
@@ -67,5 +66,6 @@ public:
 		HACKING METHODS
 	***********************************************************************************/
 	ip_t crackIp(string ip);
+	string decipherId(string code);
 	
 };
