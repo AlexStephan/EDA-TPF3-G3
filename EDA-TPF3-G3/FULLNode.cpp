@@ -9,17 +9,18 @@
  * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 #define CRLF "\x0D\x0A"
+#define INIT_CHALLENGE 3
 
-/*******************************************************************************
- * NAMESPACES
- ******************************************************************************/
+ /*******************************************************************************
+  * NAMESPACES
+  ******************************************************************************/
 using json = nlohmann::json;
 
 /*******************************************************************************
 	CONSTRUCTOR
  ******************************************************************************/
 FULLNode::FULLNode(Socket _socket) : Node(NO_NODE_DATA),
-	cryptohandler(NODO_FULL), utxohandler(NODO_FULL,&blockChain,&txs)
+cryptohandler(NODO_FULL), utxohandler(NODO_FULL, &blockChain, &txs)
 {
 	ownData.setID(cryptohandler.getMyPublicKey());
 	ownData.setSocket(_socket);
@@ -42,6 +43,7 @@ FULLNode::FULLNode(Socket _socket) : Node(NO_NODE_DATA),
 	Server* genesisServer = new Server(ownData.getSocket().getPort());
 	genesisServer->startConnection();			//Preguntar si esto funcaria
 	servers.push_back(genesisServer);
+	challenge = INIT_CHALLENGE;
 }
 
 /*******************************************************************************
@@ -67,18 +69,18 @@ FULLNode::~FULLNode() {
  ******************************************************************************/
 void FULLNode::cycle() {
 	int gotReady = -1;
-	cout << "Node" << ownData.getID()<< " Node state: " << nodeState << endl;
+	cout << "Node" << ownData.getID() << " Node state: " << nodeState << endl;
 	bool gotSomething = false;
 	switch (nodeState) {
 	case IDLE:
 		servers.back()->listening();
 		if (servers.back()->getDoneListening()) {
-			if (servers.back()->getDoneDownloading()){
+			if (servers.back()->getDoneDownloading()) {
 				if (servers.back()->getDoneSending()) {
 					cout << "Server done servering" << endl;
 					//HANDLE FINISHED SERVER
 					if (servers.back()->getState() == PING) {					//If layout was correctly received		//SPEAK WITH NETWORKING PPL
-						cout << "Node " << ownData.getID() << " Just received PING! Entering WAITING LAYOUT state!"<< endl;
+						cout << "Node " << ownData.getID() << " Just received PING! Entering WAITING LAYOUT state!" << endl;
 						nodeState = WAITING_LAYOUT;
 					}
 					else {
@@ -88,7 +90,7 @@ void FULLNode::cycle() {
 					servers.pop_back();											//Remove useless server
 					Server* newServer = new Server(port);
 					newServer->startConnection();								//Create new server
-					cout << "Node" << ownData.getID() << " created server to RECEIVE LAYOUT "<< endl;
+					cout << "Node" << ownData.getID() << " created server to RECEIVE LAYOUT " << endl;
 					servers.push_back(newServer);
 				}
 				else {
@@ -96,7 +98,7 @@ void FULLNode::cycle() {
 					cout << "Node " << ownData.getID() << " Is RESPONING to a message" << endl;
 					servers.back()->sendMessage(serverResponse(servers.back()->getState(), servers.back()->getMessage()));
 				}
-			}	
+			}
 			else {
 				cout << "Node " << ownData.getID() << " Is RECEIVING a message" << endl;
 				servers.back()->receiveMessage();
@@ -156,7 +158,7 @@ void FULLNode::cycle() {
 					allResponded = false;
 			}		//COMMENT DOUBLE FOR IF UNRESPONSIVE, JUST COMPARING SIZES ((?) MIGHT BE ENOUGH TO ENSURE CONNECTION
 			if (allResponded)*/
-				nodeState = SENDING_LAYOUT;
+			nodeState = SENDING_LAYOUT;
 		}
 		if (nodeState == SENDING_LAYOUT) {
 			makeLayout();
@@ -241,7 +243,7 @@ void FULLNode::cycle() {
 		keepSending();
 		break;
 	default:
-		cout << "You fucked up with the FSM, Morty!"<< endl;
+		cout << "You fucked up with the FSM, Morty!" << endl;
 		break;
 	}
 }
@@ -249,20 +251,24 @@ void FULLNode::cycle() {
 /***********************************************************************************
 		METHODS USED BY CONTROLLER
 ***********************************************************************************/
-errorType FULLNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers){
-	Transaction tx;
-	Block aux;
-	//BUILD TX
-	tx.vIn = givers;
-	tx.nTxIn = givers.size();
-	tx.vOut = receivers;
-	tx.nTxOut = receivers.size();
-	tx.txId = aux.getTxId(tx);
-	for (int i = 0; i < neighbourhood.size(); i++)
-		postTransaction(i, tx);												//Post Tx to all neighbours
+errorType FULLNode::makeTX(const vector<Vout>& receivers, longN fee) {
 	errorType ret;
+	Transaction newTx;
+	if (makeSmartTX(fee, receivers, newTx)) {
+		ret.error = false;
+		ret.datos = "Valid transaction. Have a nice day, beach";
+		txs.push_back(newTx);
+	}
+	else {
+		ret.error = true;
+		ret.datos = "INVALID TRANSACTION DETECTED, NICE TRY BEACH";
+	}
+	for (int i = 0; i < neighbourhood.size(); i++)
+		postTransaction(i, newTx);
+	notifyAllObservers(this);
 	return ret;
 }
+
 errorType FULLNode::makeBlock() {
 	errorType ret;
 	Block block = blockChain.back();
@@ -321,6 +327,11 @@ void FULLNode::addTx(string trans) {
 	JSONHandler.saveTx(trans, txs);
 	notifyAllObservers(this);
 }
+void FULLNode::updateMyMoney() //llamar UNA VEZ Q SE HAYA MODIFICADO MI DINERO (ingrese una tx, bloque, etc)
+{
+	myMoney = utxohandler.balance(ownData.getID());
+	notifyAllObservers(this);
+}
 //void FULLNode::saveMerkleBlock(string merkleBlock) {}
 
 /***********************************************************************************
@@ -349,7 +360,7 @@ void FULLNode::keepListening() {
 		if (!(*i)->getDoneDownloading())
 			(*i)->receiveMessage();
 		else if (!(*i)->getDoneSending())
-			(*i)->sendMessage(serverResponse((*i)->getState(),(*i)->getMessage()));
+			(*i)->sendMessage(serverResponse((*i)->getState(), (*i)->getMessage()));
 		if ((*i)->getDoneSending()) {
 			cout << "Server done servering" << endl;
 			doneServers.push_back(*i);
@@ -364,7 +375,8 @@ void FULLNode::keepListening() {
 		switch ((*j)->getState()) {
 		case BLOCK:			//Done
 			blck.saveBlock((*j)->getMessage());
-			found = false;
+			handleReceivedBlock(blck);
+			/*found = false;
 			for (int i = 0; i < blockChain.size(); i++) {
 				if (blck.getBlockID() == blockChain[i].getBlockID())			//If received block is already in chain, it gets ignored
 					found = true;
@@ -373,32 +385,12 @@ void FULLNode::keepListening() {
 				blockChain.push_back(blck);										//Save block into blockchain
 				checkForFilter(blck);											//Inform possible suscripted SPVNodes
 				floodBlock(blck, (*j)->getSender());							//And flood the block
-			}
+			}*/
 			break;
 		case TX:			//Done
-			JSONHandler.saveTx((*j)->getMessage(), txs);
-			found = false;
-			for (int i = 0; i < txs.size() - 1; i++) {
-				if ((txs.size() != 1) && (txs.back().txId == txs[i].txId))
-					found = true;
-			}
-			if(found)														
-				txs.pop_back();										//Remove tx if repeated
-			else{
-				if(!txs.empty())
-					floodTx(txs.back(), (*j)->getSender());							//And flood the tx
-			}
+			handleReceivedTx((*j)->getMessage());
 			break;
 		case MERKLE:														//FULL NODES DONT CARE ABOUT RECEIVING MERKLE BLOCKS
-			break;
-		case PING:
-			found = false;
-			for (int i = 0; i < neighbourhood.size(); i++) {
-				if ((*j)->getSender() == neighbourhood[i])
-					found = true;
-			}
-			if (!found)														//If ping sender is not already a neighbour, add it
-				neighbourhood.push_back((*j)->getSender());
 			break;
 		case FILTER:
 			filters.push_back(JSONHandler.saveFilter((*j)->getMessage()));
@@ -458,7 +450,7 @@ errorType FULLNode::postBlock(unsigned int neighbourPos, unsigned int height)
 	Block bl0ck;
 	for (int i = 0; i < blockChain.size(); i++)
 	{
-		if(blockChain[i].getHeight() == height)
+		if (blockChain[i].getHeight() == height)
 		{
 			bl0ck = blockChain[i];
 		}
@@ -557,7 +549,7 @@ string FULLNode::serverResponse(STATE rta, string msg)
 		break;
 
 	case FILTER:
-    	message = createServerOkRsp("/eda_coin/send_filter");
+		message = createServerOkRsp("/eda_coin/send_filter");
 		break;
 
 	case LAYOUT:
@@ -681,7 +673,7 @@ string FULLNode::createServerHeader(string path, string id)
 	char dateLine[100];
 	char expiresLine[100];
 	createDates(dateLine, expiresLine);
-	string content = JSONHandler.createJsonBlockHeader(blockChain, id); 
+	string content = JSONHandler.createJsonBlockHeader(blockChain, id);
 
 	message += "HTTP/1.1 200 OK";
 	message += CRLF;
@@ -759,10 +751,24 @@ void FULLNode::createDates(char* c1, char* c2)
 	strftime(c2, 100, "Expires: %a, %d %b %G %X GMT", nextTime);
 }
 
+bool FULLNode::makeSmartTX(longN fee, const vector<Vout>& receivers, Transaction& tx)
+{
+	tx.txId.clear();
+	tx.nTxIn = 0;
+	tx.nTxOut = 0;
+	tx.vIn.clear();
+	tx.vOut.clear();
+
+	bool validez = utxohandler.createTX(ownData.getID(), receivers, tx, fee);
+	cryptohandler.signAllVinsInTx(tx);
+	cryptohandler.hashTx(tx);
+	return validez;
+}
+
 /***********************************************************************************
 		FLOODING / VERIFICATION
 ***********************************************************************************/
-void FULLNode::checkForFilter(Block blck) 
+void FULLNode::checkForFilter(Block blck)
 {
 	for (int j = 0; j < filters.size(); j++)
 	{
@@ -824,8 +830,41 @@ void FULLNode::manageNetworkReady(string rta)
 {
 	json rt = json::parse(rta);
 	string blckchain = rt["blockchain"].dump();
-	BlockChain laNewBlckChain;
-	JSONHandler.saveBlockChain(laNewBlckChain, blckchain);
-	blockChain = laNewBlckChain;
+	JSONHandler.saveBlockChain(blockChain, blckchain);
 
+}
+
+void FULLNode::handleReceivedTx(string txString) {
+	JSONHandler.saveTx((*j)->getMessage(), txs);
+	Transaction newTx = txs.back();
+	txs.pop_back();
+	if (!utxohandler.TxExistAlready(newTx) && cryptohandler.verifyTXHash(newTx) && cryptohandler.verifyTXSign(newTx, &utxohandler) && utxohandler.validateTX(newTx).error) {
+		utxohandler.insertTX(newTx);
+		floodTx(newTx, ownData);
+		notifyAllObservers(this);
+	}
+}
+void FULLNode::handleReceivedBlock(Block& block) {
+	if (verifyChallenge(block) && verifyPrevID(block) && !utxohandler.BlockExistAlready(block) && utxohandler.validateBlock(block).error && cryptohandler.verifyBlockHash(block) && cryptohandler.verifyBlockSign(block, &utxohandler)) {
+		blockChain.push_back(block);
+		floodBlock(block, ownData);
+		notifyAllObservers(this);
+	}
+
+}
+
+bool FULLNode::verifyChallenge(Block& block) {
+	bool ret = false;
+
+
+
+
+	return ret;
+}
+
+bool FULLNode::verifyPrevID(Block& block) {
+	bool ret = false;
+	if (block.getPreviousBlockID() == blockChain.back().getBlockID())
+		ret = true;
+	return ret;
 }

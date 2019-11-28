@@ -10,20 +10,20 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
-/*******************************************************************************
-* CONSTANT AND MACRO DEFINITIONS USING #DEFINE
-******************************************************************************/
+ /*******************************************************************************
+ * CONSTANT AND MACRO DEFINITIONS USING #DEFINE
+ ******************************************************************************/
 #define MAX_LENGTH 10000
 
-/*******************************************************************************
- * NAMESPACES
- ******************************************************************************/
+ /*******************************************************************************
+  * NAMESPACES
+  ******************************************************************************/
 using namespace std;
 
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  *****************************************************************************/
-typedef enum { BLOCK,TX, MERKLE, FILTER, HEADER, LAYOUT, PING, ERR } STATE;
+typedef enum { BLOCK, TX, MERKLE, FILTER, HEADER, LAYOUT, PING, ERR } STATE;
 
 class Server
 {
@@ -64,7 +64,6 @@ private:
 	string Msg;
 	string bodyMsg;
 	string flterId;
-	string myResponse;
 	char buf[MAX_LENGTH];
 
 	/***********************************************************************************
@@ -92,8 +91,6 @@ private:
 	/***********************************************************************************
 		CALLBACKS/HANDLERS
 	***********************************************************************************/
-	void receiveHandler(const boost::system::error_code err, std::size_t bytes);
+	void messaggeHandler(const boost::system::error_code err, std::size_t bytes);
 	void connectionHandler(const boost::system::error_code& err);
-	void sendHandler(const boost::system::error_code err, std::size_t bytes);
-
 };

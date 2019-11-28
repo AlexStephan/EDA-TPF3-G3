@@ -22,13 +22,13 @@ public:
 	void cycle();
 
 	//Accedidos por NETcontroller
-	errorType createFULLNode(NodeData newNode);
-	errorType createSPVNode(NodeData newNode, NodeData FilterNode, NodeData HeaderNode);
-	
+	errorType createFULLNode(Socket _socket);
+	errorType createSPVNode(Socket _socket, NodeData FilterNode, NodeData HeaderNode);
+
 	//Accedidos por NETviewer
 	const vector<NodeData>& getKnownFULLdata();
 	const vector<NodeData>& getKnownSPVdata();
-	
+
 	size_t getFULLamount(); //de ESTA maquina
 	size_t getSPVamount();
 	FULLNode* getFULLnode(size_t pos);
@@ -51,4 +51,3 @@ private:
 	bool existAlready(string ID);
 	bool existAlready(Socket socket);
 };
-
