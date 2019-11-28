@@ -57,6 +57,7 @@ private:
 
 	bool foundInBlockChain(Vin& vin,Vout& answer);
 
+	longN getMoneyFromVin(Vin& vin);
 	longN getDifference(vector<Transaction>& enterTX);
 };
 

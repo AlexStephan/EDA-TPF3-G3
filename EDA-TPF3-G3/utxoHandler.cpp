@@ -499,6 +499,31 @@ bool utxoHandler::foundInBlockChain(Vin& vin, Vout& answer)
 	return rta;
 }
 
+longN utxoHandler::getMoneyFromVin(Vin& vin)
+{
+	size_t aux = 0;
+	longN money = 0;
+
+	if (vinRefersToProcessing(vin, aux)) {
+		money = processingTxList[aux].amount;
+	}
+	else if (vinRefersToUtxo(vin, aux)) {
+		money = utxoList[aux].amount;
+	}
+	else {
+		Vout source;
+		if (foundInBlockChain(vin, source)) {
+			money = source.amount;
+		}
+		else {
+			cout << "WARNING!! Esto no debio haber pasado la prueba de validacion..." << endl;
+		}
+	}
+
+
+	return money;
+}
+
 longN utxoHandler::getDifference(vector<Transaction>& enterTX)
 {
 	longN income = 0;
@@ -508,8 +533,11 @@ longN utxoHandler::getDifference(vector<Transaction>& enterTX)
 		for (int j = 0; j < enterTX[i].vOut.size(); j++) {
 			outcome += enterTX[i].vOut[j].amount;
 		}
-	}
+		for (int k = 0; k < enterTX[i].vIn.size(); k++) {
+			income += getMoneyFromVin(enterTX[i].vIn[k]);
+		}
 
+	}
 
 	return income - outcome;
 }
