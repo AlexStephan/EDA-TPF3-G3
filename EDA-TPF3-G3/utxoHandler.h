@@ -44,11 +44,11 @@ private:
 	BlockChain* blockChain;
 	vector<Transaction>* txs;
 
-	bool vinRefersToUtxo(Vin& vin,size_t index);
-	bool findUtxo(const string& id,int nutxo, size_t indexInList);
+	bool vinRefersToUtxo(Vin& vin,size_t& index);
+	bool findUtxo(const string& id,int nutxo, size_t& indexInList);
 	
-	bool vinRefersToProcessing(Vin& vin, size_t index);
-	bool findProcessing(const string& id, int nutxo, size_t indexInList);
+	bool vinRefersToProcessing(Vin& vin, size_t& index);
+	bool findProcessing(const string& id, int nutxo, size_t& indexInList);
 
 	void addUtxo(Block& block, Transaction& tx,size_t voutIndex);
 	void eraseUtxo(Vin& vin);
@@ -56,6 +56,7 @@ private:
 
 
 	bool foundInBlockChain(Vin& vin,Vout& answer);
+	bool foundInTXs(Transaction& tx, size_t& index);
 
 	longN getMoneyFromVin(Vin& vin);
 	longN getDifference(vector<Transaction>& enterTX);

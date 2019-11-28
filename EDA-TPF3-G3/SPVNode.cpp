@@ -128,7 +128,8 @@ void SPVNode::keepListening() {
 		case MERKLE:														//SPV NODES ONLY CARE ABOUT RECEIVING MERKLEBLOCKS ON SERVER
 			JSONHandler.saveMerkleBlock((*j)->getMessage(), mBlocks);
 			//REQUEST CONFIRMATION OF VALIDATION
-			getBlockHeader(mBlocks.back().blockId);							//SUPER DUDOSO LO QUE ACABO DE HACER, PERO ONDA, SUPER DUDOSO
+			get
+			(mBlocks.back().blockId);							//SUPER DUDOSO LO QUE ACABO DE HACER, PERO ONDA, SUPER DUDOSO
 			break;
 		}
 	}
@@ -329,7 +330,9 @@ errorType SPVNode::postTransaction(Transaction tx)
 	return err;
 }
 
-void SPVNode::verifyMerkleBlock(Block head) {
+void SPVNode::verify
+
+(Block head) {
 	errorType error;
 	newIDstr headRoot = head.getMerkleRoot();
 	if (headRoot != head.getRootFromPath(mBlocks.end()->merklePath)) {
