@@ -2,6 +2,7 @@
 #include "observer.h"
 
 #include "FULLNode.h"
+#include "MINERNode.h"
 #include "WarningWindowHandler.h"
 
 #define MAX_TX_ID	280
@@ -15,7 +16,7 @@ public:
 		currTX = 1;
 		cstate = FULL_MENU;
 	}
-	virtual void update(void*) {} //no se me ocurre q necesite el controller q se actualice
+	virtual void update(void*);
 	void cycle();
 
 private:
