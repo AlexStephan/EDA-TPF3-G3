@@ -55,7 +55,7 @@ void SPVNode::cycle() {
 ***********************************************************************************/
 errorType SPVNode::makeTX(const vector<Vout>& receivers, longN fee)
 {
-	//WIP!!
+	//WIP!! ARREGLAR ESTA WEA, GIAN O ALE!!
 	/*
 	errorType err = { false,"" };
 	Transaction tx;
