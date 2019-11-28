@@ -79,80 +79,12 @@ void FULLcontroller::drawMBlock() {
 	}
 }
 
-
 void FULLcontroller::drawMTX() {
 	returnButton();
-	ImGui::Text("\nMAKE A TRANSACTION\n\n");
-
-	for (int i = 0; i < currTX; i++) {
-		if (txVout.size() == 0) {
-			Vout VoutAux;
-			txVout.push_back(VoutAux);
-			string aux;
-			auxstr.push_back(aux);
-		}
-		if (drawV(txVout[i], i) && (txVout.size() != 1)) {
-			currTX--;
-			for (int j = i; j < currTX; j++) {
-				txVout[j] = txVout[j + 1];
-				auxstr[j] = auxstr[j + 1];
-			}
-			txVout.resize(txVout.size() - 1);
-			auxstr.resize(auxstr.size() - 1);
-		}
+	if (TXHandler.drawTX()) {
+		warningHandler.check(fnode->makeTX(TXHandler.getVout(), TXHandler.getFee()));
+		cstate = FULL_MENU;
 	}
-	
-	if (txVout[currTX - 1].publicId.size()) {
-		Vout vout;
-		string aux;
-		currTX++;
-		txVout.push_back(vout);
-		auxstr.push_back(aux);
-	}
-
-	ImGui::Text("Amount of Vouts: %d", currTX - 1);
-	ImGui::SetNextItemWidth(50);
-	ImGui::InputText("Fee", &feeStr);
-
-	if (ImGui::Button("MAKE TRANSACTION")) {
-		errfee = false;
-		if (isAllDigits(feeStr)) {
-			unsigned long int fee = _atoi64(feeStr.c_str());
-			txVout.pop_back();
-			warningHandler.check(fnode->makeTX(txVout, fee));
-			txVout.clear();
-			auxstr.clear();
-			feeStr.clear();
-			currTX = 1;
-			cstate = FULL_MENU;
-		}
-		else
-			errfee = true;
-	}
-
-	if (errfee)
-		ImGui::Text("Por favor ingrese un valor de fee valido");
-
-}
-
-bool FULLcontroller::drawV(Vout& vout, int i){
-	bool r = false;
-	
-	ImGui::Text("Vout");
-	ImGui::InputText(("Public ID##" + to_string(i)).c_str(), &vout.publicId);
-	ImGui::SetNextItemWidth(50);
-	ImGui::InputText(("Monto##" + to_string(i)).c_str(), &auxstr[i]);
-	
-	if (ImGui::Button(("Delete##" + to_string(i)).c_str())) {
-		if (isAllDigits(auxstr[i])) {
-			vout.amount = _atoi64(auxstr[i].c_str());
-			r = true;
-		}
-	}
-
-	ImGui::NewLine();
-
-	return r;
 }
 
 
@@ -193,22 +125,6 @@ void FULLcontroller::returnButton() {
 
 	if (ImGui::Button("Return"))
 		cstate = FULL_MENU;
-}
-
-bool FULLcontroller::isAllDigits(string s) {
-	bool r = true;
-	if (!s.size()) 
-		r = false;
-	else{
-		for (int i = 0; i < s.size(); i++) {
-			if (s[i] < '0' || s[i] > '9') {
-				r = false;
-				break;
-			}
-		}
-	}
-
-	return r;
 }
 
 //void FULLcontroller::neighbourSelect()

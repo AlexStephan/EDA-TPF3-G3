@@ -1,6 +1,6 @@
 #pragma once
 #include "observer.h"
-
+#include "drawTXHandler.h"
 #include "FULLNode.h"
 #include "MINERNode.h"
 #include "WarningWindowHandler.h"
@@ -13,22 +13,22 @@ class FULLcontroller : public Observer
 public:
 	FULLcontroller(FULLNode* model) : fnode(model), windowID(model->getData().getID()),
 		warningHandler(model->getData().getID()) {
-		currTX = 1;
+		//currTX = 1;
 		cstate = FULL_MENU;
 	}
 	virtual void update(void*);
 	void cycle();
 
 private:
-	void drawWindow();
+	virtual void drawWindow();
 	void drawMBlock();
 	void drawMTX();
 	void drawAddNode();
-	bool drawV(Vout&, int);
+	//bool drawV(Vout&, int);
 	void newPortSelect();
 	void newIpSelect();
 	void returnButton();
-	bool isAllDigits(string);
+	//bool isAllDigits(string);
 
 	//void neighbourSelect();
 	//const char* findNeighbourNames();
@@ -44,15 +44,16 @@ private:
 	int newPort;
 	int newIP[4];
 	string newID;
-	bool errfee;
+	//bool errfee;
 	int cstate;
-	int currTX;
-	string feeStr;
-	vector<string> auxstr;
+	//int currTX;
+	//string feeStr;
+	//vector<string> auxstr;
 	//int currNeighbour;
-	vector<Vout> txVout;
+	//vector<Vout> txVout;
 	FULLNode* fnode;
 	string windowID;
 	WarningWindowHandler warningHandler;
+	drawTXHandler TXHandler;
 };
 

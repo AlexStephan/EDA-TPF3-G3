@@ -50,6 +50,7 @@
     <ClInclude Include="NETcontroller.h" />
     <ClInclude Include="NETviewer.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="drawTXHandler.h" />
     <ClInclude Include="NodeData.h" />
     <ClInclude Include="observer.h" />
     <ClInclude Include="printTXroutine.h" />
@@ -98,6 +99,7 @@
     <ClCompile Include="NETcontroller.cpp" />
     <ClCompile Include="NETviewer.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="drawTXHandler.cpp" />
     <ClCompile Include="NodeData.cpp" />
     <ClCompile Include="printTXroutine.cpp" />
     <ClCompile Include="server.cpp" />

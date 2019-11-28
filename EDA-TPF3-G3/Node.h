@@ -13,6 +13,7 @@
 #include "errorType.h"
 #include "typeEnums.h"
 
+
 class Node :
 	public Subject
 {
