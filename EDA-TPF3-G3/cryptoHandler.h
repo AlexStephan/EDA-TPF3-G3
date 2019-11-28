@@ -22,6 +22,7 @@
 #include "typeEnums.h"
 
 using namespace std;
+using namespace CryptoPP;
 
 class cryptoHandler
 {
