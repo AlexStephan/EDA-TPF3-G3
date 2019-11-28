@@ -214,7 +214,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories> C:\boost_1_71_0\stage\lib;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\lib;D:\boost_1_71_0\lib64-msvc-14.2;C:\local\boost_1_71_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Gianfranco\source\repos\EDA-TPF3-G3\EDA-TPF3-G3\Crypto;C:\boost_1_71_0\stage\lib;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\lib;D:\boost_1_71_0\lib64-msvc-14.2;C:\local\boost_1_71_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
