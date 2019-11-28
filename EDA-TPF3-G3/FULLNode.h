@@ -70,15 +70,17 @@ protected:
 	***********************************************************************************/
 	void makeLayout(); //me apodere de la declaracion : parametros: ownData, network, layout
 	fullNodeStates nodeState;
-	vector <Server*> servers;								//Server List
-	vector <Client*> clients;								//Client Lis
+	vector <Server*> servers;										//Server List
+	vector <Client*> clients;										//Client Lis
 	static bool isLedaderNode;
-	unsigned int port;										//Just port number
-	void keepListening();									//Make all available servers keep receiving messages, parse them if completed. Make last Server listen to void.
-	void keepSending();										//All active clients keep sending their messages, parse if completed, destroy if completed.
-	chrono::system_clock::time_point clock;					//Current time variable, used in initialization of Network Layout
-	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
-	chrono::duration<int, milli> miningAverage;
+	unsigned int port;												//Just port number
+	void keepListening();											//Make all available servers keep receiving messages, parse them if completed. Make last Server listen to void.
+	void keepSending();												//All active clients keep sending their messages, parse if completed, destroy if completed.
+	chrono::system_clock::time_point clock;							//Current time variable, used in initialization of Network Layout
+	chrono::duration<int, milli> timeout;							//Time before TIMEOUT, randomly chosen on constructor
+	
+	chrono::duration<int, milli> miningAverage;						//Average time for a blocked being mined
+	unsigned int newBlocks;											//Blocks arrived or mined, caped at 10, used for average
 	//CLIENT POST
 	errorType postMerkleBlock(Block blck, Transaction tx, unsigned int neighbourPos);
 	errorType postMerkleBlock(Block blck, Transaction tx, NodeData data);
@@ -106,6 +108,7 @@ protected:
 
 	void handleReceivedTx(string txString);
 	void handleReceivedBlock(Block& block);
+	void handleChallengeRating();
 
 	bool verifyChallenge(Block& block);
 	bool verifyPrevID(Block& block);

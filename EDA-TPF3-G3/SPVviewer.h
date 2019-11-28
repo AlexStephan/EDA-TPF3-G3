@@ -9,17 +9,15 @@ class SPVviewer :
 public:
 	SPVviewer();
 	virtual void update(void*);
-	void cycle(); //OLI
-	//Dibuja: datos del nodo, y datos de los dos nodos FULL vecinos
-	//(especificando cual es cual)
-	//puede usar los campos q ya estan definidos (se actualizan en el update)
-	//asi q no es necesario llamar a metodos de SPV... creo
-	//Recordar: nombre de la ventana: windowName
-
+	void cycle(); 
 
 private:
+	void showNodeType();
+
 	NodeData nodedata;
 	string windowName;
+	tipo_de_nodo type;
+	unsigned long int money;
 	NodeData headernodedata;
 	NodeData filternodedata;
 };

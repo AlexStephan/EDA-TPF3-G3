@@ -17,6 +17,8 @@ void SPVviewer::update(void* n)
 	nodedata = node->getData();
 	headernodedata = node->getHeaderNodeData();
 	filternodedata = node->getFilterNodeData();
+	money = node->getMyMoney();
+	type = node->getNodeType();
 
 	windowName = nodedata.getID();
 }
@@ -26,9 +28,12 @@ void SPVviewer::cycle() {
 	ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX() + CCHILD_W, ImGui::GetCursorPosY() - CHILD_H));
 	ImGui::BeginChild("SPV VIEW", ImVec2(CHILD_W, CHILD_H));
 
-	ImGui::Text("SPV Node ID: %s", nodedata.getID().c_str());
-	ImGui::Text("SPV Node Port: %d", nodedata.getSocket().getPort());
-	ImGui::Text("SPV Node IP: %s", nodedata.getSocket().getIPString().c_str());
+	showNodeType();
+	ImGui::Text("My EdaCoins: %d", money);
+
+	ImGui::Text("ID: %s", nodedata.getID().c_str());
+	ImGui::Text("Port: %d", nodedata.getSocket().getPort());
+	ImGui::Text("IP: %s", nodedata.getSocket().getIPString().c_str());
 	ImGui::NewLine();
 	if (ImGui::CollapsingHeader("Filter Node")) {
 		ImGui::Text("Filter Node ID: %s", filternodedata.getID().c_str());
@@ -43,4 +48,21 @@ void SPVviewer::cycle() {
 
 	ImGui::EndChild();
 	ImGui::End();
+}
+
+void SPVviewer::showNodeType() {
+	switch (type) {
+	case NODO_UNKNOWN: default:
+		ImGui::Text("Node Type: UNKNOWN");
+		break;
+	case NODO_MINERO:
+		ImGui::Text("Node Type: MINER");
+		break;
+	case NODO_FULL:
+		ImGui::Text("Node Type: FULL");
+		break;
+	case NODO_SPV:
+		ImGui::Text("Node Type: SPV");
+		break;
+	}
 }

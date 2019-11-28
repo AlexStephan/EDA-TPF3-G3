@@ -10,6 +10,10 @@
  ******************************************************************************/
 #define CRLF "\x0D\x0A"
 #define INIT_CHALLENGE 3
+#define MINING_MID 60000
+#define MINING_UPPER 70000
+#define MINING_LOWER 50000
+#define BLOCKS_FOR_AVERAGE 10
 
  /*******************************************************************************
   * NAMESPACES
@@ -44,7 +48,11 @@ FULLNode::FULLNode(Socket _socket, tipo_de_nodo tipoNodo = NODO_FULL)
 	Server* genesisServer = new Server(ownData.getSocket().getPort());
 	genesisServer->startConnection();			//Preguntar si esto funcaria
 	servers.push_back(genesisServer);
+	
 	challenge = INIT_CHALLENGE;
+	newBlocks = 0;
+	chrono::duration<int, milli> dur(0);
+	miningAverage = dur;
 }
 
 /*******************************************************************************
@@ -194,6 +202,7 @@ void FULLNode::cycle() {
 						}
 						makeLayout();
 						nodeState = NETWORK_CREATED;								//And now we work as usual
+						clock = chrono::system_clock::now();
 						for (int i = 0; i < clients.size(); i++) {
 							delete clients[i];								//Destroy client
 							clients.erase(clients.begin() + i);				//Remove client from list
@@ -236,8 +245,10 @@ void FULLNode::cycle() {
 				}
 			}
 		}
-		if (clients.empty())										//If all clients were destroyed
+		if (clients.empty()) {										//If all clients were destroyed
 			nodeState = NETWORK_CREATED;							//All nodes received layout, and network is created
+			clock = chrono::system_clock::now();
+		}
 		break;
 	case NETWORK_CREATED:
 		keepListening();
@@ -849,8 +860,25 @@ void FULLNode::handleReceivedBlock(Block& block) {
 	if (verifyChallenge(block) && verifyPrevID(block) && !utxohandler.BlockExistAlready(block) && utxohandler.validateBlock(block).error && cryptohandler.verifyBlockHash(block) && cryptohandler.verifyBlockSign(block, &utxohandler)) {
 		blockChain.push_back(block);
 		floodBlock(block, ownData);
+		handleChallengeRating();
 		notifyAllObservers(this);
 	}
+}
+
+void FULLNode::handleChallengeRating() {
+	newBlocks++;
+	miningAverage += chrono::duration_cast<std::chrono::milliseconds>(chrono::system_clock::now() - clock);	//Clock has timepoint from last mined/received block
+	if (newBlocks == BLOCKS_FOR_AVERAGE) {
+		auto ms = miningAverage.count()/BLOCKS_FOR_AVERAGE;				//ms holds the average time for one block
+		if (ms < MINING_LOWER)											//Adjust challenge rating accordingly
+			challenge++;
+		else if (ms > MINING_UPPER)
+			challenge--;
+		newBlocks = 0;													//Reset the counter for next average fase
+		chrono::duration<int, milli> dur(0);
+		miningAverage = dur;											//Reset time counter
+	}
+	clock = chrono::system_clock::now();								//Reset clock
 }
 
 bool FULLNode::verifyChallenge(Block& block) {
