@@ -137,3 +137,9 @@ string hashMessage(string& message)
 	StringSource s(message, true, new HashFilter(hash, new HexEncoder(new StringSink(digest))));
 	return digest;
 }
+
+string hash2nodes(string txid1, string txid2)
+{
+	string conc = txid1 + txid2;
+	return hashMessage(conc);
+}

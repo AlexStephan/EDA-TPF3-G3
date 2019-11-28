@@ -36,3 +36,6 @@ void stringToByte(string& dataToPrint, byte output[],int size);
 void copyPublicKeys(ECDSA<ECP, SHA256>::PublicKey& original, ECDSA<ECP, SHA256>::PublicKey& copy); //be careful!! (might explode)
 
 string hashMessage(string& message);
+
+//ALE, USA ESTE PARA EL MERKLE TREE Y ROOT
+string hash2nodes(string txid1, string txid2);
