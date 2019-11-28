@@ -11,6 +11,7 @@ public:
 	layoutWindowHandler();
 	void createWindow(const NodeData& callingOne, const Layout& layout, const vector<NodeData>& neighbourhood);
 	void draw();
+	void close();
 private:
 	string windowName;
 	bool open;

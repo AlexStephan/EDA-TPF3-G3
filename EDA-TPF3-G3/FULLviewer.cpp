@@ -146,6 +146,8 @@ void FULLviewer::drawBigRedButton() {
 		redButton = !redButton;
 		if (redButton)
 			layoutHandler.createWindow(nodedata, *layout, *neighbours);
+		else
+			layoutHandler.close();
 	}
 }
 

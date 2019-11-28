@@ -66,6 +66,11 @@ void layoutWindowHandler::draw()
 	}
 }
 
+void layoutWindowHandler::close()
+{
+	open = false;
+}
+
 void layoutWindowHandler::formatLayout()
 {
 	formattedLayout = *layout;
