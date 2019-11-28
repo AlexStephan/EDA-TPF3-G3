@@ -1,7 +1,7 @@
 #include "EDAcoinsNet.h"
 
 EDAcoinsNet::EDAcoinsNet() :
-	FULLdata(), SPVdata(), FULLvector(), SPVvector()
+	FULLdata(), SPVdata(), MINERdata(), FULLvector(), SPVvector(), MINERvector()
 {
 }
 
@@ -11,6 +11,9 @@ EDAcoinsNet::~EDAcoinsNet()
 		delete FULLvector[i];
 
 	for (size_t i = 0; i < SPVvector.size(); i++)
+		delete SPVvector[i];
+
+	for (size_t i = 0; i < MINERvector.size(); i++)
 		delete SPVvector[i];
 }
 void EDAcoinsNet::cycle()
@@ -56,6 +59,24 @@ errorType EDAcoinsNet::createSPVNode(Socket _socket, NodeData FilterNode, NodeDa
 	notifyAllObservers(this);
 	return creationState;
 }
+errorType EDAcoinsNet::createMINERNode(Socket _socket)
+{
+	errorType creationState;
+	creationState.error = false;
+	creationState.datos = "";
+
+	if (existAlready(_socket) == false) {
+		MINERNode* node = new MINERNode(_socket);
+		MINERvector.emplace_back(node);
+		MINERdata.emplace_back(node->getData());
+	}
+	else {
+		creationState.error = true;
+		creationState.datos = "Failed to create MINER Node:\nSpecified socket or ID is already used";
+	}
+	notifyAllObservers(this);
+	return creationState;
+}
 const vector<NodeData>& EDAcoinsNet::getKnownFULLdata()
 {
 	return FULLdata;
@@ -76,6 +97,11 @@ size_t EDAcoinsNet::getSPVamount()
 	return SPVvector.size();
 }
 
+size_t EDAcoinsNet::getMINERamount()
+{
+	return MINERvector.size();
+}
+
 FULLNode* EDAcoinsNet::getFULLnode(size_t pos)
 {
 	FULLNode* node = nullptr;
@@ -89,6 +115,14 @@ SPVNode* EDAcoinsNet::getSPVnode(size_t pos)
 	SPVNode* node = nullptr;
 	if (pos < SPVvector.size())
 		node = SPVvector[pos];
+	return node;
+}
+
+MINERNode* EDAcoinsNet::getMINERnode(size_t pos)
+{
+	MINERNode* node = nullptr;
+	if (pos < MINERvector.size())
+		node = MINERvector[pos];
 	return node;
 }
 
@@ -142,6 +176,14 @@ bool EDAcoinsNet::existAlready(string ID)
 			existence = true;
 	}
 
+	for (size_t i = 0;
+		(existence == false) && (i < MINERdata.size());
+		i++) {
+
+		if (MINERdata[i].getID() == ID)
+			existence = true;
+	}
+
 	return existence;
 }
 
@@ -162,6 +204,14 @@ bool EDAcoinsNet::existAlready(Socket socket)
 		i++) {
 
 		if (SPVdata[i].getSocket() == socket)
+			existence = true;
+	}
+
+	for (size_t i = 0;
+		(existence == false) && (i < MINERdata.size());
+		i++) {
+
+		if (MINERdata[i].getSocket() == socket)
 			existence = true;
 	}
 
