@@ -23,7 +23,7 @@ public:
 	void saveBlockChain(BlockChain& blockchain, string path);
 	void saveTx(string trans, vector<Transaction>& txs);
 	void saveMerkleBlock(string merkleBlock,vector <MerkleBlock>& mrkl);
-	Filter saveFilter(string filter);
+	Filter_tt saveFilter(string filter);
 	Block saveBlockHeader(string header);
 	
 	/***********************************************************************************
@@ -35,7 +35,7 @@ public:
 	string createJsonBlock(Block block);
 	string createJsonTx(Transaction tx);
 	string createJsonMerkle(Block block,Transaction trans);
-	string createJsonFilter(Filter filt);
+	string createJsonFilter(Filter_tt filt);
 	string createJsonFilter(NodeData data);
 
 	//Server response related

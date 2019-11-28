@@ -62,7 +62,7 @@ struct MerkleBlock {
 /****************
  *    FILTER   	*
 ****************/
-struct Filter{
+struct Filter_tt{
 	string publicID;
 	ip_t ip;
 	unsigned int port;

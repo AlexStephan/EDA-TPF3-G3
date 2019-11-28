@@ -50,7 +50,7 @@ protected:
 		INNER EDACoin VARIABLES
 	***********************************************************************************/
 	BlockChain blockChain;											//THE BlockChain
-	vector<Filter> filters;											//List of inner filters
+	vector<Filter_tt> filters;											//List of inner filters
 	vector<Transaction> txs;										//List of transactions
 	vector<MerkleBlock> merkleBlocks;								//List of merkleBlocks (?)
 	void addBlock(Block block);										//Add a block to blockChain

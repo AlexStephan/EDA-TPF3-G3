@@ -171,9 +171,9 @@ void jsonHandler::saveMerkleBlock(string _merkleBlock, vector<MerkleBlock>& mrkl
 }
 
 
-Filter jsonHandler::saveFilter(string filter)
+Filter_tt jsonHandler::saveFilter(string filter)
 {
-	Filter aux;
+	Filter_tt aux;
 	json filt = json::parse(filter);
 	aux.publicID = filt["Id"].get<string>();
 	aux.ip = crackIp(filt["ip"].get<string>());
@@ -303,7 +303,7 @@ string jsonHandler::createJsonMerkle(Block block, Transaction trans)
 	return merkle.dump();
 }
 
-string jsonHandler::createJsonFilter(Filter filt)
+string jsonHandler::createJsonFilter(Filter_tt filt)
 {
 	json filter;
 	filter["Id"] = filt.publicID;
