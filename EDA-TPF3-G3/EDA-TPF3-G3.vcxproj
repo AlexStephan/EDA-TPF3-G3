@@ -197,7 +197,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\boost_1_71_0;C:\local\boost_1_71_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\odevi\Source\Repos\AlexStephan\EDA-TPF3-G3\EDA-TPF3-G3\Crypto;C:\boost_1_71_0;C:\local\boost_1_71_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

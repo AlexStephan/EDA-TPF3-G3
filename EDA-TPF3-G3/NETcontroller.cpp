@@ -133,8 +133,9 @@ void NETcontroller::drawControlWindow() {
 	ImGui::Begin(myWindowName.c_str());
 	ImGui::Text("Elija el tipo de nodo que desee crear");
 	
-	ImGui::RadioButton("FULL Node", &type, 0); ImGui::SameLine();
-	ImGui::RadioButton("SPV Node", &type, 1); ImGui::SameLine();
+	ImGui::RadioButton("FULL Node", &type, 1); ImGui::SameLine();
+	ImGui::RadioButton("MINER Node", &type, 2); ImGui::SameLine();
+	ImGui::RadioButton("SPV Node", &type, 0); ImGui::SameLine();
 
 	//ImGui::SetNextItemWidth(250);
 	//ImGui::InputText("Node ID", &IDname);
@@ -152,9 +153,15 @@ void NETcontroller::drawControlWindow() {
 	ImGui::DragInt("Node IP##4", IParr + 3, 0.5);
 	ImGui::PopItemWidth();
 
-	if (!type) {
-		if(ImGui::Button("Create Full Node"))
-			warningHandler.check(netmodel->createFULLNode(Socket((uint)nodePort, (uint)IParr[0], (uint)IParr[1], (uint)IParr[2], (uint)IParr[3])));
+	if (type) {
+		if (type == 1) {
+			if (ImGui::Button("Create Full Node"))
+				warningHandler.check(netmodel->createFULLNode(Socket((uint)nodePort, (uint)IParr[0], (uint)IParr[1], (uint)IParr[2], (uint)IParr[3])));
+		}
+		else {
+			if (ImGui::Button("Create Miner Node"))
+				warningHandler.check(netmodel->createMINERNode(Socket((uint)nodePort, (uint)IParr[0], (uint)IParr[1], (uint)IParr[2], (uint)IParr[3])));
+		}
 	}
 	else {
 		findFullNames();
