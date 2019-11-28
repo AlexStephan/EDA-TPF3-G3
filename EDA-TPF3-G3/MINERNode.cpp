@@ -229,6 +229,8 @@ void MINERNode::miningActions()
 		blockChain.push_back(miningBlock);
 		//FLODEAR EL BLOQUE
 		floodBlock(miningBlock, ownData);
+		//Adjust challenge rating accordingly
+		handleChallengeRating();
 		errorType mensaje;
 		mensaje.error = true;
 		mensaje.datos = "ENHORABUENA!!!\nEste minero logro minar";
