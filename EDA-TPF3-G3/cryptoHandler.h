@@ -24,6 +24,8 @@
 using namespace std;
 using namespace CryptoPP;
 
+class utxoHandler;
+
 class cryptoHandler
 {
 public:
