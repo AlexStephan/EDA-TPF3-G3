@@ -12,7 +12,7 @@
 	CONSTRUTOR
  ******************************************************************************/
 SPVNode::SPVNode(Socket _socket, NodeData FilterNode, NodeData HeaderNode) : Node(NO_NODE_DATA), filterNode(FilterNode), headerNode(HeaderNode),
-	cryptohandler(NODO_SPV)
+	cryptohandler(NODO_SPV), utxohandler(NODO_SPV,nullptr,nullptr)
 {
 	
 	ownData.setID(cryptohandler.getMyPublicKey());
@@ -53,8 +53,10 @@ void SPVNode::cycle() {
 /***********************************************************************************
 	METHODS USED BY CONTROLLER
 ***********************************************************************************/
-errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& givers) 
+errorType SPVNode::makeTX(const vector<Vout>& receivers, longN fee)
 {
+	//WIP!! ARREGLAR ESTA WEA, GIAN O ALE!!
+	/*
 	errorType err = { false,"" };
 	Transaction tx;
 	Block aux;
@@ -66,6 +68,7 @@ errorType SPVNode::makeTX(const vector<Vout>& receivers, const vector<Vin>& give
 	tx.txId = aux.getTxId(tx);
 	//POST TX TO A NEIGHBOUR, JUST ONE
 	postTransaction(tx);
+	*/
 	return err;
 }
 

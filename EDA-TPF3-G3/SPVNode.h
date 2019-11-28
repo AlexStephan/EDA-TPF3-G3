@@ -19,7 +19,8 @@ public:
 	/***********************************************************************************
 		METHODS USED BY CONTROLLER
 	***********************************************************************************/
-	errorType makeTX(const vector<Vout>& receivers, const vector<Vin>& givers);
+	//MAKE!!
+	errorType makeTX(const vector<Vout>& receivers, longN fee);
 	errorType postFilter();
 	errorType changeFilterNode(NodeData FilterNode);
 	errorType changeHeaderNode(NodeData HeaderNode);
@@ -45,7 +46,7 @@ private:
 
 
 	cryptoHandler cryptohandler;
-
+	utxoHandler utxohandler;
 	/***********************************************************************************
 		NETWORKING SH*T
 	***********************************************************************************/
