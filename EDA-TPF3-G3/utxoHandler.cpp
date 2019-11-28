@@ -192,8 +192,7 @@ errorType utxoHandler::insertTX(Transaction& tx)
 		}
 	}
 
-
-	if (err.error == false) {
+	if (tipo != NODO_SPV && err.error == false) {
 		txs->emplace_back(tx);
 	}
 
@@ -390,14 +389,23 @@ void utxoHandler::startNewMiningBlock(string myPublicId, cryptoHandler& cryptoha
 
 }
 
-void utxoHandler::processHeader(MerkleBlock& merkle, unsigned long int height)
+void utxoHandler::processHeader(MerkleBlock& merkle, unsigned long int height, string myPublicId)
 {
 	if (tipo == NODO_SPV) {
+		Transaction tx = merkle.tx[0];
 
-//WIP
-
-
-
+		//elimina
+		size_t aux = 0;
+		for (int i = 0; i < tx.vIn.size(); i++) {
+			if (vinRefersToProcessing(tx.vIn[i], aux)) {
+				processingTxList.erase(processingTxList.begin() + aux);
+			}
+		}
+		for (int i = 0; i < tx.vOut.size(); i++) {
+			if (tx.vOut[i].publicId == myPublicId) {
+				addUtxo(merkle.blockId, height, merkle.tx[0], i);
+			}
+		}
 
 	}
 }
@@ -448,17 +456,24 @@ bool utxoHandler::findProcessing(const string& id, int nutxo, size_t& indexInLis
 	return false;
 }
 
-void utxoHandler::addUtxo(Block& block, Transaction& tx,size_t voutIndex)
+void utxoHandler::addUtxo(string& blockID, longN height, Transaction& tx, size_t voutIndex)
 {
 	utxo newUtxo;
-	newUtxo.blockID = block.getBlockID();
-	newUtxo.blockHeight = block.getHeight();
+	newUtxo.blockID = blockID;
+	newUtxo.blockHeight =height;
 	newUtxo.txID = tx.txId;
 	newUtxo.nutxo = voutIndex + 1;
 	newUtxo.ownerID = tx.vOut[voutIndex].publicId;
 	newUtxo.amount = tx.vOut[voutIndex].amount;
 
 	utxoList.emplace_back(newUtxo);
+}
+
+void utxoHandler::addUtxo(Block& block, Transaction& tx,size_t voutIndex)
+{
+	string blockID = block.getBlockID();
+	longN height = block.getHeight();
+	addUtxo(blockID,height,tx,voutIndex);
 }
 
 void utxoHandler::eraseUtxo(Vin& vin)

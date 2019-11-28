@@ -19,6 +19,8 @@ public:
 
 	bool TxExistAlready(Transaction& tx);
 	errorType validateTX(Transaction& tx); //ANTES COMPROBAR HASH Y FIRMA
+
+	//TAMBIEN PARA SPV: (INSTERT TX)
 	errorType insertTX(Transaction& tx);
 
 	bool BlockExistAlready(Block& block);
@@ -34,7 +36,7 @@ public:
 	void startNewMiningBlock(string myPublicId, cryptoHandler& cryptohandler);
 
 	//SPV
-	void processHeader(MerkleBlock& merkle, unsigned long int height);
+	void processHeader(MerkleBlock& merkle, unsigned long int height, string myPublicId);
 	
 
 private:
@@ -54,6 +56,7 @@ private:
 	bool vinRefersToProcessing(Vin& vin, size_t& index);
 	bool findProcessing(const string& id, int nutxo, size_t& indexInList);
 
+	void addUtxo(string& blockID,longN height, Transaction& tx, size_t voutIndex);
 	void addUtxo(Block& block, Transaction& tx,size_t voutIndex);
 	void eraseUtxo(Vin& vin);
 	Vin utxo2vin(size_t index);
