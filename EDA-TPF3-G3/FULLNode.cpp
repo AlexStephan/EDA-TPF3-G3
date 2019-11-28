@@ -835,7 +835,7 @@ void FULLNode::manageNetworkReady(string rta)
 }
 
 void FULLNode::handleReceivedTx(string txString) {
-	JSONHandler.saveTx((*j)->getMessage(), txs);
+	JSONHandler.saveTx(txString, txs);
 	Transaction newTx = txs.back();
 	txs.pop_back();
 	if (!utxohandler.TxExistAlready(newTx) && cryptohandler.verifyTXHash(newTx) && cryptohandler.verifyTXSign(newTx, &utxohandler) && utxohandler.validateTX(newTx).error) {
@@ -850,15 +850,19 @@ void FULLNode::handleReceivedBlock(Block& block) {
 		floodBlock(block, ownData);
 		notifyAllObservers(this);
 	}
-
 }
 
 bool FULLNode::verifyChallenge(Block& block) {
 	bool ret = false;
-
-
-
-
+	string ID = block.getBlockID();
+	int i = 0;
+	unsigned int zeros = 0;
+	while (i < ID.size() && ID[i] == '0') {
+		zeros++;
+		i++;
+	}
+	if (zeros >= challenge)
+		ret = true;
 	return ret;
 }
 
