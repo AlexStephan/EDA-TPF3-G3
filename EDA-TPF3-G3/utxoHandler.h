@@ -3,6 +3,7 @@
 #include "utxo.h"
 #include "errorType.h"
 #include "typeEnums.h"
+#include "cryptoHandler.h"
 
 class utxoHandler
 {
@@ -30,7 +31,7 @@ public:
 
 	//MINERO
 	void setMiningBlock(Block* miningBlock);
-	void startNewMiningBlock();
+	void startNewMiningBlock(string myPublicId, cryptoHandler& cryptohandler);
 
 private:
 	tipo_de_nodo tipo;
@@ -55,5 +56,7 @@ private:
 
 
 	bool foundInBlockChain(Vin& vin,Vout& answer);
+
+	longN getDifference(vector<Transaction>& enterTX);
 };
 

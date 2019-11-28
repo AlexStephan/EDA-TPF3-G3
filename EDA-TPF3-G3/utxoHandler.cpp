@@ -338,13 +338,32 @@ void utxoHandler::setMiningBlock(Block* miningBlock)
 	this->miningBlock = miningBlock;
 }
 
-void utxoHandler::startNewMiningBlock()
+void utxoHandler::startNewMiningBlock(string myPublicId, cryptoHandler& cryptohandler)
 {
 	if (checkMiner() == false)
 		return;
 
 	//ORDENAR LAS TX Y METERLAS
-	miningBlock->setTransactions(*txs);
+
+	vector<Transaction> enterTX = *txs;
+	longN fee = 50 + getDifference(enterTX);
+
+	Vout myFee;
+	myFee.publicId = myPublicId;
+	myFee.amount = fee;
+
+	Transaction firstOne;
+	firstOne.nTxIn = 0;
+	firstOne.vIn.clear();
+	firstOne.nTxOut = 1;
+	firstOne.vOut.clear();
+	firstOne.vOut.emplace_back(myFee);
+	cryptohandler.hashTx(firstOne);
+
+	enterTX.emplace(enterTX.begin(), firstOne);
+
+
+	miningBlock->setTransactions(enterTX);
 	miningBlock->setHeight(blockChain->size() + 1);
 	miningBlock->setNTx(txs->size());
 	miningBlock->setPrevBlockId((*blockChain).back().getBlockID());
@@ -478,4 +497,19 @@ bool utxoHandler::foundInBlockChain(Vin& vin, Vout& answer)
 		}
 	}
 	return rta;
+}
+
+longN utxoHandler::getDifference(vector<Transaction>& enterTX)
+{
+	longN income = 0;
+	longN outcome = 0;
+
+	for (int i = 0; i < enterTX.size(); i++) {
+		for (int j = 0; j < enterTX[i].vOut.size(); j++) {
+			outcome += enterTX[i].vOut[j].amount;
+		}
+	}
+
+
+	return income - outcome;
 }

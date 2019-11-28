@@ -35,7 +35,7 @@ void MINERNode::miningActions()
 		mensaje.error = true;
 		mensaje.datos = "ENHORABUENA!!!\nEste minero logro minar";
 		mensajesDeVentana.emplace_back(mensaje);
-		utxohandler.startNewMiningBlock();
+		utxohandler.startNewMiningBlock(ownData.getID(),cryptohandler);
 
 	}
 }
