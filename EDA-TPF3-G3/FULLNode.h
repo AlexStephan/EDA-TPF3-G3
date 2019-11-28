@@ -1,3 +1,9 @@
+//       \\\\\           \\\\\           \\\\\           \\\\\    
+//      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o      \\\\\\\__o
+//______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_
+//private->protected
+
+
 #pragma once
 /*******************************************************************************
  * INCLUDE HEADER FILES
@@ -10,9 +16,6 @@
 #include "layout.h"
 #include"jsonHandler.h"
 
-#include "cryptoHandler.h"
-#include "utxoHandler.h"
-
 /*******************************************************************************
  * ENUMERATIONS AND STRUCTURES AND TYPEDEFS
  *****************************************************************************/
@@ -23,15 +26,14 @@ class FULLNode :
 	public Node
 {
 public:
-	FULLNode(Socket _socket); //ID SURGE DE MANERA ALEATORIA
+	FULLNode(NodeData ownData);
 	~FULLNode();
 	virtual void cycle();
 
 	/***********************************************************************************
 		METHODS USED BY CONTROLLER
 	***********************************************************************************/
-	errorType makeTX(const vector<Vout>& receivers, longN fee);
-
+	errorType makeTX(const vector<Vout>& receivers, const vector<Vin>& givers);
 	errorType makeBlock(); //"MINAR"
 	errorType addNeighbour(NodeData neighbour); //agrega fulls
 
@@ -55,12 +57,11 @@ protected:
 	vector<MerkleBlock> merkleBlocks;								//List of merkleBlocks (?)
 	void addBlock(Block block);										//Add a block to blockChain
 	void addTx(string trans);										//Save received transaction, add to tx list
-	void updateMyMoney();
-	unsigned int challenge;
 	/***********************************************************************************
 		NEIGHBOURHOOD AND NODES
 	***********************************************************************************/
 	vector<NodeData> neighbourhood;									//List of neighbour nodes
+	vector<NodeData> network;
 	vector<NodeData> askedForFilter;
 	Layout layout;													//Layout in vector<connection> form
 	string layoutMsg;												//Layout in JSON form
@@ -78,7 +79,7 @@ protected:
 	void keepSending();										//All active clients keep sending their messages, parse if completed, destroy if completed.
 	chrono::system_clock::time_point clock;					//Current time variable, used in initialization of Network Layout
 	chrono::duration<int, milli> timeout;					//Time before TIMEOUT, randomly chosen on constructor
-	chrono::duration<int, milli> miningAverage;				
+
 	//CLIENT POST
 	errorType postMerkleBlock(Block blck, Transaction tx, unsigned int neighbourPos);
 	errorType postMerkleBlock(Block blck, Transaction tx, NodeData data);
@@ -101,21 +102,6 @@ protected:
 	/***********************************************************************************
 		FLOODING / VERIFICATION
 	***********************************************************************************/
-	cryptoHandler cryptohandler;
-	utxoHandler utxohandler;
-
-	void handleReceivedTx(string txString);
-	void handleReceivedBlock(Block& block);
-
-	bool verifyChallenge(Block& block);
-	bool verifyPrevID(Block& block);
-	//recibe: lista de destinatarios (ID + monto)
-	//			fee: dinero que se quedara el minero
-	//devuelve: bool: indica si es valido o no la tx (si se hizo una falsa a proposito o no), true = valido, false = falsa
-	//			tx: modifica la tx ingresada (se supone vacia) confeccionandola, para poder floodearla
-	//NOTA: si es falsa, floodearla, mandar un mensaje de warning del tipo "hehe, dia de los inocentes" (errorType), pero NO INGRESARLA, no ser tarados
-	bool makeSmartTX(longN fee,const vector<Vout>& receivers, Transaction& tx);
-	
 	void checkForFilter(Block blck);
 	bool checkForId(string id);
 	void floodBlock(Block blck, NodeData sender);
