@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "Socket.h"
+#include <cstdint>
 
 /*******************************************************************************
  * NAMESPACES
@@ -90,7 +91,7 @@ public:
 	const Transaction getTx(vector<Transaction>::iterator it);
 	const Transaction getTx(unsigned int it);
 	const unsigned long int getHeight() const;
-	const unsigned long int getNonce();
+	uint32_t getNonce();
 	const unsigned long int getNTx();
 	const long int getBlockPos(vector<Block>* BlockChain);
 	const string getBlockID() const;
@@ -110,7 +111,7 @@ public:
 	***********************************************************************************/
 	void addTx(Transaction _tx) { tx.push_back(_tx); };
 	void setHeight(unsigned long int h) { height = h; };
-	void setNonce(unsigned long int h) { nonce = h; };
+	void setNonce(uint32_t h) { nonce = h; };
 	void setBlockId(string s) { blockId = s; };
 	void setPrevBlockId(string s) { previousBlockId = s; };
 	void setMerkleRoot(string s) { merkleRoot = s; };
@@ -128,12 +129,12 @@ private:
 	/***********************************************************************************
 		BLOCK STRUCTURE
 	***********************************************************************************/
-	vector<Transaction> tx;
-	unsigned long int height;
-	unsigned long int nonce;
-	string blockId;
-	string previousBlockId;
-	string merkleRoot;
-	vector<string> merkleTree;
-	unsigned long int nTx;
+	vector<Transaction> tx;			//utxo-
+	unsigned long int height;		//utxo-
+	uint32_t nonce;					//crypto-
+	string blockId;					//crypto-
+	string previousBlockId;			//utxo-
+	string merkleRoot;				//?
+	vector<string> merkleTree;		//?
+	unsigned long int nTx;			//utxo-
 };

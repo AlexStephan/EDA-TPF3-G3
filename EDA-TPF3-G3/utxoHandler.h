@@ -2,11 +2,12 @@
 
 #include "utxo.h"
 #include "errorType.h"
+#include "typeEnums.h"
 
 class utxoHandler
 {
 public:
-	utxoHandler(BlockChain* blockChain, vector<Transaction>* txs);
+	utxoHandler(tipo_de_nodo tipo,BlockChain* blockChain, vector<Transaction>* txs);
 
 	void initializeUtxo(); //ASUMO Q LA BLOCKCHAIN ES VALIDA
 
@@ -26,7 +27,16 @@ public:
 
 	string getOwner(Vin& vin);
 
+
+	//MINERO
+	void setMiningBlock(Block* miningBlock);
+	void startNewMiningBlock();
+
 private:
+	tipo_de_nodo tipo;
+	bool checkMiner();
+	Block* miningBlock;
+
 	vector<utxo> utxoList;
 	vector<utxo> processingTxList;
 

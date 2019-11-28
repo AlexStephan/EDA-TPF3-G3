@@ -2,9 +2,17 @@
 #include "cryptoFunctions.h"
 
 #include <cstring>
+#include <iostream>
 
-cryptoHandler::cryptoHandler()
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+cryptoHandler::cryptoHandler(tipo_de_nodo tipo) : tipo(tipo), miningBlock(nullptr)
 {
+	srand(time(NULL));
+
 	myprivateKey = generatePrivKey();
 	myprivateKey.MakePublicKey(mypublicKey);
 
@@ -116,6 +124,43 @@ bool cryptoHandler::isHashValid(string& message, string& hash)
 	return (hash == hashMessage(message));
 }
 
+void cryptoHandler::setMiningBlock(Block* miningBlock)
+{
+	this->miningBlock = miningBlock;
+}
+
+void cryptoHandler::tryNewNonce()
+{
+	if (checkMiner() == false)
+		return;
+
+	uint32_t random = 0;
+	for (int i = 0; i < 4; i++)
+		random += ((rand() % 256) << (8 * i));
+
+	miningBlock->setNonce(random);
+	hashBlock(*miningBlock);
+}
+
+void cryptoHandler::hashBlock(Block& block)
+{
+	block.setBlockId( makeHashFromBlock(block) );
+}
+
+bool cryptoHandler::checkMiner()
+{
+	if (tipo != NODO_MINERO) {
+		cout << "ILEGAL: un nodo no minero no puede minar" << endl;
+		return false;
+	}
+	if (miningBlock == nullptr) {
+		cout << "ILEGAL: se trato de minar, pero aun no se enlazo con el mining block" << endl;
+		return false;
+	}
+
+	return true;
+}
+
 string cryptoHandler::makeHashFromTx(Transaction& tx)
 {
 	string message = "";
@@ -162,6 +207,6 @@ string cryptoHandler::makeHashFromBlock(Block& block)
 	message += block.getPreviousBlockID();
 	message += to_string(block.getHeight());
 	message += block.getMerkleRoot();
-	message += block.getNonce();
+	message += to_string(block.getNonce());
 	return hashMessage(message);
 }
