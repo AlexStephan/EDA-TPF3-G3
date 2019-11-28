@@ -207,6 +207,6 @@ string cryptoHandler::makeHashFromBlock(Block& block)
 	message += block.getPreviousBlockID();
 	message += to_string(block.getHeight());
 	message += block.getMerkleRoot();
-	message += to_string(block.getNonce());
+	message += number32ToString(block.getNonce());
 	return hashMessage(message);
 }

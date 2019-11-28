@@ -29,6 +29,7 @@ bool verifySignatureString(byte header[HEADER_CHARS],string &pubKey, string &dat
 
 vector<byte> privateKeyToByte(ECDSA<ECP, SHA256>::PrivateKey& privKey);
 vector<byte> publicKeyToByte(ECDSA<ECP, SHA256>::PublicKey& pubKey);
+string number32ToString(uint32_t number);
 string byteToString(vector<byte>& dataToPrint);
 void stringToByte(string& dataToPrint, byte output[],int size);
 
