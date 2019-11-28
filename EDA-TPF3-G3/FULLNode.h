@@ -23,7 +23,7 @@ class FULLNode :
 	public Node
 {
 public:
-	FULLNode(Socket _socket); //ID SURGE DE MANERA ALEATORIA
+	FULLNode(Socket _socket, tipo_de_nodo tipo = NODO_FULL); //ID SURGE DE MANERA ALEATORIA
 	~FULLNode();
 	virtual void cycle();
 

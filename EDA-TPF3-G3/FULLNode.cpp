@@ -19,12 +19,13 @@ using json = nlohmann::json;
 /*******************************************************************************
 	CONSTRUCTOR
  ******************************************************************************/
-FULLNode::FULLNode(Socket _socket) : Node(NO_NODE_DATA),
-cryptohandler(NODO_FULL), utxohandler(NODO_FULL, &blockChain, &txs)
+FULLNode::FULLNode(Socket _socket, tipo_de_nodo tipoNodo = NODO_FULL) 
+	: Node(NO_NODE_DATA),
+	cryptohandler(tipoNodo), utxohandler(tipoNodo, &blockChain, &txs)
 {
 	ownData.setID(cryptohandler.getMyPublicKey());
 	ownData.setSocket(_socket);
-	nodeType = NODO_FULL;
+	nodeType = tipoNodo;
 
 	nodeState = IDLE;
 	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
