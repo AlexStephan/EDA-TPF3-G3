@@ -32,7 +32,7 @@ FULLNode::FULLNode(Socket _socket, tipo_de_nodo tipoNodo)
 	nodeType = tipoNodo;
 
 	nodeState = IDLE;
-	JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
+	//JSONHandler.saveBlockChain(blockChain, "BlockChain.json");
 	JSONHandler.getNodesInLayout("manifest.json", ownData, nodesInManifest);
 	port = ownData.getSocket().getPort();
 

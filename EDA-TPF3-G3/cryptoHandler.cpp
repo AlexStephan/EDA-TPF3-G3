@@ -11,10 +11,11 @@ using namespace std;
 
 cryptoHandler::cryptoHandler(tipo_de_nodo tipo) : tipo(tipo), miningBlock(nullptr)
 {
-	srand(time(NULL));
-
-	myprivateKey = generatePrivKey();
-	myprivateKey.MakePublicKey(mypublicKey);
+	//srand(time(NULL));
+	ECDSA<ECP, SHA256>::PrivateKey myprivateKey2;
+	ECDSA<ECP, SHA256>::PublicKey mypublicKey2;
+	myprivateKey2 = generatePrivKey();
+	myprivateKey2.MakePublicKey(mypublicKey);
 
 	byte auxBuf[HEADER_CHARS + PUBLIC_KEY_CHARS];
 	ArraySink sink(auxBuf, HEADER_CHARS + PUBLIC_KEY_CHARS);

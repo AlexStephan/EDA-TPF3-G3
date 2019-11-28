@@ -7,12 +7,16 @@
 
 #include "string"
 
-#include "cryptlib.h"
-#include "osrng.h"
-#include "eccrypto.h"
-#include "oids.h"
-#include "hex.h"
-#include "sha3.h"
+
+//#include "dll.h"
+
+
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/osrng.h"
+#include "cryptopp/eccrypto.h"
+#include "cryptopp/oids.h"
+#include "cryptopp/hex.h"
+#include "cryptopp/sha3.h"
 #include <string>
 
 #include "blockChain.h"

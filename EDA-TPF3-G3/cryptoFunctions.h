@@ -5,14 +5,14 @@
 //______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_______\\\\\\\'/_
 //toda la clase
 
+//#include "dll.h"
 
-
-#include "cryptlib.h"
-#include "osrng.h"
-#include "eccrypto.h"
-#include "oids.h"
-#include "hex.h"
-#include "sha3.h"
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/osrng.h"
+#include "cryptopp/eccrypto.h"
+#include "cryptopp/oids.h"
+#include "cryptopp/hex.h"
+#include "cryptopp/sha3.h"
 #include <string>
 
 #define PRIVATE_KEY_CHARS 32

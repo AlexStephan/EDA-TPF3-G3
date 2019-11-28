@@ -8,7 +8,7 @@ class NODEviewer : public Observer {
 
 public:
 	NODEviewer();
-	virtual void update(void*);
+	virtual void update(void*) = 0;
 	
 protected:
 	void showNodeType();
