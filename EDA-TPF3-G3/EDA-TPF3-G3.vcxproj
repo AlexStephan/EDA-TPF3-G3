@@ -206,7 +206,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Ale\source\repos\EDA-TPF4-G3-XD\EDA-TPF3-G3\Crypto;C:\Users\Gianfranco\source\repos\EDA-TPF3-G3\EDA-TPF3-G3\Crypto;C:\boost_1_71_0;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\include;D:\boost_1_71_0;C:\local\boost_1_71_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Ale\source\repos\EDA-TP-FINAL-FINAL-V3-FINAL-V2.02-FINALFINAL\EDA-TPF3-G3\Crypto;C:\Users\Ale\source\repos\EDA-TPF4-G3-XD\EDA-TPF3-G3\Crypto;C:\Users\Gianfranco\source\repos\EDA-TPF3-G3\EDA-TPF3-G3\Crypto;C:\boost_1_71_0;C:\Users\Gianfranco\source\repos\curl\builds\libcurl-vc-x64-release-dll-ipv6-sspi-winssl\include;D:\boost_1_71_0;C:\local\boost_1_71_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
