@@ -88,7 +88,7 @@ bool cryptoHandler::verifyTXSign(Transaction& tx,utxoHandler* handler)
 
 bool cryptoHandler::verifyBlockHash(Block& block)
 {
-	return (block.getBlockID() == makeHashFromBlock(block);
+	return (block.getBlockID() == makeHashFromBlock(block));
 }
 
 bool cryptoHandler::verifyBlockSign(Block& block, utxoHandler* handler)
