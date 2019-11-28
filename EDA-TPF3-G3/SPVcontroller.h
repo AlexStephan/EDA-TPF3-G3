@@ -21,13 +21,14 @@ public:
 private:
 	void drawWindow(); 
 	void drawMTX();
-	bool drawV(Vin&, Vout&, int);
+	bool drawV(Vout&, int);
 	void drawPFilter();
 	void drawChangeFN();
 	void drawChangeHN();
 	void newPortSelect();
 	void newIpSelect();
 	void returnButton();
+	bool isAllDigits(string);
 
 
 	//Mismas indicaciones q drawWindow de FULLcontroller, pero en este caso accede a:
@@ -40,8 +41,9 @@ private:
 	int cstate;
 	int currTX;
 	vector<string> auxstr;
-	vector<Vin> txVin;
 	vector<Vout> txVout;
+	string feeStr;
+	bool errfee;
 	string newID;
 	int newPort;
 	int newIP[4];

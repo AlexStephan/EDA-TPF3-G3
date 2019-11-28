@@ -114,8 +114,8 @@ void NETcontroller::drawControlWindow() {
 	ImGui::RadioButton("FULL Node", &type, 0); ImGui::SameLine();
 	ImGui::RadioButton("SPV Node", &type, 1); ImGui::SameLine();
 
-	ImGui::SetNextItemWidth(250);
-	ImGui::InputText("Node ID", &IDname);
+	//ImGui::SetNextItemWidth(250);
+	//ImGui::InputText("Node ID", &IDname);
 
 	ImGui::SetNextItemWidth(50);
 	ImGui::DragInt("Port", &nodePort, 0.5);
@@ -132,7 +132,7 @@ void NETcontroller::drawControlWindow() {
 
 	if (!type) {
 		if(ImGui::Button("Create Full Node"))
-			warningHandler.check(netmodel->createFULLNode(NodeData(IDname, nodePort, IParr[0], IParr[1], IParr[2], IParr[3])));
+			warningHandler.check(netmodel->createFULLNode(Socket((uint)nodePort, (uint)IParr[0], (uint)IParr[1], (uint)IParr[2], (uint)IParr[3])));
 	}
 	else {
 		findFullNames();
@@ -140,19 +140,19 @@ void NETcontroller::drawControlWindow() {
 		ImGui::Combo("Seleccione el nodo FULL vecino al que se le pediran los merkle blocks", &currHeader, FullNames.c_str());
 		if (ImGui::Button("Create SPV Node")) {
 			errSPV = NONE;
-			if (IDname.size() != 0) {
+			//if (IDname.size() != 0) {
 				if (currFilter != currHeader)
-					warningHandler.check(netmodel->createSPVNode(NodeData(IDname, nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
+					warningHandler.check(netmodel->createSPVNode(Socket(nodePort, IParr[0], IParr[1], IParr[2], IParr[3]), netmodel->getFULLnode(currFilter)->getData(), netmodel->getFULLnode(currHeader)->getData()));
 				else
 					errSPV = SAME_NODE;
-			}
-			else
-				errSPV = NO_ID;
+			//}
+			//else
+			//	errSPV = NO_ID;
 		}
 		if(errSPV == SAME_NODE)
 			ImGui::Text("No puede elegir el mismo nodo para ambos campos");
-		else if(errSPV == NO_ID)
-			ImGui::Text("Por favor complete el campo Node ID");
+		//else if(errSPV == NO_ID)
+		//	ImGui::Text("Por favor complete el campo Node ID");
 
 	}
 
@@ -176,7 +176,7 @@ void NETcontroller::makeFirstFULL()
 	jsonhandler.getNodesInLayout("manifest.json", dummyNode, genesisNodes);
 
 	for (size_t i = FIRST; i <= LAST; i++) {
-		netmodel->createFULLNode(genesisNodes[i]);
+		netmodel->createFULLNode(genesisNodes[i].getSocket());
 	}
 
 	for (size_t i = 0; i < genesisNodes.size(); i++) {

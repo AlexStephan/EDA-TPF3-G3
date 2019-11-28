@@ -23,10 +23,11 @@ private:
 	void drawMBlock();
 	void drawMTX();
 	void drawAddNode();
-	bool drawV(Vin&, Vout&, int);
+	bool drawV(Vout&, int);
 	void newPortSelect();
 	void newIpSelect();
 	void returnButton();
+	bool isAllDigits(string);
 
 	//void neighbourSelect();
 	//const char* findNeighbourNames();
@@ -42,12 +43,13 @@ private:
 	int newPort;
 	int newIP[4];
 	string newID;
+	bool errfee;
 	int cstate;
 	int currTX;
+	string feeStr;
 	vector<string> auxstr;
 	//int currNeighbour;
 	vector<Vout> txVout;
-	vector<Vin> txVin;
 	FULLNode* fnode;
 	string windowID;
 	WarningWindowHandler warningHandler;

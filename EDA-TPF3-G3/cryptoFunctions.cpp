@@ -1,6 +1,7 @@
 #include "cryptoFunctions.h"
 #include <cstring>
 
+#define BIG_ENDIAN false
 
 ECDSA<ECP, SHA256>::PrivateKey generatePrivKey()
 {
@@ -73,6 +74,29 @@ vector<byte> publicKeyToByte(ECDSA<ECP, SHA256>::PublicKey& pubKey)
 	pubKeyByteArray.insert(pubKeyByteArray.end(), aux.begin(), aux.end());
 
 	return pubKeyByteArray;
+}
+
+string number32ToString(uint32_t number)
+{
+	vector<byte> dataToPrint = {};
+
+#if BIG_ENDIAN==false
+	for (int i = 3; i >= 0; i--) {
+
+#elif
+	for (int i = 0; i < 4; i++) {
+#endif
+		dataToPrint.emplace_back(*( ((byte*)& number)  + i));
+
+	}
+
+	CryptoPP::HexEncoder encoder;
+	string output;
+	encoder.Attach(new CryptoPP::StringSink(output));
+	encoder.Put(dataToPrint.data(), dataToPrint.size());
+	encoder.MessageEnd();
+
+	return output;
 }
 
 string byteToString(vector<byte>& dataToPrint)

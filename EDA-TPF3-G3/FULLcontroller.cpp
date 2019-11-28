@@ -76,67 +76,70 @@ void FULLcontroller::drawMTX() {
 	ImGui::Text("\nMAKE A TRANSACTION\n\n");
 
 	for (int i = 0; i < currTX; i++) {
-		if (txVin.size() == 0 || txVout.size() == 0) {
-			Vin VinAux;
-			txVin.push_back(VinAux);
+		if (txVout.size() == 0) {
 			Vout VoutAux;
 			txVout.push_back(VoutAux);
 			string aux;
 			auxstr.push_back(aux);
 		}
-		if (drawV(txVin[i], txVout[i], i) && (txVin.size() != 1 && txVout.size() != 1)) {
+		if (drawV(txVout[i], i) && (txVout.size() != 1)) {
 			currTX--;
 			for (int j = i; j < currTX; j++) {
-				txVin[j] = txVin[j + 1];
 				txVout[j] = txVout[j + 1];
 				auxstr[j] = auxstr[j + 1];
 			}
-			txVin.resize(txVin.size() - 1);
 			txVout.resize(txVout.size() - 1);
 			auxstr.resize(auxstr.size() - 1);
 		}
 	}
 	
-	if (txVin[currTX - 1].blockId.size() && txVout[currTX - 1].publicId.size()) {
-		Vin vin;
+	if (txVout[currTX - 1].publicId.size()) {
 		Vout vout;
 		string aux;
 		currTX++;
-		txVin.push_back(vin);
 		txVout.push_back(vout);
 		auxstr.push_back(aux);
 	}
 
-	ImGui::Text("Amount of Vins and Vouts: %d", currTX - 1);
+	ImGui::Text("Amount of Vouts: %d", currTX - 1);
+	ImGui::SetNextItemWidth(50);
+	ImGui::InputText("Fee", &feeStr);
+
 	if (ImGui::Button("MAKE TRANSACTION")) {
-		txVin.pop_back();
-		txVout.pop_back();
-		warningHandler.check(fnode->makeTX(txVout, txVin));
-		txVin.clear();
-		txVout.clear();
-		auxstr.clear();
-		currTX = 1;
-		cstate = FULL_MENU;
+		errfee = false;
+		if (isAllDigits(feeStr)) {
+			unsigned long int fee = _atoi64(feeStr.c_str());
+			txVout.pop_back();
+			warningHandler.check(fnode->makeTX(txVout, fee));
+			txVout.clear();
+			auxstr.clear();
+			feeStr.clear();
+			currTX = 1;
+			cstate = FULL_MENU;
+		}
+		else
+			errfee = true;
 	}
+
+	if (errfee)
+		ImGui::Text("Por favor ingrese un valor de fee valido");
 
 }
 
-bool FULLcontroller::drawV(Vin& vin, Vout& vout, int i){
+bool FULLcontroller::drawV(Vout& vout, int i){
 	bool r = false;
 	
-	ImGui::Text("Vin");
-
-	ImGui::InputText(("Block ID##" + to_string(i)).c_str(), &vin.blockId);
-	ImGui::InputText(("Transaction ID##" + to_string(i)).c_str(), &vin.txId);
-
 	ImGui::Text("Vout");
 	ImGui::InputText(("Public ID##" + to_string(i)).c_str(), &vout.publicId);
 	ImGui::SetNextItemWidth(50);
 	ImGui::InputText(("Monto##" + to_string(i)).c_str(), &auxstr[i]);
-	vout.amount = _atoi64(auxstr[i].c_str());
 	
-	if (ImGui::Button(("Delete##" + to_string(i)).c_str()))
-		r = true;
+	if (ImGui::Button(("Delete##" + to_string(i)).c_str())) {
+		if (isAllDigits(auxstr[i])) {
+			vout.amount = _atoi64(auxstr[i].c_str());
+			r = true;
+		}
+	}
 
 	ImGui::NewLine();
 
@@ -181,6 +184,22 @@ void FULLcontroller::returnButton() {
 
 	if (ImGui::Button("Return"))
 		cstate = FULL_MENU;
+}
+
+bool FULLcontroller::isAllDigits(string s) {
+	bool r = true;
+	if (!s.size()) 
+		r = false;
+	else{
+		for (int i = 0; i < s.size(); i++) {
+			if (s[i] < '0' || s[i] > '9') {
+				r = false;
+				break;
+			}
+		}
+	}
+
+	return r;
 }
 
 //void FULLcontroller::neighbourSelect()

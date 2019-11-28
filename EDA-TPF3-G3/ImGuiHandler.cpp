@@ -24,6 +24,7 @@ ImGuiHandler::ImGuiHandler(ImVec4 bColor) : backColor(bColor)
 	ImGuiIO& io = ImGui::GetIO();
 	//(void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.Fonts->AddFontFromFileTTF("BebasNeue_Regular.ttf", 20.0f);
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplAllegro5_Init(display);
