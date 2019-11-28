@@ -186,7 +186,7 @@ void MINERNode::cycle() {
 		}
 		break;
 	case NETWORK_CREATED:
-		utxohandler.startNewMiningBlock();
+		utxohandler.startNewMiningBlock(ownData.getID(), cryptohandler);
 		keepListening();
 		keepSending();
 		break;
@@ -201,7 +201,7 @@ void MINERNode::handleReceivedBlock(Block& block) {
 		blockChain.push_back(block);
 		floodBlock(block, ownData);
 		handleChallengeRating();
-		utxohandler.startNewMiningBlock();
+		utxohandler.startNewMiningBlock(ownData.getID(), cryptohandler);
 		notifyAllObservers(this);
 	}
 }
