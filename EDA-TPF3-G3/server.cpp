@@ -72,21 +72,21 @@ void Server::receiveMessage()
 
 void Server::sendMessage(const string& message) //ES BLOQUEANTE POR AHORA
 {
-	size_t len;
-	len = socket->write_some(boost::asio::buffer(message, strlen(message.c_str())), error);
+	//size_t len;
+	//len = socket->write_some(boost::asio::buffer(message, strlen(message.c_str())), error);
 
-	if (error.value() != WSAEWOULDBLOCK)
-	{
-		doneSending = true;
-		cout << "Done sending" << endl;
-		cout << message << endl;
-	}
+	//if (error.value() != WSAEWOULDBLOCK)
+	//{
+	//	doneSending = true;
+	//	cout << "Done sending" << endl;
+	//	cout << message << endl;
+	//}
 
 
-	//myResponse = message;
-	//IO_handler->poll();
-	//socket->async_write_some(boost::asio::buffer(myResponse, myResponse.size()), boost::bind(&Server::sendHandler, this,
-	//	boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+	myResponse = message;
+	IO_handler->poll();
+	socket->async_write_some(boost::asio::buffer(myResponse, myResponse.size()), boost::bind(&Server::sendHandler, this,
+		boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
 
 
 
